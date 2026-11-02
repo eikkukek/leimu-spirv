@@ -3,7 +3,7 @@ A compact SPIR-V reflection library written in pure-Rust with zero dependencies,
 
 ## Usage
 
-An example of doing some reflection on SPIR-V words.
+An example of doing some reflection on SPIR-V words:
 ``` rust
 use leimu_spirv::op;
 use leimu_spirv::Module;

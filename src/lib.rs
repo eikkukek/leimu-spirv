@@ -1,11 +1,5 @@
 //! Compact SPIR-V reflection library written in pure-Rust with zero dependencies and minimal
 //! allocations.
-//!
-//! # Allocation policy
-//! - Strings and arrays are just slices to the SPIR-V passed to [`Module`].
-//! - Only [`decorations`][1] and [`instructions streams`][2] with a [`result id`][3] are cached using
-//!   an extra allocation.
-//! - Parsing is mostly done on-demand.
 //! 
 //! [1]: op::Decoration
 //! [2]: stream::InstructionStream
