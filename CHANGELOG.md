@@ -1,5 +1,8 @@
 # Cangelog
 All changes to this project will be documented in this file.
+## [0.4.1]
+## Fixed
+- Docs
 ## [0.4.0]
 ### Changed
 - Using UTF-8 string slices over just `CStr` for correctness.
