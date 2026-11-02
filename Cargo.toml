@@ -1,9 +1,9 @@
 [package]
 name = "leimu-spirv"
-version = "0.4.1"
+version = "0.4.2"
 edition = "2024"
 description = "Compact SPIR-V reflection library written in pure-Rust."
-license = "MIT or Apache-2.0"
+license = "MIT OR Apache-2.0"
 repository = "https://github.com/eikkukek/leimu-spirv"
 readme = "README.md"
 keywords = ["shader", "spir-v", "reflect"]

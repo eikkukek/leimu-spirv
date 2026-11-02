@@ -1,12 +1,16 @@
 # Cangelog
 All changes to this project will be documented in this file.
+
+## [0.4.2]
+### Fixed
+- license format
 ## [0.4.1]
-## Fixed
+### Fixed
 - Docs
-## [0.4.0]
+### [0.4.0]
 ### Changed
 - Using UTF-8 string slices over just `CStr` for correctness.
-## Added
+### Added
 - `Module::from_bytes`
 
 ## [0.3.1] - 2026-04-25
@@ -41,6 +45,7 @@ All changes to this project will be documented in this file.
 - Initial crate release
 - Basic reflection
 
+[0.4.2]: https://crates.io/crates/leimu-spirv/0.4.2
 [0.4.1]: https://crates.io/crates/leimu-spirv/0.4.1
 [0.4.0]: https://crates.io/crates/leimu-spirv/0.4.0
 [0.3.1]: https://crates.io/crates/leimu-spirv/0.3.1
