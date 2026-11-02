@@ -37,6 +37,10 @@ pub enum ParseError {
     EndOfStream,
     /// Indicates a wrong magic number for the module.
     InvalidMagicNumber(u32),
+    /// Indicates that the bytes passed to [`from_bytes`][1] is not divisible by 4.
+    ///
+    /// [1]: Module::from_bytes
+    FromBytesError(usize),
     /// Indicates an invalid type.
     InvalidType {
         /// The expected type.
@@ -131,6 +135,25 @@ impl<'a> Module<'a> {
     /// Creates a new module from SPIR-V words.
     #[inline]
     pub fn new(spirv: &'a [u32]) -> ParseResult<Self> {
+        let stream = Stream::new(spirv)?;
+        Ok(Self {
+            results: ResultStorage::new(stream.bound()),
+            stream,
+        })
+    }
+
+    /// Creates a new module from bytes.
+    #[inline]
+    pub fn from_bytes(spirv: &'a [u8]) -> ParseResult<Self> {
+        if !spirv.len().is_multiple_of(4) {
+            return Err(ParseError::FromBytesError(spirv.len()))
+        }
+        let spirv = unsafe {
+            slice::from_raw_parts(
+                spirv.as_ptr().cast(),
+                spirv.len() / 4
+            )
+        };
         let stream = Stream::new(spirv)?;
         Ok(Self {
             results: ResultStorage::new(stream.bound()),
@@ -288,6 +311,9 @@ impl Display for ParseError {
 
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::FromBytesError(len) => write!(f,
+                "SPIR-V module length `{len}` is not 4-byte aligned"
+            ),
             Self::EndOfStream => write!(f, "end of stream"),
             Self::InvalidMagicNumber(num) => write!(f, "invalid magic number {num}, expected 0x07230203"),
             Self::InvalidType { expected, found } => write!(f,

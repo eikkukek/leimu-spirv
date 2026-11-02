@@ -15,11 +15,12 @@
 //! use leimu_spirv::op;
 //! use leimu_spirv::Module;
 //! use leimu_spirv::reflect::{Reflector, ResourceType};
+//!
 //! 
-//! let spirv: &[u32] = ...;
-//! let module = Module::new(spirv).unwrap();
+//! let spirv: &[u8] = include_bytes!("../mesh.spv"); 
+//! let module = Module::from_bytes(spirv).unwrap();
 //! let mut reflector = Reflector::new(module).unwrap();
-//! reflector.set_entry_point(c"main", op::ExecutionModel::FRAGMENT).unwrap();
+//! reflector.set_entry_point("main", op::ExecutionModel::MESH_EXT).unwrap();
 //! for ubo in reflector.resources_for_type(ResourceType::UniformBuffer).unwrap() {
 //!     match ubo {
 //!         Ok(ubo) => {

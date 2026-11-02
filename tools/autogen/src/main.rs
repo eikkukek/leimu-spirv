@@ -635,7 +635,8 @@ fn definition_gen(
                 });
             *opcode = quote! {
                 #[doc = "# Struct template"]
-                #[doc = "``` rust"]
+                #[doc = "``` ignored"]
+                #[doc = "use leimu_spirv::op::*;"]
                 #(#docs)*
                 #[doc = "```"]
                 #opcode
@@ -726,7 +727,8 @@ fn definition_gen(
                 });
             *opcode = quote! {
                 #[doc = "# Struct template"]
-                #[doc = "``` rust"]
+                #[doc = "``` ignored"]
+                #[doc = "use leimu_spirv::op::*;"]
                 #(#docs)*
                 #[doc = "```"]
                 #opcode
