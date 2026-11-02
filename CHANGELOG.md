@@ -1,13 +1,13 @@
 # Cangelog
 All changes to this project will be documented in this file.
 
-## [0.4.2]
+## [0.4.2] - 2026-11-02
 ### Fixed
 - license format
-## [0.4.1]
+## [0.4.1] - 2026-11-02
 ### Fixed
 - Docs
-### [0.4.0]
+## [0.4.0] - 2026-11-02
 ### Changed
 - Using UTF-8 string slices over just `CStr` for correctness.
 ### Added
