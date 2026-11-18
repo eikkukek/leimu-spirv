@@ -224,7 +224,7 @@ impl<'a> Module<'a> {
             .enumerate()
             .filter_map(|(i, result)| {
                 result
-                    .map(|result| (op::IdRef::from_word(i as u32), result))
+                    .map(|result| (op::IdRef::from_native(i as u32), result))
             })
     }
 
@@ -252,7 +252,7 @@ pub trait WordExt<'a>: Word {
     fn parse_one(
         stream: &mut InstructionStream<'a>,
     ) -> ParseResult<Self> {
-        Ok(Self::from_word(stream.read()?))
+        Ok(Self::from_native(stream.read()?))
     }
 
     /// Tries to optionally parse one word.
@@ -263,7 +263,7 @@ pub trait WordExt<'a>: Word {
         if stream.is_eos() {
             Ok(None)
         } else {
-            Ok(Some(Self::from_word(stream.read()?)))
+            Ok(Some(Self::from_native(stream.read()?)))
         }
     }
 
@@ -271,14 +271,9 @@ pub trait WordExt<'a>: Word {
     #[inline]
     fn parse_eos(
         stream: &mut InstructionStream<'a>,
-    ) -> ParseResult<&'a [Self]> {
+    ) -> ParseResult<WordView<'a, Self>> {
         let words = stream.read_words(None)?;
-        Ok(unsafe {
-            slice::from_raw_parts(
-                words.as_ptr().cast(),
-                words.len(),
-            )
-        })
+        Ok(WordView::new(words, stream.endianness()))
     }
 }
 

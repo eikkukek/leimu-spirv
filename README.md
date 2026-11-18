@@ -19,9 +19,9 @@ for ubo in reflector.resources_for_type(ResourceType::UniformBuffer).unwrap() {
             let mut set = None;
             let mut binding = None;
             for dec in reflector.decorations(ubo.variable_id) {
-                if let op::Decoration::DescriptorSet { descriptor_set } = dec.decoration {
+                if let op::DecorationOperands::DescriptorSet { descriptor_set } = dec.decoration {
                     set = Some(descriptor_set);
-                } else if let op::Decoration::Binding { binding_point } = dec.decoration {
+                } else if let op::DecorationOperands::Binding { binding_point } = dec.decoration {
                     binding = Some(binding_point);
                 }
             }

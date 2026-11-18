@@ -1,19 +1,124 @@
 use core::{
     slice,
-    fmt::{self, Display},
+    fmt::{self, Display, Debug},
+    marker::PhantomData,
 };
+
+#[repr(align(4))]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
+pub struct WordBytes(pub [u8; 4]);
+
+impl WordBytes {
+
+    #[inline]
+    pub fn transmute_from_u32(value: u32) -> Self {
+        Self(value.to_ne_bytes())
+    }
+
+    #[inline]
+    pub fn transmute_slice_from_u32(slice: &[u32]) -> &[Self] {
+        unsafe {
+            core::slice::from_raw_parts(
+                slice.as_ptr().cast(),
+                slice.len()
+            )
+        }
+    }
+}
+
+/// Represents endianness.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum Endianness {
+    /// Little endian byte order.
+    Le,
+    /// Big endian byte order.
+    Be,
+}
 
 /// A trait for types, which can be trivially created from a [`u32`].
 pub trait Word: Sized {
     
-    fn from_word(word: u32) -> Self;
+    fn from_word(word: WordBytes, endianness: Endianness) -> Self {
+        let word: u32 = u32::from_word(word, endianness);
+        Self::from_native(word)
+    }
+
+    fn from_native(word: u32) -> Self;
 }
 
 impl Word for u32 { 
 
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_word(word: WordBytes, endianness: Endianness) -> Self {
+        match endianness {
+            Endianness::Le => {
+                u32::from_le_bytes(word.0)
+            },
+            Endianness::Be => {
+                u32::from_be_bytes(word.0)
+            },
+        }
+    }
+    
+    #[inline]
+    fn from_native(word: u32) -> Self {
         word
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct WordView<'a, T: Word>(&'a [WordBytes], Endianness, PhantomData<T>);
+
+impl<'a, T: Word + Debug> Debug for WordView<'a, T> {
+
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut list = f.debug_list();
+        for t in self.iter() {
+            list.entry(&t);
+        }
+        list.finish()
+    }
+}
+
+impl<'a, T: Word> WordView<'a, T> {
+
+    #[inline]
+    pub fn new(
+        words: &'a [WordBytes],
+        endianness: Endianness,
+    ) -> Self {
+        Self(words, endianness, PhantomData)
+    }
+
+    #[inline]
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+    
+    #[inline]
+    pub fn len(&self) -> usize {
+        self.0.len()
+    }
+
+    #[inline]
+    pub fn iter(&self) -> impl Iterator<Item = T> {
+        self.0.iter()
+            .copied()
+            .map(|w| {
+                T::from_word(w, self.1)
+            })
+    }
+
+    #[inline]
+    pub fn contains(&self, value: T) -> bool
+        where T: PartialEq,
+    {
+        self.iter().any(|x| x == value)
+    }
+
+    #[inline]
+    pub fn get(&self, index: usize) -> Option<T> {
+        self.0.get(index).map(|&word| T::from_word(word, self.1))
     }
 }
 

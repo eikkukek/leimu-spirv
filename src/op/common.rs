@@ -19,9 +19,8 @@ impl Display for IdResultType {
     }
 }
 impl Word for IdResultType {
-
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -35,9 +34,8 @@ impl Display for IdResult {
     }
 }
 impl Word for IdResult {
-
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -52,9 +50,8 @@ impl Display for IdMemorySemantics {
     }
 }
 impl Word for IdMemorySemantics {
-
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -68,9 +65,8 @@ impl Display for IdScope {
     }
 }
 impl Word for IdScope {
-
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -84,9 +80,8 @@ impl Display for IdRef {
     }
 }
 impl Word for IdRef {
-
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -110,9 +105,8 @@ pub use crate::LiteralStr as LiteralString;
 /// A float consuming one word.
 pub type LiteralFloat = f32;
 impl Word for LiteralFloat {
-
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self::from_bits(word)
     }
 }
@@ -201,7 +195,7 @@ pub type LiteralExtInstInteger = u32;
 #[derive(Clone, Copy, Debug)]
 pub struct LiteralSpecConstantOpInteger<'a> {
     pub code: Code,
-    pub operands: &'a [IdRef],
+    pub operands: WordView<'a, IdRef>,
 }
 impl<'a> LiteralSpecConstantOpInteger<'a> {
 
@@ -210,7 +204,7 @@ impl<'a> LiteralSpecConstantOpInteger<'a> {
     ) -> ParseResult<Self>
     {
         Ok(Self {
-            code: Code::from_word(stream.read()?),
+            code: Code::from_native(stream.read()?),
             operands: IdRef::parse_eos(stream)?,
         })
     }
@@ -219,7 +213,7 @@ impl<'a> Display for LiteralSpecConstantOpInteger<'a> {
 
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.code)?;
-        for operand in self.operands {
+        for operand in self.operands.iter() {
             write!(f, " {operand}")?;
         }
         Ok(())
@@ -252,7 +246,7 @@ impl<'a, T, U> Pair<T, U>
     pub fn parse_one(
         stream: &mut InstructionStream<'a>,
     ) -> ParseResult<Self> {
-        Ok(Self(T::from_word(stream.read()?), U::from_word(stream.read()?)))
+        Ok(Self(T::from_native(stream.read()?), U::from_native(stream.read()?)))
     }
 
     #[inline]

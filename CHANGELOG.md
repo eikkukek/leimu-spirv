@@ -1,5 +1,10 @@
 # Cangelog
 All changes to this project will be documented in this file.
+## [0.5.2] - 2026-11-18
+### Changed
+- Internals to take endianness into account (untested for little endian).
+### Fixed
+- Docs
 ## [0.5.1] - 2026-11-18
 ### Fixed
 - Errors in upper snake case names
@@ -51,6 +56,9 @@ All changes to this project will be documented in this file.
 - Initial crate release
 - Basic reflection
 
+[0.5.2]: https://crates.io/crates/leimu-spirv/0.5.2
+[0.5.1]: https://crates.io/crates/leimu-spirv/0.5.1
+[0.5.0]: https://crates.io/crates/leimu-spirv/0.5.0
 [0.4.2]: https://crates.io/crates/leimu-spirv/0.4.2
 [0.4.1]: https://crates.io/crates/leimu-spirv/0.4.1
 [0.4.0]: https://crates.io/crates/leimu-spirv/0.4.0

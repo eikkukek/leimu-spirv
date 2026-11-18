@@ -7523,7 +7523,7 @@ impl Code {
 }
 impl Word for Code {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word as u16)
     }
 }

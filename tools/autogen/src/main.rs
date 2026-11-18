@@ -199,9 +199,8 @@ fn enum_gen(
             };
             let word = quote! {
                 impl Word for #kind {
-
                     #[inline]
-                    fn from_word(word: u32) -> Self {
+                    fn from_native(word: u32) -> Self {
                         Self(word)
                     }
                 }
@@ -398,9 +397,8 @@ fn enum_gen(
             let word = quote! {
 
                 impl Word for #kind {
-
                     #[inline]
-                    fn from_word(word: u32) -> Self {
+                    fn from_native(word: u32) -> Self {
                         Self(word)
                     }
                 }
@@ -774,9 +772,8 @@ fn definition_gen(
             #(#opcodes)*
         }
         impl Word for Code {
-
             #[inline]
-            fn from_word(word: u32) -> Self {
+            fn from_native(word: u32) -> Self {
                 Self(word as u16)
             }
         }

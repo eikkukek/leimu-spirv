@@ -37,7 +37,7 @@ impl ImageOperands {
 }
 impl Word for ImageOperands {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -143,7 +143,7 @@ impl FPFastMathMode {
 }
 impl Word for FPFastMathMode {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -211,7 +211,7 @@ impl SelectionControl {
 }
 impl Word for SelectionControl {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -272,7 +272,7 @@ impl LoopControl {
 }
 impl Word for LoopControl {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -387,7 +387,7 @@ impl FunctionControl {
 }
 impl Word for FunctionControl {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -455,7 +455,7 @@ impl MemorySemantics {
 }
 impl Word for MemorySemantics {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -553,7 +553,7 @@ impl MemoryAccess {
 }
 impl Word for MemoryAccess {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -620,7 +620,7 @@ impl KernelProfilingInfo {
 }
 impl Word for KernelProfilingInfo {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -669,7 +669,7 @@ impl RayFlags {
 }
 impl Word for RayFlags {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -752,7 +752,7 @@ impl FragmentShadingRate {
 }
 impl Word for FragmentShadingRate {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -804,7 +804,7 @@ impl RawAccessChainOperands {
 }
 impl Word for RawAccessChainOperands {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -859,7 +859,7 @@ impl SourceLanguage {
 }
 impl Word for SourceLanguage {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -907,7 +907,7 @@ impl ExecutionModel {
 }
 impl Word for ExecutionModel {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -945,7 +945,7 @@ impl AddressingModel {
 }
 impl Word for AddressingModel {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -970,7 +970,7 @@ impl MemoryModel {
 }
 impl Word for MemoryModel {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -1854,7 +1854,7 @@ impl ExecutionMode {
 }
 impl Word for ExecutionMode {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2008,7 +2008,7 @@ impl StorageClass {
 }
 impl Word for StorageClass {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2062,7 +2062,7 @@ impl Dim {
 }
 impl Word for Dim {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2092,7 +2092,7 @@ impl SamplerAddressingMode {
 }
 impl Word for SamplerAddressingMode {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2116,7 +2116,7 @@ impl SamplerFilterMode {
 }
 impl Word for SamplerFilterMode {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2177,7 +2177,7 @@ impl ImageFormat {
 }
 impl Word for ImageFormat {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2256,7 +2256,7 @@ impl ImageChannelOrder {
 }
 impl Word for ImageChannelOrder {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2319,7 +2319,7 @@ impl ImageChannelDataType {
 }
 impl Word for ImageChannelDataType {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2366,7 +2366,7 @@ impl FPRoundingMode {
 }
 impl Word for FPRoundingMode {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2389,7 +2389,7 @@ impl FPDenormMode {
 }
 impl Word for FPDenormMode {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2416,7 +2416,7 @@ impl QuantizationModes {
 }
 impl Word for QuantizationModes {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2443,7 +2443,7 @@ impl FPOperationMode {
 }
 impl Word for FPOperationMode {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2466,7 +2466,7 @@ impl OverflowModes {
 }
 impl Word for OverflowModes {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2490,7 +2490,7 @@ impl LinkageType {
 }
 impl Word for LinkageType {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2513,7 +2513,7 @@ impl AccessQualifier {
 }
 impl Word for AccessQualifier {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2537,7 +2537,7 @@ impl HostAccessQualifier {
 }
 impl Word for HostAccessQualifier {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -2567,7 +2567,7 @@ impl FunctionParameterAttribute {
 }
 impl Word for FunctionParameterAttribute {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -3939,7 +3939,7 @@ impl Decoration {
 }
 impl Word for Decoration {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -4250,7 +4250,7 @@ impl BuiltIn {
 }
 impl Word for BuiltIn {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -4410,7 +4410,7 @@ impl Scope {
 }
 impl Word for Scope {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -4441,7 +4441,7 @@ impl GroupOperation {
 }
 impl Word for GroupOperation {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -4468,7 +4468,7 @@ impl KernelEnqueueFlags {
 }
 impl Word for KernelEnqueueFlags {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -4775,7 +4775,7 @@ impl Capability {
 }
 impl Word for Capability {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5171,7 +5171,7 @@ impl RayQueryIntersection {
 }
 impl Word for RayQueryIntersection {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5197,7 +5197,7 @@ impl RayQueryCommittedIntersectionType {
 }
 impl Word for RayQueryCommittedIntersectionType {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5225,7 +5225,7 @@ impl RayQueryCandidateIntersectionType {
 }
 impl Word for RayQueryCandidateIntersectionType {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5249,7 +5249,7 @@ impl PackedVectorFormat {
 }
 impl Word for PackedVectorFormat {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5273,7 +5273,7 @@ impl CooperativeMatrixOperands {
 }
 impl Word for CooperativeMatrixOperands {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5332,7 +5332,7 @@ impl CooperativeMatrixLayout {
 }
 impl Word for CooperativeMatrixLayout {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5356,7 +5356,7 @@ impl CooperativeMatrixUse {
 }
 impl Word for CooperativeMatrixUse {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5379,7 +5379,7 @@ impl CooperativeMatrixReduce {
 }
 impl Word for CooperativeMatrixReduce {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5429,7 +5429,7 @@ impl TensorClampMode {
 }
 impl Word for TensorClampMode {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5454,7 +5454,7 @@ impl TensorAddressingOperands {
 }
 impl Word for TensorAddressingOperands {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5497,7 +5497,7 @@ impl InitializationModeQualifier {
 }
 impl Word for InitializationModeQualifier {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5521,7 +5521,7 @@ impl LoadCacheControl {
 }
 impl Word for LoadCacheControl {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5547,7 +5547,7 @@ impl StoreCacheControl {
 }
 impl Word for StoreCacheControl {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5569,7 +5569,7 @@ impl NamedMaximumNumberOfRegisters {
 }
 impl Word for NamedMaximumNumberOfRegisters {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5602,7 +5602,7 @@ impl MatrixMultiplyAccumulateOperands {
 }
 impl Word for MatrixMultiplyAccumulateOperands {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5694,7 +5694,7 @@ impl FPEncoding {
 }
 impl Word for FPEncoding {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5718,7 +5718,7 @@ impl CooperativeVectorMatrixLayout {
 }
 impl Word for CooperativeVectorMatrixLayout {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5754,7 +5754,7 @@ impl ComponentType {
 }
 impl Word for ComponentType {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }
@@ -5792,7 +5792,7 @@ impl TensorOperands {
 }
 impl Word for TensorOperands {
     #[inline]
-    fn from_word(word: u32) -> Self {
+    fn from_native(word: u32) -> Self {
         Self(word)
     }
 }

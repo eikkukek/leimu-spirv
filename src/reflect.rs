@@ -29,7 +29,7 @@ pub enum Constant<'a> {
         /// The type [`Id`] of the composite type.
         ty: Id,
         /// The constituents of composite value.
-        constituents: &'a [Id],
+        constituents: WordView<'a, Id>,
     },
     /// A constant sampler.
     Sampler {
@@ -54,7 +54,7 @@ pub enum Constant<'a> {
         /// The type [`Id`] of the composite type.
         ty: Id,
         /// The constituents of the composite value.
-        constituents: &'a [Id],
+        constituents: WordView<'a, Id>,
     },
     /// A specialization constant operation.
     SpecConstantOp {
@@ -65,7 +65,7 @@ pub enum Constant<'a> {
         /// [1]: op::Code
         opcode: op::Code,
         /// The operands of the operation.
-        operands: &'a [Id]
+        operands: WordView<'a, Id>,
     },
 }
 
@@ -363,7 +363,7 @@ pub struct Variable {
 struct EntryPoint<'a> {
     _execution_model: op::ExecutionModel,
     _name: LiteralStr<'a>,
-    interface: &'a [Id],
+    interface: WordView<'a, Id>,
 }
 
 /// Reflects SPIR-V code through a [`module`][1].
@@ -712,7 +712,7 @@ impl<'a> Reflector<'a> {
                 } else { None }
             });
             if self.module.version() >= VERSION_1_4 &&
-                !entry_point.interface.contains(&op_variable.id_result)
+                !entry_point.interface.contains(op_variable.id_result)
             {
                 return Ok(None)
             }
@@ -1147,7 +1147,7 @@ impl<'a> Reflector<'a> {
                     .filter_map(|dec| {
                         if let Some(member) = dec.member &&
                             let op::DecorationOperands::Offset { byte_offset } = dec.decoration &&
-                            let Some(&ty) = member_types.get(member as usize) &&
+                            let Some(ty) = member_types.get(member as usize) &&
                             let Ok(desc) = self.type_description(ty)
                         {
                             Some((desc, member, byte_offset))

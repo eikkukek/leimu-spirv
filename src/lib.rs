@@ -1,9 +1,6 @@
 //! Compact SPIR-V reflection library written in pure-Rust with zero dependencies and minimal
 //! allocations.
-//! 
-//! [1]: op::Decoration
-//! [2]: stream::InstructionStream
-//! [3]: op::IdResult
+//!
 //! # Usage 
 //! ``` rust
 //! use leimu_spirv::op;
@@ -21,9 +18,9 @@
 //!             let mut set = None;
 //!             let mut binding = None;
 //!             for dec in reflector.decorations(ubo.variable_id) {
-//!                 if let op::Decoration::DescriptorSet { descriptor_set } = dec.decoration {
+//!                 if let op::DecorationOperands::DescriptorSet { descriptor_set } = dec.decoration {
 //!                     set = Some(descriptor_set);
-//!                 } else if let op::Decoration::Binding { binding_point } = dec.decoration {
+//!                 } else if let op::DecorationOperands::Binding { binding_point } = dec.decoration {
 //!                     binding = Some(binding_point);
 //!                 }
 //!             }

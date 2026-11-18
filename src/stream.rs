@@ -11,10 +11,11 @@ use crate::{
 /// [1]: InstructionStream
 #[derive(Clone, Copy)]
 pub struct Stream<'a> {
-    spirv: &'a [u32],
+    spirv: &'a [WordBytes],
     version: u32,
     bound: u32,
     pos: usize,
+    endianness: Endianness,
 }
 
 impl<'a> Stream<'a> {
@@ -24,31 +25,46 @@ impl<'a> Stream<'a> {
     pub fn new(spirv: &'a [u32]) -> ParseResult<Self> {
         if spirv.len() < 5 { return Err(ParseError::EndOfStream) }
         let magic_number = spirv[0];
-        if magic_number != 0x07230203 {
-            return Err(ParseError::InvalidMagicNumber(magic_number))
-        }
+        let le = 0x07230203u32.to_le_bytes();
+        let be = 0x07230203u32.to_be_bytes();
+        let endianness =
+            if magic_number == u32::from_le_bytes(le)
+            {
+                Endianness::Le
+            } else if magic_number == u32::from_be_bytes(be) {
+                Endianness::Be
+            } else {
+                return Err(ParseError::InvalidMagicNumber(magic_number))
+            };
         Ok(Self {
-            spirv: &spirv[5..],
+            spirv: WordBytes::transmute_slice_from_u32(&spirv[5..]),
             version: spirv[1],
             bound: spirv[3],
             pos: 0,
+            endianness,
         })
+    }
+    
+    /// Returns the [`Endianness`] of this stream.
+    #[inline]
+    pub fn endianness(&self) -> Endianness {
+        self.endianness
     }
 
     /// Resets the stream's position to zero.
-    #[inline(always)]
+    #[inline]
     pub fn reset(&mut self) {
         self.pos = 0;
     }
 
     /// The version of the SPIR-V passed to this stream.
-    #[inline(always)]
+    #[inline]
     pub fn version(&self) -> u32 {
         self.version
     }
 
     /// The bound, where all ids are guaranteed to satisfy 0 < id < bound.
-    #[inline(always)]
+    #[inline]
     pub fn bound(&self) -> u32 {
         self.bound
     }
@@ -58,11 +74,18 @@ impl<'a> Stream<'a> {
 #[derive(Clone, Copy)]
 pub struct InstructionStream<'a> {
     op: op::Code,
-    words: &'a [u32],
+    words: &'a [WordBytes],
     pos: usize,
+    endianness: Endianness,
 }
 
 impl<'a> InstructionStream<'a> {
+
+    /// Returns the [`Endianness`] of this stream.
+    #[inline]
+    pub fn endianness(&self) -> Endianness {
+        self.endianness
+    }
 
     /// Returns the instruction's [`Code`][1].
     ///
@@ -94,7 +117,7 @@ impl<'a> InstructionStream<'a> {
             Ok(())
         }
     }
-    
+
     /// Reads a word from the stream.
     #[inline]
     pub fn read(&mut self) -> ParseResult<u32> {
@@ -103,7 +126,10 @@ impl<'a> InstructionStream<'a> {
         if pos == len { Err(ParseError::EndOfStream) }
         else {
             self.pos += 1;
-            Ok(self.words[pos])
+            Ok(u32::from_word(
+                self.words[pos],
+                self.endianness,
+            ))
         }
     }
 
@@ -111,7 +137,7 @@ impl<'a> InstructionStream<'a> {
     ///
     /// Pass [`None`] for `count` to read until the end of the stream.
     #[inline]
-    pub fn read_words(&mut self, count: Option<u32>) -> ParseResult<&'a [u32]> {
+    pub fn read_words(&mut self, count: Option<u32>) -> ParseResult<&'a [WordBytes]> {
         let len = self.words.len();
         let pos = self.pos;
         if pos == len { Ok(Default::default()) }
@@ -135,7 +161,13 @@ impl<'a> InstructionStream<'a> {
         let pos = self.pos;
         if pos == self.words.len() { Err(ParseError::EndOfStream) }
         else {
-            let str = LiteralStr::new(&self.words[pos..])?;
+            let words = &self.words[pos..];
+            let str = LiteralStr::new(unsafe {
+                core::slice::from_raw_parts(
+                    words.as_ptr().cast(),
+                    words.len()
+                )
+            })?;
             let div = str.len_with_nul() / 4;
             let mul = 4 * div;
             self.pos = pos + div + if str.len_with_nul() - mul != 0 { 1 } else { 0 };
@@ -154,7 +186,7 @@ impl<'a> Iterator for Stream<'a> {
         let pos = self.pos;
         if pos == len { None }
         else {
-            let word = self.spirv[pos];
+            let word: u32 = Word::from_word(self.spirv[pos], self.endianness);
             let (count, op_code) = (word >> 16, word & 0xFFFF);
             let end = pos + count as usize;
             if end > len { None }
@@ -163,6 +195,7 @@ impl<'a> Iterator for Stream<'a> {
                     op: op::Code(op_code as u16),
                     words: &self.spirv[pos..end],
                     pos: 1,
+                    endianness: self.endianness,
                 };
                 self.pos = end;
                 Some(instruction)
