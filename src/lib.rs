@@ -48,6 +48,8 @@
 //! }
 //! ```
 
+#![warn(rustdoc::all)]
+
 mod core;
 pub mod stream;
 pub mod op;

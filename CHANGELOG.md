@@ -1,6 +1,9 @@
 # Cangelog
 All changes to this project will be documented in this file.
 
+## [0.5.0] - 2026-11-18
+### Changed
+- SPIR-V autogeneration (`Hash` for enums)
 ## [0.4.2] - 2026-11-02
 ### Fixed
 - license format

@@ -3,7 +3,7 @@
 #![doc = r" This file is auto-generated, do not modify manually."]
 use crate::{core::*, op::*};
 use core::fmt::{self, Display};
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct Code(pub(crate) u16);
 impl Code {
     #[doc = "# Struct template"]

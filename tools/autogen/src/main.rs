@@ -102,7 +102,7 @@ fn enum_gen(
     let path = op_path.with_file_name("op/enums.rs");
     let mut enums = File::create(&path)?;
     let struct_derive = quote! {
-        #[derive(Clone, Copy, PartialEq, Eq, Debug)]
+        #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
     };
     let enum_derive = quote! {
         #[derive(Clone, Copy, Debug)]
@@ -244,6 +244,10 @@ fn enum_gen(
                 .members()
                 .any(|enumerant| !enumerant["parameters"].is_null())
             {
+                let kind = Ident::new(
+                    &format!("{kind}Operands"),
+                    Span::call_site(),
+                );
                 let mut variants = vec![];
                 let mut display = vec![];
                 let mut parse = vec![];
@@ -352,60 +356,59 @@ fn enum_gen(
                     }
                 };
                 write!(enums, "{def}\n{parse}\n{display}\n")?;
-            } else {
-                let def = quote! {
-                    #struct_derive
-                    pub struct #kind(pub(crate) u32);
-                };
-                let enumerants: Vec<_> = enumerants
-                    .members()
-                    .map(|enumerant| {
-                        let name = enumerant["enumerant"].as_str().unwrap();
-                        let snake_case = upper_snake_case(name);
-                        let value = enumerant["value"].as_u32().unwrap();
-                        (
-                            quote! {
-                                pub const #snake_case: Self = Self(#value);
-                            },
-                            quote! {
-                                Self::#snake_case => write!(f, #name),
-                            },
-                        )
-                    }).collect();
-                let inherent = enumerants
-                    .iter()
-                    .map(|(def, _)| def);
-                let inherent = quote! {
-                    impl #kind {
-                        #(#inherent)*
-                    }
-                };
-                let word = quote! {
-
-                    impl Word for #kind {
-
-                        #[inline]
-                        fn from_word(word: u32) -> Self {
-                            Self(word)
-                        }
-                    }
-                };
-                let display = enumerants
-                    .iter()
-                    .map(|(_, display)| display);
-                let display = quote! {
-                    impl Display for #kind {
-
-                        fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                            match *self {
-                                #(#display)*
-                                x => write!(f, "{x}"),
-                            }
-                        }
-                    }
-                };
-                write!(enums, "{def}\n{inherent}\n{word}\n{display}\n")?;
             }
+            let def = quote! {
+                #struct_derive
+                pub struct #kind(pub(crate) u32);
+            };
+            let enumerants: Vec<_> = enumerants
+                .members()
+                .map(|enumerant| {
+                    let name = enumerant["enumerant"].as_str().unwrap();
+                    let snake_case = upper_snake_case(name);
+                    let value = enumerant["value"].as_u32().unwrap();
+                    (
+                        quote! {
+                            pub const #snake_case: Self = Self(#value);
+                        },
+                        quote! {
+                            Self::#snake_case => write!(f, #name),
+                        },
+                    )
+                }).collect();
+            let inherent = enumerants
+                .iter()
+                .map(|(def, _)| def);
+            let inherent = quote! {
+                impl #kind {
+                    #(#inherent)*
+                }
+            };
+            let word = quote! {
+
+                impl Word for #kind {
+
+                    #[inline]
+                    fn from_word(word: u32) -> Self {
+                        Self(word)
+                    }
+                }
+            };
+            let display = enumerants
+                .iter()
+                .map(|(_, display)| display);
+            let display = quote! {
+                impl Display for #kind {
+
+                    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                        match *self {
+                            #(#display)*
+                            x => write!(f, "{x}"),
+                        }
+                    }
+                }
+            };
+            write!(enums, "{def}\n{inherent}\n{word}\n{display}\n")?;
         }
     }
     enums.flush()?;
@@ -754,7 +757,7 @@ fn definition_gen(
         ];
     };
     let opcode_def = quote! {
-        #[derive(Clone, Copy, PartialEq, Eq, Debug)]
+        #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
         pub struct Code(pub(crate) u16);
         impl Code {
             #(#opcodes)*

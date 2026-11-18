@@ -14,7 +14,7 @@ impl BitFmt {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct ImageOperands(pub(crate) u32);
 impl ImageOperands {
     pub const NONE: Self = Self(0x0000);
@@ -128,7 +128,7 @@ impl Display for ImageOperands {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct FPFastMathMode(pub(crate) u32);
 impl FPFastMathMode {
     pub const NONE: Self = Self(0x0000);
@@ -202,7 +202,7 @@ impl Display for FPFastMathMode {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct SelectionControl(pub(crate) u32);
 impl SelectionControl {
     pub const NONE: Self = Self(0x0000);
@@ -246,7 +246,7 @@ impl Display for SelectionControl {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct LoopControl(pub(crate) u32);
 impl LoopControl {
     pub const NONE: Self = Self(0x0000);
@@ -375,7 +375,7 @@ impl Display for LoopControl {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct FunctionControl(pub(crate) u32);
 impl FunctionControl {
     pub const NONE: Self = Self(0x0000);
@@ -434,7 +434,7 @@ impl Display for FunctionControl {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct MemorySemantics(pub(crate) u32);
 impl MemorySemantics {
     pub const RELAXED: Self = Self(0x0000);
@@ -538,7 +538,7 @@ impl Display for MemorySemantics {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct MemoryAccess(pub(crate) u32);
 impl MemoryAccess {
     pub const NONE: Self = Self(0x0000);
@@ -612,7 +612,7 @@ impl Display for MemoryAccess {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct KernelProfilingInfo(pub(crate) u32);
 impl KernelProfilingInfo {
     pub const NONE: Self = Self(0x0000);
@@ -651,7 +651,7 @@ impl Display for KernelProfilingInfo {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct RayFlags(pub(crate) u32);
 impl RayFlags {
     pub const NONE_KHR: Self = Self(0x0000);
@@ -742,7 +742,7 @@ impl Display for RayFlags {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct FragmentShadingRate(pub(crate) u32);
 impl FragmentShadingRate {
     pub const VERTICAL2_PIXELS: Self = Self(0x0001);
@@ -795,7 +795,7 @@ impl Display for FragmentShadingRate {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct RawAccessChainOperands(pub(crate) u32);
 impl RawAccessChainOperands {
     pub const NONE: Self = Self(0x0000);
@@ -839,7 +839,7 @@ impl Display for RawAccessChainOperands {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct SourceLanguage(pub(crate) u32);
 impl SourceLanguage {
     pub const UNKNOWN: Self = Self(0u32);
@@ -884,7 +884,7 @@ impl Display for SourceLanguage {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct ExecutionModel(pub(crate) u32);
 impl ExecutionModel {
     pub const VERTEX: Self = Self(0u32);
@@ -935,7 +935,7 @@ impl Display for ExecutionModel {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct AddressingModel(pub(crate) u32);
 impl AddressingModel {
     pub const LOGICAL: Self = Self(0u32);
@@ -960,7 +960,7 @@ impl Display for AddressingModel {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct MemoryModel(pub(crate) u32);
 impl MemoryModel {
     pub const SIMPLE: Self = Self(0u32);
@@ -986,7 +986,7 @@ impl Display for MemoryModel {
     }
 }
 #[derive(Clone, Copy, Debug)]
-pub enum ExecutionMode {
+pub enum ExecutionModeOperands {
     Invocations {
         number_of_invocations: LiteralInteger,
     },
@@ -1182,7 +1182,7 @@ pub enum ExecutionMode {
         named_maximum_number_of_registers: NamedMaximumNumberOfRegisters,
     },
 }
-impl<'a> ExecutionMode {
+impl<'a> ExecutionModeOperands {
     #[inline]
     pub fn parse_one(stream: &mut InstructionStream<'a>) -> ParseResult<Self> {
         let variant = stream.read()?;
@@ -1384,13 +1384,13 @@ impl<'a> ExecutionMode {
                 )?,
             }),
             x => Err(ParseError::UnknownVariant {
-                kind: stringify!(ExecutionMode),
+                kind: stringify!(ExecutionModeOperands),
                 value: x,
             }),
         }
     }
 }
-impl Display for ExecutionMode {
+impl Display for ExecutionModeOperands {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Invocations {
@@ -1750,7 +1750,230 @@ impl Display for ExecutionMode {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+pub struct ExecutionMode(pub(crate) u32);
+impl ExecutionMode {
+    pub const INVOCATIONS: Self = Self(0u32);
+    pub const SPACING_EQUAL: Self = Self(1u32);
+    pub const SPACING_FRACTIONAL_EVEN: Self = Self(2u32);
+    pub const SPACING_FRACTIONAL_ODD: Self = Self(3u32);
+    pub const VERTEX_ORDER_CW: Self = Self(4u32);
+    pub const VERTEX_ORDER_CCW: Self = Self(5u32);
+    pub const PIXEL_CENTER_INTEGER: Self = Self(6u32);
+    pub const ORIGIN_UPPER_LEFT: Self = Self(7u32);
+    pub const ORIGIN_LOWER_LEFT: Self = Self(8u32);
+    pub const EARLY_FRAGMENT_TESTS: Self = Self(9u32);
+    pub const POINT_MODE: Self = Self(10u32);
+    pub const XFB: Self = Self(11u32);
+    pub const DEPTH_REPLACING: Self = Self(12u32);
+    pub const DEPTH_GREATER: Self = Self(14u32);
+    pub const DEPTH_LESS: Self = Self(15u32);
+    pub const DEPTH_UNCHANGED: Self = Self(16u32);
+    pub const LOCAL_SIZE: Self = Self(17u32);
+    pub const LOCAL_SIZE_HINT: Self = Self(18u32);
+    pub const INPUT_POINTS: Self = Self(19u32);
+    pub const INPUT_LINES: Self = Self(20u32);
+    pub const INPUT_LINES_ADJACENCY: Self = Self(21u32);
+    pub const TRIANGLES: Self = Self(22u32);
+    pub const INPUT_TRIANGLES_ADJACENCY: Self = Self(23u32);
+    pub const QUADS: Self = Self(24u32);
+    pub const ISOLINES: Self = Self(25u32);
+    pub const OUTPUT_VERTICES: Self = Self(26u32);
+    pub const OUTPUT_POINTS: Self = Self(27u32);
+    pub const OUTPUT_LINE_STRIP: Self = Self(28u32);
+    pub const OUTPUT_TRIANGLE_STRIP: Self = Self(29u32);
+    pub const VEC_TYPE_HINT: Self = Self(30u32);
+    pub const CONTRACTION_OFF: Self = Self(31u32);
+    pub const INITIALIZER: Self = Self(33u32);
+    pub const FINALIZER: Self = Self(34u32);
+    pub const SUBGROUP_SIZE: Self = Self(35u32);
+    pub const SUBGROUPS_PER_WORKGROUP: Self = Self(36u32);
+    pub const SUBGROUPS_PER_WORKGROUP_ID: Self = Self(37u32);
+    pub const LOCAL_SIZE_ID: Self = Self(38u32);
+    pub const LOCAL_SIZE_HINT_ID: Self = Self(39u32);
+    pub const NON_COHERENT_COLOR_ATTACHMENT_READ_EXT: Self = Self(4169u32);
+    pub const NON_COHERENT_DEPTH_ATTACHMENT_READ_EXT: Self = Self(4170u32);
+    pub const NON_COHERENT_STENCIL_ATTACHMENT_READ_EXT: Self = Self(4171u32);
+    pub const SUBGROUP_UNIFORM_CONTROL_FLOW_KHR: Self = Self(4421u32);
+    pub const POST_DEPTH_COVERAGE: Self = Self(4446u32);
+    pub const DENORM_PRESERVE: Self = Self(4459u32);
+    pub const DENORM_FLUSH_TO_ZERO: Self = Self(4460u32);
+    pub const SIGNED_ZERO_INF_NAN_PRESERVE: Self = Self(4461u32);
+    pub const ROUNDING_MODE_RTE: Self = Self(4462u32);
+    pub const ROUNDING_MODE_RTZ: Self = Self(4463u32);
+    pub const NON_COHERENT_TILE_ATTACHMENT_READ_QCOM: Self = Self(4489u32);
+    pub const TILE_SHADING_RATE_QCOM: Self = Self(4490u32);
+    pub const EARLY_AND_LATE_FRAGMENT_TESTS_AMD: Self = Self(5017u32);
+    pub const STENCIL_REF_REPLACING_EXT: Self = Self(5027u32);
+    pub const COALESCING_AMDX: Self = Self(5069u32);
+    pub const IS_API_ENTRY_AMDX: Self = Self(5070u32);
+    pub const MAX_NODE_RECURSION_AMDX: Self = Self(5071u32);
+    pub const STATIC_NUM_WORKGROUPS_AMDX: Self = Self(5072u32);
+    pub const SHADER_INDEX_AMDX: Self = Self(5073u32);
+    pub const MAX_NUM_WORKGROUPS_AMDX: Self = Self(5077u32);
+    pub const STENCIL_REF_UNCHANGED_FRONT_AMD: Self = Self(5079u32);
+    pub const STENCIL_REF_GREATER_FRONT_AMD: Self = Self(5080u32);
+    pub const STENCIL_REF_LESS_FRONT_AMD: Self = Self(5081u32);
+    pub const STENCIL_REF_UNCHANGED_BACK_AMD: Self = Self(5082u32);
+    pub const STENCIL_REF_GREATER_BACK_AMD: Self = Self(5083u32);
+    pub const STENCIL_REF_LESS_BACK_AMD: Self = Self(5084u32);
+    pub const QUAD_DERIVATIVES_KHR: Self = Self(5088u32);
+    pub const REQUIRE_FULL_QUADS_KHR: Self = Self(5089u32);
+    pub const SHARES_INPUT_WITH_AMDX: Self = Self(5102u32);
+    pub const ARITHMETIC_POISON_KHR: Self = Self(5157u32);
+    pub const OUTPUT_LINES_EXT: Self = Self(5269u32);
+    pub const OUTPUT_PRIMITIVES_EXT: Self = Self(5270u32);
+    pub const DERIVATIVE_GROUP_QUADS_KHR: Self = Self(5289u32);
+    pub const DERIVATIVE_GROUP_LINEAR_KHR: Self = Self(5290u32);
+    pub const OUTPUT_TRIANGLES_EXT: Self = Self(5298u32);
+    pub const PIXEL_INTERLOCK_ORDERED_EXT: Self = Self(5366u32);
+    pub const PIXEL_INTERLOCK_UNORDERED_EXT: Self = Self(5367u32);
+    pub const SAMPLE_INTERLOCK_ORDERED_EXT: Self = Self(5368u32);
+    pub const SAMPLE_INTERLOCK_UNORDERED_EXT: Self = Self(5369u32);
+    pub const SHADING_RATE_INTERLOCK_ORDERED_EXT: Self = Self(5370u32);
+    pub const SHADING_RATE_INTERLOCK_UNORDERED_EXT: Self = Self(5371u32);
+    pub const SHADER64_BIT_INDEXING_EXT: Self = Self(5427u32);
+    pub const SHARED_LOCAL_MEMORY_SIZE_INTEL: Self = Self(5618u32);
+    pub const ROUNDING_MODE_RTPINTEL: Self = Self(5620u32);
+    pub const ROUNDING_MODE_RTNINTEL: Self = Self(5621u32);
+    pub const FLOATING_POINT_MODE_ALTINTEL: Self = Self(5622u32);
+    pub const FLOATING_POINT_MODE_IEEEINTEL: Self = Self(5623u32);
+    pub const MAX_WORKGROUP_SIZE_INTEL: Self = Self(5893u32);
+    pub const MAX_WORK_DIM_INTEL: Self = Self(5894u32);
+    pub const NO_GLOBAL_OFFSET_INTEL: Self = Self(5895u32);
+    pub const NUM_SIMDWORKITEMS_INTEL: Self = Self(5896u32);
+    pub const SCHEDULER_TARGET_FMAX_MHZ_INTEL: Self = Self(5903u32);
+    pub const MAXIMALLY_RECONVERGES_KHR: Self = Self(6023u32);
+    pub const FPFAST_MATH_DEFAULT: Self = Self(6028u32);
+    pub const STREAMING_INTERFACE_INTEL: Self = Self(6154u32);
+    pub const REGISTER_MAP_INTERFACE_INTEL: Self = Self(6160u32);
+    pub const NAMED_BARRIER_COUNT_INTEL: Self = Self(6417u32);
+    pub const MAXIMUM_REGISTERS_INTEL: Self = Self(6461u32);
+    pub const MAXIMUM_REGISTERS_ID_INTEL: Self = Self(6462u32);
+    pub const NAMED_MAXIMUM_REGISTERS_INTEL: Self = Self(6463u32);
+}
+impl Word for ExecutionMode {
+    #[inline]
+    fn from_word(word: u32) -> Self {
+        Self(word)
+    }
+}
+impl Display for ExecutionMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match *self {
+            Self::INVOCATIONS => write!(f, "Invocations"),
+            Self::SPACING_EQUAL => write!(f, "SpacingEqual"),
+            Self::SPACING_FRACTIONAL_EVEN => write!(f, "SpacingFractionalEven"),
+            Self::SPACING_FRACTIONAL_ODD => write!(f, "SpacingFractionalOdd"),
+            Self::VERTEX_ORDER_CW => write!(f, "VertexOrderCw"),
+            Self::VERTEX_ORDER_CCW => write!(f, "VertexOrderCcw"),
+            Self::PIXEL_CENTER_INTEGER => write!(f, "PixelCenterInteger"),
+            Self::ORIGIN_UPPER_LEFT => write!(f, "OriginUpperLeft"),
+            Self::ORIGIN_LOWER_LEFT => write!(f, "OriginLowerLeft"),
+            Self::EARLY_FRAGMENT_TESTS => write!(f, "EarlyFragmentTests"),
+            Self::POINT_MODE => write!(f, "PointMode"),
+            Self::XFB => write!(f, "Xfb"),
+            Self::DEPTH_REPLACING => write!(f, "DepthReplacing"),
+            Self::DEPTH_GREATER => write!(f, "DepthGreater"),
+            Self::DEPTH_LESS => write!(f, "DepthLess"),
+            Self::DEPTH_UNCHANGED => write!(f, "DepthUnchanged"),
+            Self::LOCAL_SIZE => write!(f, "LocalSize"),
+            Self::LOCAL_SIZE_HINT => write!(f, "LocalSizeHint"),
+            Self::INPUT_POINTS => write!(f, "InputPoints"),
+            Self::INPUT_LINES => write!(f, "InputLines"),
+            Self::INPUT_LINES_ADJACENCY => write!(f, "InputLinesAdjacency"),
+            Self::TRIANGLES => write!(f, "Triangles"),
+            Self::INPUT_TRIANGLES_ADJACENCY => write!(f, "InputTrianglesAdjacency"),
+            Self::QUADS => write!(f, "Quads"),
+            Self::ISOLINES => write!(f, "Isolines"),
+            Self::OUTPUT_VERTICES => write!(f, "OutputVertices"),
+            Self::OUTPUT_POINTS => write!(f, "OutputPoints"),
+            Self::OUTPUT_LINE_STRIP => write!(f, "OutputLineStrip"),
+            Self::OUTPUT_TRIANGLE_STRIP => write!(f, "OutputTriangleStrip"),
+            Self::VEC_TYPE_HINT => write!(f, "VecTypeHint"),
+            Self::CONTRACTION_OFF => write!(f, "ContractionOff"),
+            Self::INITIALIZER => write!(f, "Initializer"),
+            Self::FINALIZER => write!(f, "Finalizer"),
+            Self::SUBGROUP_SIZE => write!(f, "SubgroupSize"),
+            Self::SUBGROUPS_PER_WORKGROUP => write!(f, "SubgroupsPerWorkgroup"),
+            Self::SUBGROUPS_PER_WORKGROUP_ID => write!(f, "SubgroupsPerWorkgroupId"),
+            Self::LOCAL_SIZE_ID => write!(f, "LocalSizeId"),
+            Self::LOCAL_SIZE_HINT_ID => write!(f, "LocalSizeHintId"),
+            Self::NON_COHERENT_COLOR_ATTACHMENT_READ_EXT => {
+                write!(f, "NonCoherentColorAttachmentReadEXT")
+            }
+            Self::NON_COHERENT_DEPTH_ATTACHMENT_READ_EXT => {
+                write!(f, "NonCoherentDepthAttachmentReadEXT")
+            }
+            Self::NON_COHERENT_STENCIL_ATTACHMENT_READ_EXT => {
+                write!(f, "NonCoherentStencilAttachmentReadEXT")
+            }
+            Self::SUBGROUP_UNIFORM_CONTROL_FLOW_KHR => write!(f, "SubgroupUniformControlFlowKHR"),
+            Self::POST_DEPTH_COVERAGE => write!(f, "PostDepthCoverage"),
+            Self::DENORM_PRESERVE => write!(f, "DenormPreserve"),
+            Self::DENORM_FLUSH_TO_ZERO => write!(f, "DenormFlushToZero"),
+            Self::SIGNED_ZERO_INF_NAN_PRESERVE => write!(f, "SignedZeroInfNanPreserve"),
+            Self::ROUNDING_MODE_RTE => write!(f, "RoundingModeRTE"),
+            Self::ROUNDING_MODE_RTZ => write!(f, "RoundingModeRTZ"),
+            Self::NON_COHERENT_TILE_ATTACHMENT_READ_QCOM => {
+                write!(f, "NonCoherentTileAttachmentReadQCOM")
+            }
+            Self::TILE_SHADING_RATE_QCOM => write!(f, "TileShadingRateQCOM"),
+            Self::EARLY_AND_LATE_FRAGMENT_TESTS_AMD => write!(f, "EarlyAndLateFragmentTestsAMD"),
+            Self::STENCIL_REF_REPLACING_EXT => write!(f, "StencilRefReplacingEXT"),
+            Self::COALESCING_AMDX => write!(f, "CoalescingAMDX"),
+            Self::IS_API_ENTRY_AMDX => write!(f, "IsApiEntryAMDX"),
+            Self::MAX_NODE_RECURSION_AMDX => write!(f, "MaxNodeRecursionAMDX"),
+            Self::STATIC_NUM_WORKGROUPS_AMDX => write!(f, "StaticNumWorkgroupsAMDX"),
+            Self::SHADER_INDEX_AMDX => write!(f, "ShaderIndexAMDX"),
+            Self::MAX_NUM_WORKGROUPS_AMDX => write!(f, "MaxNumWorkgroupsAMDX"),
+            Self::STENCIL_REF_UNCHANGED_FRONT_AMD => write!(f, "StencilRefUnchangedFrontAMD"),
+            Self::STENCIL_REF_GREATER_FRONT_AMD => write!(f, "StencilRefGreaterFrontAMD"),
+            Self::STENCIL_REF_LESS_FRONT_AMD => write!(f, "StencilRefLessFrontAMD"),
+            Self::STENCIL_REF_UNCHANGED_BACK_AMD => write!(f, "StencilRefUnchangedBackAMD"),
+            Self::STENCIL_REF_GREATER_BACK_AMD => write!(f, "StencilRefGreaterBackAMD"),
+            Self::STENCIL_REF_LESS_BACK_AMD => write!(f, "StencilRefLessBackAMD"),
+            Self::QUAD_DERIVATIVES_KHR => write!(f, "QuadDerivativesKHR"),
+            Self::REQUIRE_FULL_QUADS_KHR => write!(f, "RequireFullQuadsKHR"),
+            Self::SHARES_INPUT_WITH_AMDX => write!(f, "SharesInputWithAMDX"),
+            Self::ARITHMETIC_POISON_KHR => write!(f, "ArithmeticPoisonKHR"),
+            Self::OUTPUT_LINES_EXT => write!(f, "OutputLinesEXT"),
+            Self::OUTPUT_PRIMITIVES_EXT => write!(f, "OutputPrimitivesEXT"),
+            Self::DERIVATIVE_GROUP_QUADS_KHR => write!(f, "DerivativeGroupQuadsKHR"),
+            Self::DERIVATIVE_GROUP_LINEAR_KHR => write!(f, "DerivativeGroupLinearKHR"),
+            Self::OUTPUT_TRIANGLES_EXT => write!(f, "OutputTrianglesEXT"),
+            Self::PIXEL_INTERLOCK_ORDERED_EXT => write!(f, "PixelInterlockOrderedEXT"),
+            Self::PIXEL_INTERLOCK_UNORDERED_EXT => write!(f, "PixelInterlockUnorderedEXT"),
+            Self::SAMPLE_INTERLOCK_ORDERED_EXT => write!(f, "SampleInterlockOrderedEXT"),
+            Self::SAMPLE_INTERLOCK_UNORDERED_EXT => write!(f, "SampleInterlockUnorderedEXT"),
+            Self::SHADING_RATE_INTERLOCK_ORDERED_EXT => write!(f, "ShadingRateInterlockOrderedEXT"),
+            Self::SHADING_RATE_INTERLOCK_UNORDERED_EXT => {
+                write!(f, "ShadingRateInterlockUnorderedEXT")
+            }
+            Self::SHADER64_BIT_INDEXING_EXT => write!(f, "Shader64BitIndexingEXT"),
+            Self::SHARED_LOCAL_MEMORY_SIZE_INTEL => write!(f, "SharedLocalMemorySizeINTEL"),
+            Self::ROUNDING_MODE_RTPINTEL => write!(f, "RoundingModeRTPINTEL"),
+            Self::ROUNDING_MODE_RTNINTEL => write!(f, "RoundingModeRTNINTEL"),
+            Self::FLOATING_POINT_MODE_ALTINTEL => write!(f, "FloatingPointModeALTINTEL"),
+            Self::FLOATING_POINT_MODE_IEEEINTEL => write!(f, "FloatingPointModeIEEEINTEL"),
+            Self::MAX_WORKGROUP_SIZE_INTEL => write!(f, "MaxWorkgroupSizeINTEL"),
+            Self::MAX_WORK_DIM_INTEL => write!(f, "MaxWorkDimINTEL"),
+            Self::NO_GLOBAL_OFFSET_INTEL => write!(f, "NoGlobalOffsetINTEL"),
+            Self::NUM_SIMDWORKITEMS_INTEL => write!(f, "NumSIMDWorkitemsINTEL"),
+            Self::SCHEDULER_TARGET_FMAX_MHZ_INTEL => write!(f, "SchedulerTargetFmaxMhzINTEL"),
+            Self::MAXIMALLY_RECONVERGES_KHR => write!(f, "MaximallyReconvergesKHR"),
+            Self::FPFAST_MATH_DEFAULT => write!(f, "FPFastMathDefault"),
+            Self::STREAMING_INTERFACE_INTEL => write!(f, "StreamingInterfaceINTEL"),
+            Self::REGISTER_MAP_INTERFACE_INTEL => write!(f, "RegisterMapInterfaceINTEL"),
+            Self::NAMED_BARRIER_COUNT_INTEL => write!(f, "NamedBarrierCountINTEL"),
+            Self::MAXIMUM_REGISTERS_INTEL => write!(f, "MaximumRegistersINTEL"),
+            Self::MAXIMUM_REGISTERS_ID_INTEL => write!(f, "MaximumRegistersIdINTEL"),
+            Self::NAMED_MAXIMUM_REGISTERS_INTEL => write!(f, "NamedMaximumRegistersINTEL"),
+            x => write!(f, "{x}"),
+        }
+    }
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct StorageClass(pub(crate) u32);
 impl StorageClass {
     pub const UNIFORM_CONSTANT: Self = Self(0u32);
@@ -1825,7 +2048,7 @@ impl Display for StorageClass {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct Dim(pub(crate) u32);
 impl Dim {
     pub const TYPE_1D: Self = Self(0u32);
@@ -1858,7 +2081,7 @@ impl Display for Dim {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct SamplerAddressingMode(pub(crate) u32);
 impl SamplerAddressingMode {
     pub const NONE: Self = Self(0u32);
@@ -1885,7 +2108,7 @@ impl Display for SamplerAddressingMode {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct SamplerFilterMode(pub(crate) u32);
 impl SamplerFilterMode {
     pub const NEAREST: Self = Self(0u32);
@@ -1906,7 +2129,7 @@ impl Display for SamplerFilterMode {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct ImageFormat(pub(crate) u32);
 impl ImageFormat {
     pub const UNKNOWN: Self = Self(0u32);
@@ -2007,7 +2230,7 @@ impl Display for ImageFormat {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct ImageChannelOrder(pub(crate) u32);
 impl ImageChannelOrder {
     pub const R: Self = Self(0u32);
@@ -2064,7 +2287,7 @@ impl Display for ImageChannelOrder {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct ImageChannelDataType(pub(crate) u32);
 impl ImageChannelDataType {
     pub const SNORM_INT8: Self = Self(0u32);
@@ -2133,7 +2356,7 @@ impl Display for ImageChannelDataType {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct FPRoundingMode(pub(crate) u32);
 impl FPRoundingMode {
     pub const RTE: Self = Self(0u32);
@@ -2158,7 +2381,7 @@ impl Display for FPRoundingMode {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct FPDenormMode(pub(crate) u32);
 impl FPDenormMode {
     pub const PRESERVE: Self = Self(0u32);
@@ -2179,7 +2402,7 @@ impl Display for FPDenormMode {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct QuantizationModes(pub(crate) u32);
 impl QuantizationModes {
     pub const TRN: Self = Self(0u32);
@@ -2212,7 +2435,7 @@ impl Display for QuantizationModes {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct FPOperationMode(pub(crate) u32);
 impl FPOperationMode {
     pub const IEEE: Self = Self(0u32);
@@ -2233,7 +2456,7 @@ impl Display for FPOperationMode {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct OverflowModes(pub(crate) u32);
 impl OverflowModes {
     pub const WRAP: Self = Self(0u32);
@@ -2258,7 +2481,7 @@ impl Display for OverflowModes {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct LinkageType(pub(crate) u32);
 impl LinkageType {
     pub const EXPORT: Self = Self(0u32);
@@ -2281,7 +2504,7 @@ impl Display for LinkageType {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct AccessQualifier(pub(crate) u32);
 impl AccessQualifier {
     pub const READ_ONLY: Self = Self(0u32);
@@ -2304,7 +2527,7 @@ impl Display for AccessQualifier {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct HostAccessQualifier(pub(crate) u32);
 impl HostAccessQualifier {
     pub const NONE_INTEL: Self = Self(0u32);
@@ -2329,7 +2552,7 @@ impl Display for HostAccessQualifier {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct FunctionParameterAttribute(pub(crate) u32);
 impl FunctionParameterAttribute {
     pub const ZEXT: Self = Self(0u32);
@@ -2365,7 +2588,7 @@ impl Display for FunctionParameterAttribute {
     }
 }
 #[derive(Clone, Copy, Debug)]
-pub enum Decoration<'a> {
+pub enum DecorationOperands<'a> {
     RelaxedPrecision,
     SpecId {
         specialization_constant_id: LiteralInteger,
@@ -2684,7 +2907,7 @@ pub enum Decoration<'a> {
         cache_control: StoreCacheControl,
     },
 }
-impl<'a> Decoration<'a> {
+impl<'a> DecorationOperands<'a> {
     #[inline]
     pub fn parse_one(stream: &mut InstructionStream<'a>) -> ParseResult<Self> {
         let variant = stream.read()?;
@@ -3007,13 +3230,13 @@ impl<'a> Decoration<'a> {
                 cache_control: StoreCacheControl::parse_one(stream)?,
             }),
             x => Err(ParseError::UnknownVariant {
-                kind: stringify!(Decoration),
+                kind: stringify!(DecorationOperands),
                 value: x,
             }),
         }
     }
 }
-impl<'a> Display for Decoration<'a> {
+impl<'a> Display for DecorationOperands<'a> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::RelaxedPrecision => write!(f, "{}", stringify!(RelaxedPrecision)),
@@ -3560,7 +3783,340 @@ impl<'a> Display for Decoration<'a> {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+pub struct Decoration(pub(crate) u32);
+impl Decoration {
+    pub const RELAXED_PRECISION: Self = Self(0u32);
+    pub const SPEC_ID: Self = Self(1u32);
+    pub const BLOCK: Self = Self(2u32);
+    pub const BUFFER_BLOCK: Self = Self(3u32);
+    pub const ROW_MAJOR: Self = Self(4u32);
+    pub const COL_MAJOR: Self = Self(5u32);
+    pub const ARRAY_STRIDE: Self = Self(6u32);
+    pub const MATRIX_STRIDE: Self = Self(7u32);
+    pub const GLSLSHARED: Self = Self(8u32);
+    pub const GLSLPACKED: Self = Self(9u32);
+    pub const CPACKED: Self = Self(10u32);
+    pub const BUILT_IN: Self = Self(11u32);
+    pub const NO_PERSPECTIVE: Self = Self(13u32);
+    pub const FLAT: Self = Self(14u32);
+    pub const PATCH: Self = Self(15u32);
+    pub const CENTROID: Self = Self(16u32);
+    pub const SAMPLE: Self = Self(17u32);
+    pub const INVARIANT: Self = Self(18u32);
+    pub const RESTRICT: Self = Self(19u32);
+    pub const ALIASED: Self = Self(20u32);
+    pub const VOLATILE: Self = Self(21u32);
+    pub const CONSTANT: Self = Self(22u32);
+    pub const COHERENT: Self = Self(23u32);
+    pub const NON_WRITABLE: Self = Self(24u32);
+    pub const NON_READABLE: Self = Self(25u32);
+    pub const UNIFORM: Self = Self(26u32);
+    pub const UNIFORM_ID: Self = Self(27u32);
+    pub const SATURATED_CONVERSION: Self = Self(28u32);
+    pub const STREAM: Self = Self(29u32);
+    pub const LOCATION: Self = Self(30u32);
+    pub const COMPONENT: Self = Self(31u32);
+    pub const INDEX: Self = Self(32u32);
+    pub const BINDING: Self = Self(33u32);
+    pub const DESCRIPTOR_SET: Self = Self(34u32);
+    pub const OFFSET: Self = Self(35u32);
+    pub const XFB_BUFFER: Self = Self(36u32);
+    pub const XFB_STRIDE: Self = Self(37u32);
+    pub const FUNC_PARAM_ATTR: Self = Self(38u32);
+    pub const FPROUNDING_MODE: Self = Self(39u32);
+    pub const FPFAST_MATH_MODE: Self = Self(40u32);
+    pub const LINKAGE_ATTRIBUTES: Self = Self(41u32);
+    pub const NO_CONTRACTION: Self = Self(42u32);
+    pub const INPUT_ATTACHMENT_INDEX: Self = Self(43u32);
+    pub const ALIGNMENT: Self = Self(44u32);
+    pub const MAX_BYTE_OFFSET: Self = Self(45u32);
+    pub const ALIGNMENT_ID: Self = Self(46u32);
+    pub const MAX_BYTE_OFFSET_ID: Self = Self(47u32);
+    pub const SATURATED_TO_LARGEST_FLOAT8_NORMAL_CONVERSION_EXT: Self = Self(4216u32);
+    pub const NO_SIGNED_WRAP: Self = Self(4469u32);
+    pub const NO_UNSIGNED_WRAP: Self = Self(4470u32);
+    pub const WEIGHT_TEXTURE_QCOM: Self = Self(4487u32);
+    pub const BLOCK_MATCH_TEXTURE_QCOM: Self = Self(4488u32);
+    pub const BLOCK_MATCH_SAMPLER_QCOM: Self = Self(4499u32);
+    pub const EXPLICIT_INTERP_AMD: Self = Self(4999u32);
+    pub const NODE_SHARES_PAYLOAD_LIMITS_WITH_AMDX: Self = Self(5019u32);
+    pub const NODE_MAX_PAYLOADS_AMDX: Self = Self(5020u32);
+    pub const TRACK_FINISH_WRITING_AMDX: Self = Self(5078u32);
+    pub const PAYLOAD_NODE_NAME_AMDX: Self = Self(5091u32);
+    pub const PAYLOAD_NODE_BASE_INDEX_AMDX: Self = Self(5098u32);
+    pub const PAYLOAD_NODE_SPARSE_ARRAY_AMDX: Self = Self(5099u32);
+    pub const PAYLOAD_NODE_ARRAY_SIZE_AMDX: Self = Self(5100u32);
+    pub const PAYLOAD_DISPATCH_INDIRECT_AMDX: Self = Self(5105u32);
+    pub const ARRAY_STRIDE_ID_EXT: Self = Self(5124u32);
+    pub const OFFSET_ID_EXT: Self = Self(5125u32);
+    pub const UTFENCODED_KHR: Self = Self(5145u32);
+    pub const OVERRIDE_COVERAGE_NV: Self = Self(5248u32);
+    pub const PASSTHROUGH_NV: Self = Self(5250u32);
+    pub const VIEWPORT_RELATIVE_NV: Self = Self(5252u32);
+    pub const SECONDARY_VIEWPORT_RELATIVE_NV: Self = Self(5256u32);
+    pub const PER_PRIMITIVE_EXT: Self = Self(5271u32);
+    pub const PER_VIEW_NV: Self = Self(5272u32);
+    pub const PER_TASK_NV: Self = Self(5273u32);
+    pub const PER_VERTEX_KHR: Self = Self(5285u32);
+    pub const NON_UNIFORM: Self = Self(5300u32);
+    pub const RESTRICT_POINTER: Self = Self(5355u32);
+    pub const ALIASED_POINTER: Self = Self(5356u32);
+    pub const MEMBER_OFFSET_NV: Self = Self(5358u32);
+    pub const HIT_OBJECT_SHADER_RECORD_BUFFER_NV: Self = Self(5386u32);
+    pub const HIT_OBJECT_SHADER_RECORD_BUFFER_EXT: Self = Self(5389u32);
+    pub const BANK_NV: Self = Self(5397u32);
+    pub const BINDLESS_SAMPLER_NV: Self = Self(5398u32);
+    pub const BINDLESS_IMAGE_NV: Self = Self(5399u32);
+    pub const BOUND_SAMPLER_NV: Self = Self(5400u32);
+    pub const BOUND_IMAGE_NV: Self = Self(5401u32);
+    pub const SIMTCALL_INTEL: Self = Self(5599u32);
+    pub const REFERENCED_INDIRECTLY_INTEL: Self = Self(5602u32);
+    pub const CLOBBER_INTEL: Self = Self(5607u32);
+    pub const SIDE_EFFECTS_INTEL: Self = Self(5608u32);
+    pub const VECTOR_COMPUTE_VARIABLE_INTEL: Self = Self(5624u32);
+    pub const FUNC_PARAM_IOKIND_INTEL: Self = Self(5625u32);
+    pub const VECTOR_COMPUTE_FUNCTION_INTEL: Self = Self(5626u32);
+    pub const STACK_CALL_INTEL: Self = Self(5627u32);
+    pub const GLOBAL_VARIABLE_OFFSET_INTEL: Self = Self(5628u32);
+    pub const COUNTER_BUFFER: Self = Self(5634u32);
+    pub const USER_SEMANTIC: Self = Self(5635u32);
+    pub const USER_TYPE_GOOGLE: Self = Self(5636u32);
+    pub const FUNCTION_ROUNDING_MODE_INTEL: Self = Self(5822u32);
+    pub const FUNCTION_DENORM_MODE_INTEL: Self = Self(5823u32);
+    pub const REGISTER_ALTERA: Self = Self(5825u32);
+    pub const MEMORY_ALTERA: Self = Self(5826u32);
+    pub const NUMBANKS_ALTERA: Self = Self(5827u32);
+    pub const BANKWIDTH_ALTERA: Self = Self(5828u32);
+    pub const MAX_PRIVATE_COPIES_ALTERA: Self = Self(5829u32);
+    pub const SINGLEPUMP_ALTERA: Self = Self(5830u32);
+    pub const DOUBLEPUMP_ALTERA: Self = Self(5831u32);
+    pub const MAX_REPLICATES_ALTERA: Self = Self(5832u32);
+    pub const SIMPLE_DUAL_PORT_ALTERA: Self = Self(5833u32);
+    pub const MERGE_ALTERA: Self = Self(5834u32);
+    pub const BANK_BITS_ALTERA: Self = Self(5835u32);
+    pub const FORCE_POW2_DEPTH_ALTERA: Self = Self(5836u32);
+    pub const STRIDESIZE_ALTERA: Self = Self(5883u32);
+    pub const WORDSIZE_ALTERA: Self = Self(5884u32);
+    pub const TRUE_DUAL_PORT_ALTERA: Self = Self(5885u32);
+    pub const BURST_COALESCE_ALTERA: Self = Self(5899u32);
+    pub const CACHE_SIZE_ALTERA: Self = Self(5900u32);
+    pub const DONT_STATICALLY_COALESCE_ALTERA: Self = Self(5901u32);
+    pub const PREFETCH_ALTERA: Self = Self(5902u32);
+    pub const STALL_ENABLE_ALTERA: Self = Self(5905u32);
+    pub const FUSE_LOOPS_IN_FUNCTION_ALTERA: Self = Self(5907u32);
+    pub const MATH_OP_DSPMODE_ALTERA: Self = Self(5909u32);
+    pub const ALIAS_SCOPE_INTEL: Self = Self(5914u32);
+    pub const NO_ALIAS_INTEL: Self = Self(5915u32);
+    pub const INITIATION_INTERVAL_ALTERA: Self = Self(5917u32);
+    pub const MAX_CONCURRENCY_ALTERA: Self = Self(5918u32);
+    pub const PIPELINE_ENABLE_ALTERA: Self = Self(5919u32);
+    pub const BUFFER_LOCATION_ALTERA: Self = Self(5921u32);
+    pub const IOPIPE_STORAGE_ALTERA: Self = Self(5944u32);
+    pub const FUNCTION_FLOATING_POINT_MODE_INTEL: Self = Self(6080u32);
+    pub const SINGLE_ELEMENT_VECTOR_INTEL: Self = Self(6085u32);
+    pub const VECTOR_COMPUTE_CALLABLE_FUNCTION_INTEL: Self = Self(6087u32);
+    pub const MEDIA_BLOCK_IOINTEL: Self = Self(6140u32);
+    pub const STALL_FREE_ALTERA: Self = Self(6151u32);
+    pub const FPMAX_ERROR_DECORATION_INTEL: Self = Self(6170u32);
+    pub const LATENCY_CONTROL_LABEL_ALTERA: Self = Self(6172u32);
+    pub const LATENCY_CONTROL_CONSTRAINT_ALTERA: Self = Self(6173u32);
+    pub const CONDUIT_KERNEL_ARGUMENT_ALTERA: Self = Self(6175u32);
+    pub const REGISTER_MAP_KERNEL_ARGUMENT_ALTERA: Self = Self(6176u32);
+    pub const MMHOST_INTERFACE_ADDRESS_WIDTH_ALTERA: Self = Self(6177u32);
+    pub const MMHOST_INTERFACE_DATA_WIDTH_ALTERA: Self = Self(6178u32);
+    pub const MMHOST_INTERFACE_LATENCY_ALTERA: Self = Self(6179u32);
+    pub const MMHOST_INTERFACE_READ_WRITE_MODE_ALTERA: Self = Self(6180u32);
+    pub const MMHOST_INTERFACE_MAX_BURST_ALTERA: Self = Self(6181u32);
+    pub const MMHOST_INTERFACE_WAIT_REQUEST_ALTERA: Self = Self(6182u32);
+    pub const STABLE_KERNEL_ARGUMENT_ALTERA: Self = Self(6183u32);
+    pub const HOST_ACCESS_INTEL: Self = Self(6188u32);
+    pub const INIT_MODE_ALTERA: Self = Self(6190u32);
+    pub const IMPLEMENT_IN_REGISTER_MAP_ALTERA: Self = Self(6191u32);
+    pub const CONDITIONAL_INTEL: Self = Self(6247u32);
+    pub const CACHE_CONTROL_LOAD_INTEL: Self = Self(6442u32);
+    pub const CACHE_CONTROL_STORE_INTEL: Self = Self(6443u32);
+}
+impl Word for Decoration {
+    #[inline]
+    fn from_word(word: u32) -> Self {
+        Self(word)
+    }
+}
+impl Display for Decoration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match *self {
+            Self::RELAXED_PRECISION => write!(f, "RelaxedPrecision"),
+            Self::SPEC_ID => write!(f, "SpecId"),
+            Self::BLOCK => write!(f, "Block"),
+            Self::BUFFER_BLOCK => write!(f, "BufferBlock"),
+            Self::ROW_MAJOR => write!(f, "RowMajor"),
+            Self::COL_MAJOR => write!(f, "ColMajor"),
+            Self::ARRAY_STRIDE => write!(f, "ArrayStride"),
+            Self::MATRIX_STRIDE => write!(f, "MatrixStride"),
+            Self::GLSLSHARED => write!(f, "GLSLShared"),
+            Self::GLSLPACKED => write!(f, "GLSLPacked"),
+            Self::CPACKED => write!(f, "CPacked"),
+            Self::BUILT_IN => write!(f, "BuiltIn"),
+            Self::NO_PERSPECTIVE => write!(f, "NoPerspective"),
+            Self::FLAT => write!(f, "Flat"),
+            Self::PATCH => write!(f, "Patch"),
+            Self::CENTROID => write!(f, "Centroid"),
+            Self::SAMPLE => write!(f, "Sample"),
+            Self::INVARIANT => write!(f, "Invariant"),
+            Self::RESTRICT => write!(f, "Restrict"),
+            Self::ALIASED => write!(f, "Aliased"),
+            Self::VOLATILE => write!(f, "Volatile"),
+            Self::CONSTANT => write!(f, "Constant"),
+            Self::COHERENT => write!(f, "Coherent"),
+            Self::NON_WRITABLE => write!(f, "NonWritable"),
+            Self::NON_READABLE => write!(f, "NonReadable"),
+            Self::UNIFORM => write!(f, "Uniform"),
+            Self::UNIFORM_ID => write!(f, "UniformId"),
+            Self::SATURATED_CONVERSION => write!(f, "SaturatedConversion"),
+            Self::STREAM => write!(f, "Stream"),
+            Self::LOCATION => write!(f, "Location"),
+            Self::COMPONENT => write!(f, "Component"),
+            Self::INDEX => write!(f, "Index"),
+            Self::BINDING => write!(f, "Binding"),
+            Self::DESCRIPTOR_SET => write!(f, "DescriptorSet"),
+            Self::OFFSET => write!(f, "Offset"),
+            Self::XFB_BUFFER => write!(f, "XfbBuffer"),
+            Self::XFB_STRIDE => write!(f, "XfbStride"),
+            Self::FUNC_PARAM_ATTR => write!(f, "FuncParamAttr"),
+            Self::FPROUNDING_MODE => write!(f, "FPRoundingMode"),
+            Self::FPFAST_MATH_MODE => write!(f, "FPFastMathMode"),
+            Self::LINKAGE_ATTRIBUTES => write!(f, "LinkageAttributes"),
+            Self::NO_CONTRACTION => write!(f, "NoContraction"),
+            Self::INPUT_ATTACHMENT_INDEX => write!(f, "InputAttachmentIndex"),
+            Self::ALIGNMENT => write!(f, "Alignment"),
+            Self::MAX_BYTE_OFFSET => write!(f, "MaxByteOffset"),
+            Self::ALIGNMENT_ID => write!(f, "AlignmentId"),
+            Self::MAX_BYTE_OFFSET_ID => write!(f, "MaxByteOffsetId"),
+            Self::SATURATED_TO_LARGEST_FLOAT8_NORMAL_CONVERSION_EXT => {
+                write!(f, "SaturatedToLargestFloat8NormalConversionEXT")
+            }
+            Self::NO_SIGNED_WRAP => write!(f, "NoSignedWrap"),
+            Self::NO_UNSIGNED_WRAP => write!(f, "NoUnsignedWrap"),
+            Self::WEIGHT_TEXTURE_QCOM => write!(f, "WeightTextureQCOM"),
+            Self::BLOCK_MATCH_TEXTURE_QCOM => write!(f, "BlockMatchTextureQCOM"),
+            Self::BLOCK_MATCH_SAMPLER_QCOM => write!(f, "BlockMatchSamplerQCOM"),
+            Self::EXPLICIT_INTERP_AMD => write!(f, "ExplicitInterpAMD"),
+            Self::NODE_SHARES_PAYLOAD_LIMITS_WITH_AMDX => {
+                write!(f, "NodeSharesPayloadLimitsWithAMDX")
+            }
+            Self::NODE_MAX_PAYLOADS_AMDX => write!(f, "NodeMaxPayloadsAMDX"),
+            Self::TRACK_FINISH_WRITING_AMDX => write!(f, "TrackFinishWritingAMDX"),
+            Self::PAYLOAD_NODE_NAME_AMDX => write!(f, "PayloadNodeNameAMDX"),
+            Self::PAYLOAD_NODE_BASE_INDEX_AMDX => write!(f, "PayloadNodeBaseIndexAMDX"),
+            Self::PAYLOAD_NODE_SPARSE_ARRAY_AMDX => write!(f, "PayloadNodeSparseArrayAMDX"),
+            Self::PAYLOAD_NODE_ARRAY_SIZE_AMDX => write!(f, "PayloadNodeArraySizeAMDX"),
+            Self::PAYLOAD_DISPATCH_INDIRECT_AMDX => write!(f, "PayloadDispatchIndirectAMDX"),
+            Self::ARRAY_STRIDE_ID_EXT => write!(f, "ArrayStrideIdEXT"),
+            Self::OFFSET_ID_EXT => write!(f, "OffsetIdEXT"),
+            Self::UTFENCODED_KHR => write!(f, "UTFEncodedKHR"),
+            Self::OVERRIDE_COVERAGE_NV => write!(f, "OverrideCoverageNV"),
+            Self::PASSTHROUGH_NV => write!(f, "PassthroughNV"),
+            Self::VIEWPORT_RELATIVE_NV => write!(f, "ViewportRelativeNV"),
+            Self::SECONDARY_VIEWPORT_RELATIVE_NV => write!(f, "SecondaryViewportRelativeNV"),
+            Self::PER_PRIMITIVE_EXT => write!(f, "PerPrimitiveEXT"),
+            Self::PER_VIEW_NV => write!(f, "PerViewNV"),
+            Self::PER_TASK_NV => write!(f, "PerTaskNV"),
+            Self::PER_VERTEX_KHR => write!(f, "PerVertexKHR"),
+            Self::NON_UNIFORM => write!(f, "NonUniform"),
+            Self::RESTRICT_POINTER => write!(f, "RestrictPointer"),
+            Self::ALIASED_POINTER => write!(f, "AliasedPointer"),
+            Self::MEMBER_OFFSET_NV => write!(f, "MemberOffsetNV"),
+            Self::HIT_OBJECT_SHADER_RECORD_BUFFER_NV => write!(f, "HitObjectShaderRecordBufferNV"),
+            Self::HIT_OBJECT_SHADER_RECORD_BUFFER_EXT => {
+                write!(f, "HitObjectShaderRecordBufferEXT")
+            }
+            Self::BANK_NV => write!(f, "BankNV"),
+            Self::BINDLESS_SAMPLER_NV => write!(f, "BindlessSamplerNV"),
+            Self::BINDLESS_IMAGE_NV => write!(f, "BindlessImageNV"),
+            Self::BOUND_SAMPLER_NV => write!(f, "BoundSamplerNV"),
+            Self::BOUND_IMAGE_NV => write!(f, "BoundImageNV"),
+            Self::SIMTCALL_INTEL => write!(f, "SIMTCallINTEL"),
+            Self::REFERENCED_INDIRECTLY_INTEL => write!(f, "ReferencedIndirectlyINTEL"),
+            Self::CLOBBER_INTEL => write!(f, "ClobberINTEL"),
+            Self::SIDE_EFFECTS_INTEL => write!(f, "SideEffectsINTEL"),
+            Self::VECTOR_COMPUTE_VARIABLE_INTEL => write!(f, "VectorComputeVariableINTEL"),
+            Self::FUNC_PARAM_IOKIND_INTEL => write!(f, "FuncParamIOKindINTEL"),
+            Self::VECTOR_COMPUTE_FUNCTION_INTEL => write!(f, "VectorComputeFunctionINTEL"),
+            Self::STACK_CALL_INTEL => write!(f, "StackCallINTEL"),
+            Self::GLOBAL_VARIABLE_OFFSET_INTEL => write!(f, "GlobalVariableOffsetINTEL"),
+            Self::COUNTER_BUFFER => write!(f, "CounterBuffer"),
+            Self::USER_SEMANTIC => write!(f, "UserSemantic"),
+            Self::USER_TYPE_GOOGLE => write!(f, "UserTypeGOOGLE"),
+            Self::FUNCTION_ROUNDING_MODE_INTEL => write!(f, "FunctionRoundingModeINTEL"),
+            Self::FUNCTION_DENORM_MODE_INTEL => write!(f, "FunctionDenormModeINTEL"),
+            Self::REGISTER_ALTERA => write!(f, "RegisterALTERA"),
+            Self::MEMORY_ALTERA => write!(f, "MemoryALTERA"),
+            Self::NUMBANKS_ALTERA => write!(f, "NumbanksALTERA"),
+            Self::BANKWIDTH_ALTERA => write!(f, "BankwidthALTERA"),
+            Self::MAX_PRIVATE_COPIES_ALTERA => write!(f, "MaxPrivateCopiesALTERA"),
+            Self::SINGLEPUMP_ALTERA => write!(f, "SinglepumpALTERA"),
+            Self::DOUBLEPUMP_ALTERA => write!(f, "DoublepumpALTERA"),
+            Self::MAX_REPLICATES_ALTERA => write!(f, "MaxReplicatesALTERA"),
+            Self::SIMPLE_DUAL_PORT_ALTERA => write!(f, "SimpleDualPortALTERA"),
+            Self::MERGE_ALTERA => write!(f, "MergeALTERA"),
+            Self::BANK_BITS_ALTERA => write!(f, "BankBitsALTERA"),
+            Self::FORCE_POW2_DEPTH_ALTERA => write!(f, "ForcePow2DepthALTERA"),
+            Self::STRIDESIZE_ALTERA => write!(f, "StridesizeALTERA"),
+            Self::WORDSIZE_ALTERA => write!(f, "WordsizeALTERA"),
+            Self::TRUE_DUAL_PORT_ALTERA => write!(f, "TrueDualPortALTERA"),
+            Self::BURST_COALESCE_ALTERA => write!(f, "BurstCoalesceALTERA"),
+            Self::CACHE_SIZE_ALTERA => write!(f, "CacheSizeALTERA"),
+            Self::DONT_STATICALLY_COALESCE_ALTERA => write!(f, "DontStaticallyCoalesceALTERA"),
+            Self::PREFETCH_ALTERA => write!(f, "PrefetchALTERA"),
+            Self::STALL_ENABLE_ALTERA => write!(f, "StallEnableALTERA"),
+            Self::FUSE_LOOPS_IN_FUNCTION_ALTERA => write!(f, "FuseLoopsInFunctionALTERA"),
+            Self::MATH_OP_DSPMODE_ALTERA => write!(f, "MathOpDSPModeALTERA"),
+            Self::ALIAS_SCOPE_INTEL => write!(f, "AliasScopeINTEL"),
+            Self::NO_ALIAS_INTEL => write!(f, "NoAliasINTEL"),
+            Self::INITIATION_INTERVAL_ALTERA => write!(f, "InitiationIntervalALTERA"),
+            Self::MAX_CONCURRENCY_ALTERA => write!(f, "MaxConcurrencyALTERA"),
+            Self::PIPELINE_ENABLE_ALTERA => write!(f, "PipelineEnableALTERA"),
+            Self::BUFFER_LOCATION_ALTERA => write!(f, "BufferLocationALTERA"),
+            Self::IOPIPE_STORAGE_ALTERA => write!(f, "IOPipeStorageALTERA"),
+            Self::FUNCTION_FLOATING_POINT_MODE_INTEL => write!(f, "FunctionFloatingPointModeINTEL"),
+            Self::SINGLE_ELEMENT_VECTOR_INTEL => write!(f, "SingleElementVectorINTEL"),
+            Self::VECTOR_COMPUTE_CALLABLE_FUNCTION_INTEL => {
+                write!(f, "VectorComputeCallableFunctionINTEL")
+            }
+            Self::MEDIA_BLOCK_IOINTEL => write!(f, "MediaBlockIOINTEL"),
+            Self::STALL_FREE_ALTERA => write!(f, "StallFreeALTERA"),
+            Self::FPMAX_ERROR_DECORATION_INTEL => write!(f, "FPMaxErrorDecorationINTEL"),
+            Self::LATENCY_CONTROL_LABEL_ALTERA => write!(f, "LatencyControlLabelALTERA"),
+            Self::LATENCY_CONTROL_CONSTRAINT_ALTERA => write!(f, "LatencyControlConstraintALTERA"),
+            Self::CONDUIT_KERNEL_ARGUMENT_ALTERA => write!(f, "ConduitKernelArgumentALTERA"),
+            Self::REGISTER_MAP_KERNEL_ARGUMENT_ALTERA => {
+                write!(f, "RegisterMapKernelArgumentALTERA")
+            }
+            Self::MMHOST_INTERFACE_ADDRESS_WIDTH_ALTERA => {
+                write!(f, "MMHostInterfaceAddressWidthALTERA")
+            }
+            Self::MMHOST_INTERFACE_DATA_WIDTH_ALTERA => write!(f, "MMHostInterfaceDataWidthALTERA"),
+            Self::MMHOST_INTERFACE_LATENCY_ALTERA => write!(f, "MMHostInterfaceLatencyALTERA"),
+            Self::MMHOST_INTERFACE_READ_WRITE_MODE_ALTERA => {
+                write!(f, "MMHostInterfaceReadWriteModeALTERA")
+            }
+            Self::MMHOST_INTERFACE_MAX_BURST_ALTERA => write!(f, "MMHostInterfaceMaxBurstALTERA"),
+            Self::MMHOST_INTERFACE_WAIT_REQUEST_ALTERA => {
+                write!(f, "MMHostInterfaceWaitRequestALTERA")
+            }
+            Self::STABLE_KERNEL_ARGUMENT_ALTERA => write!(f, "StableKernelArgumentALTERA"),
+            Self::HOST_ACCESS_INTEL => write!(f, "HostAccessINTEL"),
+            Self::INIT_MODE_ALTERA => write!(f, "InitModeALTERA"),
+            Self::IMPLEMENT_IN_REGISTER_MAP_ALTERA => write!(f, "ImplementInRegisterMapALTERA"),
+            Self::CONDITIONAL_INTEL => write!(f, "ConditionalINTEL"),
+            Self::CACHE_CONTROL_LOAD_INTEL => write!(f, "CacheControlLoadINTEL"),
+            Self::CACHE_CONTROL_STORE_INTEL => write!(f, "CacheControlStoreINTEL"),
+            x => write!(f, "{x}"),
+        }
+    }
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct BuiltIn(pub(crate) u32);
 impl BuiltIn {
     pub const POSITION: Self = Self(0u32);
@@ -3841,7 +4397,7 @@ impl Display for BuiltIn {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct Scope(pub(crate) u32);
 impl Scope {
     pub const CROSS_DEVICE: Self = Self(0u32);
@@ -3872,7 +4428,7 @@ impl Display for Scope {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct GroupOperation(pub(crate) u32);
 impl GroupOperation {
     pub const REDUCE: Self = Self(0u32);
@@ -3903,7 +4459,7 @@ impl Display for GroupOperation {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct KernelEnqueueFlags(pub(crate) u32);
 impl KernelEnqueueFlags {
     pub const NO_WAIT: Self = Self(0u32);
@@ -3926,7 +4482,7 @@ impl Display for KernelEnqueueFlags {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct Capability(pub(crate) u32);
 impl Capability {
     pub const MATRIX: Self = Self(0u32);
@@ -4607,7 +5163,7 @@ impl Display for Capability {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct RayQueryIntersection(pub(crate) u32);
 impl RayQueryIntersection {
     pub const RAY_QUERY_CANDIDATE_INTERSECTION_KHR: Self = Self(0u32);
@@ -4632,7 +5188,7 @@ impl Display for RayQueryIntersection {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct RayQueryCommittedIntersectionType(pub(crate) u32);
 impl RayQueryCommittedIntersectionType {
     pub const RAY_QUERY_COMMITTED_INTERSECTION_NONE_KHR: Self = Self(0u32);
@@ -4661,7 +5217,7 @@ impl Display for RayQueryCommittedIntersectionType {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct RayQueryCandidateIntersectionType(pub(crate) u32);
 impl RayQueryCandidateIntersectionType {
     pub const RAY_QUERY_CANDIDATE_INTERSECTION_TRIANGLE_KHR: Self = Self(0u32);
@@ -4686,7 +5242,7 @@ impl Display for RayQueryCandidateIntersectionType {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct PackedVectorFormat(pub(crate) u32);
 impl PackedVectorFormat {
     pub const PACKED_VECTOR_FORMAT4X8_BIT: Self = Self(0u32);
@@ -4705,7 +5261,7 @@ impl Display for PackedVectorFormat {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct CooperativeMatrixOperands(pub(crate) u32);
 impl CooperativeMatrixOperands {
     pub const NONE_KHR: Self = Self(0x0000);
@@ -4766,7 +5322,7 @@ impl Display for CooperativeMatrixOperands {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct CooperativeMatrixLayout(pub(crate) u32);
 impl CooperativeMatrixLayout {
     pub const ROW_MAJOR_KHR: Self = Self(0u32);
@@ -4791,7 +5347,7 @@ impl Display for CooperativeMatrixLayout {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct CooperativeMatrixUse(pub(crate) u32);
 impl CooperativeMatrixUse {
     pub const MATRIX_AKHR: Self = Self(0u32);
@@ -4814,7 +5370,7 @@ impl Display for CooperativeMatrixUse {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct CooperativeMatrixReduce(pub(crate) u32);
 impl CooperativeMatrixReduce {
     pub const ROW: Self = Self(0x0001);
@@ -4862,7 +5418,7 @@ impl Display for CooperativeMatrixReduce {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct TensorClampMode(pub(crate) u32);
 impl TensorClampMode {
     pub const UNDEFINED: Self = Self(0u32);
@@ -4889,7 +5445,7 @@ impl Display for TensorClampMode {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct TensorAddressingOperands(pub(crate) u32);
 impl TensorAddressingOperands {
     pub const NONE: Self = Self(0x0000);
@@ -4933,7 +5489,7 @@ impl Display for TensorAddressingOperands {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct InitializationModeQualifier(pub(crate) u32);
 impl InitializationModeQualifier {
     pub const INIT_ON_DEVICE_REPROGRAM_ALTERA: Self = Self(0u32);
@@ -4954,7 +5510,7 @@ impl Display for InitializationModeQualifier {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct LoadCacheControl(pub(crate) u32);
 impl LoadCacheControl {
     pub const UNCACHED_INTEL: Self = Self(0u32);
@@ -4981,7 +5537,7 @@ impl Display for LoadCacheControl {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct StoreCacheControl(pub(crate) u32);
 impl StoreCacheControl {
     pub const UNCACHED_INTEL: Self = Self(0u32);
@@ -5006,7 +5562,7 @@ impl Display for StoreCacheControl {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct NamedMaximumNumberOfRegisters(pub(crate) u32);
 impl NamedMaximumNumberOfRegisters {
     pub const AUTO_INTEL: Self = Self(0u32);
@@ -5025,7 +5581,7 @@ impl Display for NamedMaximumNumberOfRegisters {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct MatrixMultiplyAccumulateOperands(pub(crate) u32);
 impl MatrixMultiplyAccumulateOperands {
     pub const NONE: Self = Self(0x0);
@@ -5129,7 +5685,7 @@ impl Display for MatrixMultiplyAccumulateOperands {
         Ok(())
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct FPEncoding(pub(crate) u32);
 impl FPEncoding {
     pub const BFLOAT16_KHR: Self = Self(0u32);
@@ -5152,7 +5708,7 @@ impl Display for FPEncoding {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct CooperativeVectorMatrixLayout(pub(crate) u32);
 impl CooperativeVectorMatrixLayout {
     pub const ROW_MAJOR_NV: Self = Self(0u32);
@@ -5177,7 +5733,7 @@ impl Display for CooperativeVectorMatrixLayout {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct ComponentType(pub(crate) u32);
 impl ComponentType {
     pub const FLOAT16_NV: Self = Self(0u32);
@@ -5224,7 +5780,7 @@ impl Display for ComponentType {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct TensorOperands(pub(crate) u32);
 impl TensorOperands {
     pub const NONE_ARM: Self = Self(0x0000);

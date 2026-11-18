@@ -155,7 +155,7 @@ impl RuntimeArrayHole {
 ///
 /// Can be resolved, by resolving the element type [`hint`][2].
 ///
-/// [1]: op::Decoration::ArrayStride
+/// [1]: op::DecorationOperands::ArrayStride
 /// [2]: TypeSizeHint
 #[derive(Clone, Debug)]
 pub struct UnknownArrayStrideHole {
@@ -186,7 +186,7 @@ impl UnknownArrayStrideHole {
 ///
 /// Can be resolved by specifying the stride and whether the matrix is row-major.
 ///
-/// [1]: op::Decoration::MatrixStride
+/// [1]: op::DecorationOperands::MatrixStride
 #[derive(Clone, Debug)]
 pub struct MatrixStrideHole {
     columns: u32,
@@ -342,10 +342,10 @@ pub struct Decorate<'a> {
     ///
     /// [1]: Self::target
     pub member: Option<u32>,
-    /// The [`Decoration`][1] assigned to the target.
+    /// The [decoration][1] assigned to the target.
     ///
-    /// [1]: op::Decoration
-    pub decoration: op::Decoration<'a>,
+    /// [1]: op::DecorationOperands
+    pub decoration: op::DecorationOperands<'a>,
 }
 
 /// Represents a variable.
@@ -416,7 +416,7 @@ impl<'a> Reflector<'a> {
                 decorates.push(Decorate {
                     target: Id::parse_one(&mut stream)?,
                     member: None,
-                    decoration: op::Decoration::parse_one(&mut stream)?,
+                    decoration: op::DecorationOperands::parse_one(&mut stream)?,
                 });
             } else if matches!(
                 stream.code(),
@@ -425,7 +425,7 @@ impl<'a> Reflector<'a> {
                 decorates.push(Decorate {
                     target: Id::parse_one(&mut stream)?,
                     member: Some(stream.read()?),
-                    decoration: op::Decoration::parse_one(&mut stream)?,
+                    decoration: op::DecorationOperands::parse_one(&mut stream)?,
                 });
             }
         }
@@ -532,7 +532,7 @@ impl<'a> Reflector<'a> {
                         .iter()
                         .find_map(|&decorate|
                             if decorate.target == id &&
-                                let op::Decoration::SpecId { specialization_constant_id } =
+                                let op::DecorationOperands::SpecId { specialization_constant_id } =
                                 decorate.decoration
                             {
                                 Some(specialization_constant_id)
@@ -655,8 +655,8 @@ impl<'a> Reflector<'a> {
         }
     }
 
-    #[inline]
     /// Returns a name assigned to an [`Id`], or optionally to a struct member of a struct.
+    #[inline]
     pub fn name(
         &self,
         id: Id,
@@ -941,7 +941,7 @@ impl<'a> Reflector<'a> {
                     ResourceType::PushConstant => {
                         self.decorations(base_type)
                             .filter_map(|dec| {
-                                if let op::Decoration::Offset { byte_offset } = dec.decoration {
+                                if let op::DecorationOperands::Offset { byte_offset } = dec.decoration {
                                     Some(byte_offset)
                                 } else { None }
                             }).min()
@@ -967,9 +967,9 @@ impl<'a> Reflector<'a> {
         }))
     } 
 
-    /// Returns all [`decorations`][1] added to a given [`Id`].
+    /// Returns all [decorations][1] added to a given [`Id`].
     ///
-    /// [1]: op::Decoration
+    /// [1]: op::DecorationOperands
     #[inline]
     pub fn decorations(
         &self,
@@ -1096,7 +1096,7 @@ impl<'a> Reflector<'a> {
                     if let Some(stride) =
                         self.decorations(id)
                         .find_map(|dec| {
-                            let op::Decoration::ArrayStride { array_stride } = dec.decoration else {
+                            let op::DecorationOperands::ArrayStride { array_stride } = dec.decoration else {
                                 return None
                             };
                             Some(array_stride as usize)
@@ -1128,7 +1128,7 @@ impl<'a> Reflector<'a> {
                 let stride = self
                     .decorations(id)
                     .find_map(|dec| {
-                        let op::Decoration::ArrayStride { array_stride } = dec.decoration else {
+                        let op::DecorationOperands::ArrayStride { array_stride } = dec.decoration else {
                             return None
                         };
                         Some(array_stride as usize)
@@ -1146,7 +1146,7 @@ impl<'a> Reflector<'a> {
                 let (desc, member, offset) = self.decorations(id)
                     .filter_map(|dec| {
                         if let Some(member) = dec.member &&
-                            let op::Decoration::Offset { byte_offset } = dec.decoration &&
+                            let op::DecorationOperands::Offset { byte_offset } = dec.decoration &&
                             let Some(&ty) = member_types.get(member as usize) &&
                             let Ok(desc) = self.type_description(ty)
                         {
@@ -1170,9 +1170,9 @@ impl<'a> Reflector<'a> {
                             if let Some(dec_member) = dec.member &&
                                 dec_member == member
                             {
-                                if let op::Decoration::MatrixStride { matrix_stride } = dec.decoration {
+                                if let op::DecorationOperands::MatrixStride { matrix_stride } = dec.decoration {
                                     stride = Some(matrix_stride)
-                                } else if let op::Decoration::RowMajor = dec.decoration {
+                                } else if let op::DecorationOperands::RowMajor = dec.decoration {
                                     is_row_major = true
                                 }
                             }
