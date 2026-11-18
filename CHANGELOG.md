@@ -1,5 +1,8 @@
 # Cangelog
 All changes to this project will be documented in this file.
+## [0.5.3] - 2026-11-18
+### Added
+- Exposed `InstInfo` with `op::Code::get_inst_info`.
 ## [0.5.2] - 2026-11-18
 ### Changed
 - Internals to take endianness into account (untested for little endian).
@@ -56,6 +59,7 @@ All changes to this project will be documented in this file.
 - Initial crate release
 - Basic reflection
 
+[0.5.3]: https://crates.io/crates/leimu-spirv/0.5.3
 [0.5.2]: https://crates.io/crates/leimu-spirv/0.5.2
 [0.5.1]: https://crates.io/crates/leimu-spirv/0.5.1
 [0.5.0]: https://crates.io/crates/leimu-spirv/0.5.0
