@@ -1,5 +1,8 @@
 # Cangelog
 All changes to this project will be documented in this file.
+## [0.5.1] - 2026-11-18
+### Fixed
+- Errors in upper snake case names
 
 ## [0.5.0] - 2026-11-18
 ### Changed

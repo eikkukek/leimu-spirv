@@ -5387,7 +5387,7 @@ impl Code {
     #[doc = "  packed_indices: IdRef,"]
     #[doc = "}"]
     #[doc = "```"]
-    pub const WRITE_PACKED_PRIMITIVE_INDICES4X8_NV: Self = Self(5299);
+    pub const WRITE_PACKED_PRIMITIVE_INDICES_4X_8_NV: Self = Self(5299);
     #[doc = "# Struct template"]
     #[doc = "``` ignored"]
     #[doc = "use leimu_spirv::op::*;"]
@@ -6718,7 +6718,7 @@ impl Code {
     #[doc = "  operand_2: IdRef,"]
     #[doc = "}"]
     #[doc = "```"]
-    pub const IMUL32X16_INTEL: Self = Self(5597);
+    pub const IMUL_32X_16_INTEL: Self = Self(5597);
     #[doc = "# Struct template"]
     #[doc = "``` ignored"]
     #[doc = "use leimu_spirv::op::*;"]
@@ -6729,7 +6729,7 @@ impl Code {
     #[doc = "  operand_2: IdRef,"]
     #[doc = "}"]
     #[doc = "```"]
-    pub const UMUL32X16_INTEL: Self = Self(5598);
+    pub const UMUL_32X_16_INTEL: Self = Self(5598);
     #[doc = "# Struct template"]
     #[doc = "``` ignored"]
     #[doc = "use leimu_spirv::op::*;"]
@@ -7077,7 +7077,7 @@ impl Code {
     #[doc = "  float_value: IdRef,"]
     #[doc = "}"]
     #[doc = "```"]
-    pub const CONVERT_FTO_BF16_INTEL: Self = Self(6116);
+    pub const CONVERT_FTO_BF16INTEL: Self = Self(6116);
     #[doc = "# Struct template"]
     #[doc = "``` ignored"]
     #[doc = "use leimu_spirv::op::*;"]
@@ -7087,7 +7087,7 @@ impl Code {
     #[doc = "  bfloat16_value: IdRef,"]
     #[doc = "}"]
     #[doc = "```"]
-    pub const CONVERT_BF16_TO_FINTEL: Self = Self(6117);
+    pub const CONVERT_BF16TO_FINTEL: Self = Self(6117);
     #[doc = "# Struct template"]
     #[doc = "``` ignored"]
     #[doc = "use leimu_spirv::op::*;"]
@@ -7144,7 +7144,7 @@ impl Code {
     #[doc = "  dst_pointer: IdRef,"]
     #[doc = "}"]
     #[doc = "```"]
-    pub const SUBGROUP2_DBLOCK_LOAD_INTEL: Self = Self(6231);
+    pub const SUBGROUP_2D_BLOCK_LOAD_INTEL: Self = Self(6231);
     #[doc = "# Struct template"]
     #[doc = "``` ignored"]
     #[doc = "use leimu_spirv::op::*;"]
@@ -7161,7 +7161,7 @@ impl Code {
     #[doc = "  dst_pointer: IdRef,"]
     #[doc = "}"]
     #[doc = "```"]
-    pub const SUBGROUP2_DBLOCK_LOAD_TRANSFORM_INTEL: Self = Self(6232);
+    pub const SUBGROUP_2D_BLOCK_LOAD_TRANSFORM_INTEL: Self = Self(6232);
     #[doc = "# Struct template"]
     #[doc = "``` ignored"]
     #[doc = "use leimu_spirv::op::*;"]
@@ -7178,7 +7178,7 @@ impl Code {
     #[doc = "  dst_pointer: IdRef,"]
     #[doc = "}"]
     #[doc = "```"]
-    pub const SUBGROUP2_DBLOCK_LOAD_TRANSPOSE_INTEL: Self = Self(6233);
+    pub const SUBGROUP_2D_BLOCK_LOAD_TRANSPOSE_INTEL: Self = Self(6233);
     #[doc = "# Struct template"]
     #[doc = "``` ignored"]
     #[doc = "use leimu_spirv::op::*;"]
@@ -7194,7 +7194,7 @@ impl Code {
     #[doc = "  coordinate: IdRef,"]
     #[doc = "}"]
     #[doc = "```"]
-    pub const SUBGROUP2_DBLOCK_PREFETCH_INTEL: Self = Self(6234);
+    pub const SUBGROUP_2D_BLOCK_PREFETCH_INTEL: Self = Self(6234);
     #[doc = "# Struct template"]
     #[doc = "``` ignored"]
     #[doc = "use leimu_spirv::op::*;"]
@@ -7211,7 +7211,7 @@ impl Code {
     #[doc = "  coordinate: IdRef,"]
     #[doc = "}"]
     #[doc = "```"]
-    pub const SUBGROUP2_DBLOCK_STORE_INTEL: Self = Self(6235);
+    pub const SUBGROUP_2D_BLOCK_STORE_INTEL: Self = Self(6235);
     #[doc = "# Struct template"]
     #[doc = "``` ignored"]
     #[doc = "use leimu_spirv::op::*;"]
@@ -7429,7 +7429,7 @@ impl Code {
     #[doc = "  float_value: IdRef,"]
     #[doc = "}"]
     #[doc = "```"]
-    pub const ROUND_FTO_TF32_INTEL: Self = Self(6426);
+    pub const ROUND_FTO_TF32INTEL: Self = Self(6426);
     #[doc = "# Struct template"]
     #[doc = "``` ignored"]
     #[doc = "use leimu_spirv::op::*;"]
@@ -7495,7 +7495,7 @@ impl Code {
     #[doc = "  accumulator: IdRef,"]
     #[doc = "}"]
     #[doc = "```"]
-    pub const FDOT2_MIX_ACC32_VALVE: Self = Self(6916);
+    pub const FDOT_2_MIX_ACC_32_VALVE: Self = Self(6916);
     #[doc = "# Struct template"]
     #[doc = "``` ignored"]
     #[doc = "use leimu_spirv::op::*;"]
@@ -7507,7 +7507,7 @@ impl Code {
     #[doc = "  accumulator: IdRef,"]
     #[doc = "}"]
     #[doc = "```"]
-    pub const FDOT2_MIX_ACC16_VALVE: Self = Self(6917);
+    pub const FDOT_2_MIX_ACC_16_VALVE: Self = Self(6917);
     #[doc = "# Struct template"]
     #[doc = "``` ignored"]
     #[doc = "use leimu_spirv::op::*;"]
@@ -7519,7 +7519,7 @@ impl Code {
     #[doc = "  accumulator: IdRef,"]
     #[doc = "}"]
     #[doc = "```"]
-    pub const FDOT4_MIX_ACC32_VALVE: Self = Self(6918);
+    pub const FDOT_4_MIX_ACC_32_VALVE: Self = Self(6918);
 }
 impl Word for Code {
     #[inline]

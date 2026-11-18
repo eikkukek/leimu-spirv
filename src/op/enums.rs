@@ -665,7 +665,7 @@ impl RayFlags {
     pub const CULL_NO_OPAQUE_KHR: Self = Self(0x0080);
     pub const SKIP_TRIANGLES_KHR: Self = Self(0x0100);
     pub const SKIP_AABBS_KHR: Self = Self(0x0200);
-    pub const FORCE_OPACITY_MICROMAP2_STATE_EXT: Self = Self(0x0400);
+    pub const FORCE_OPACITY_MICROMAP_2_STATE_EXT: Self = Self(0x0400);
 }
 impl Word for RayFlags {
     #[inline]
@@ -733,10 +733,10 @@ impl Display for RayFlags {
             bitfmt.fmt(Self::SKIP_AABBS_KHR.0, f)?;
             write!(f, "SkipAABBsKHR")?;
         }
-        if *self & Self::FORCE_OPACITY_MICROMAP2_STATE_EXT
-            == Self::FORCE_OPACITY_MICROMAP2_STATE_EXT
+        if *self & Self::FORCE_OPACITY_MICROMAP_2_STATE_EXT
+            == Self::FORCE_OPACITY_MICROMAP_2_STATE_EXT
         {
-            bitfmt.fmt(Self::FORCE_OPACITY_MICROMAP2_STATE_EXT.0, f)?;
+            bitfmt.fmt(Self::FORCE_OPACITY_MICROMAP_2_STATE_EXT.0, f)?;
             write!(f, "ForceOpacityMicromap2StateEXT")?;
         }
         Ok(())
@@ -745,10 +745,10 @@ impl Display for RayFlags {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct FragmentShadingRate(pub(crate) u32);
 impl FragmentShadingRate {
-    pub const VERTICAL2_PIXELS: Self = Self(0x0001);
-    pub const VERTICAL4_PIXELS: Self = Self(0x0002);
-    pub const HORIZONTAL2_PIXELS: Self = Self(0x0004);
-    pub const HORIZONTAL4_PIXELS: Self = Self(0x0008);
+    pub const VERTICAL_2_PIXELS: Self = Self(0x0001);
+    pub const VERTICAL_4_PIXELS: Self = Self(0x0002);
+    pub const HORIZONTAL_2_PIXELS: Self = Self(0x0004);
+    pub const HORIZONTAL_4_PIXELS: Self = Self(0x0008);
 }
 impl Word for FragmentShadingRate {
     #[inline]
@@ -776,20 +776,20 @@ impl Display for FragmentShadingRate {
             return write!(f, "None");
         }
         let mut bitfmt = BitFmt(0);
-        if *self & Self::VERTICAL2_PIXELS == Self::VERTICAL2_PIXELS {
-            bitfmt.fmt(Self::VERTICAL2_PIXELS.0, f)?;
+        if *self & Self::VERTICAL_2_PIXELS == Self::VERTICAL_2_PIXELS {
+            bitfmt.fmt(Self::VERTICAL_2_PIXELS.0, f)?;
             write!(f, "Vertical2Pixels")?;
         }
-        if *self & Self::VERTICAL4_PIXELS == Self::VERTICAL4_PIXELS {
-            bitfmt.fmt(Self::VERTICAL4_PIXELS.0, f)?;
+        if *self & Self::VERTICAL_4_PIXELS == Self::VERTICAL_4_PIXELS {
+            bitfmt.fmt(Self::VERTICAL_4_PIXELS.0, f)?;
             write!(f, "Vertical4Pixels")?;
         }
-        if *self & Self::HORIZONTAL2_PIXELS == Self::HORIZONTAL2_PIXELS {
-            bitfmt.fmt(Self::HORIZONTAL2_PIXELS.0, f)?;
+        if *self & Self::HORIZONTAL_2_PIXELS == Self::HORIZONTAL_2_PIXELS {
+            bitfmt.fmt(Self::HORIZONTAL_2_PIXELS.0, f)?;
             write!(f, "Horizontal2Pixels")?;
         }
-        if *self & Self::HORIZONTAL4_PIXELS == Self::HORIZONTAL4_PIXELS {
-            bitfmt.fmt(Self::HORIZONTAL4_PIXELS.0, f)?;
+        if *self & Self::HORIZONTAL_4_PIXELS == Self::HORIZONTAL_4_PIXELS {
+            bitfmt.fmt(Self::HORIZONTAL_4_PIXELS.0, f)?;
             write!(f, "Horizontal4Pixels")?;
         }
         Ok(())
@@ -939,9 +939,9 @@ impl Display for ExecutionModel {
 pub struct AddressingModel(pub(crate) u32);
 impl AddressingModel {
     pub const LOGICAL: Self = Self(0u32);
-    pub const PHYSICAL32: Self = Self(1u32);
-    pub const PHYSICAL64: Self = Self(2u32);
-    pub const PHYSICAL_STORAGE_BUFFER64: Self = Self(5348u32);
+    pub const PHYSICAL_32: Self = Self(1u32);
+    pub const PHYSICAL_64: Self = Self(2u32);
+    pub const PHYSICAL_STORAGE_BUFFER_64: Self = Self(5348u32);
 }
 impl Word for AddressingModel {
     #[inline]
@@ -953,9 +953,9 @@ impl Display for AddressingModel {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
             Self::LOGICAL => write!(f, "Logical"),
-            Self::PHYSICAL32 => write!(f, "Physical32"),
-            Self::PHYSICAL64 => write!(f, "Physical64"),
-            Self::PHYSICAL_STORAGE_BUFFER64 => write!(f, "PhysicalStorageBuffer64"),
+            Self::PHYSICAL_32 => write!(f, "Physical32"),
+            Self::PHYSICAL_64 => write!(f, "Physical64"),
+            Self::PHYSICAL_STORAGE_BUFFER_64 => write!(f, "PhysicalStorageBuffer64"),
             x => write!(f, "{x}"),
         }
     }
@@ -1832,7 +1832,7 @@ impl ExecutionMode {
     pub const SAMPLE_INTERLOCK_UNORDERED_EXT: Self = Self(5369u32);
     pub const SHADING_RATE_INTERLOCK_ORDERED_EXT: Self = Self(5370u32);
     pub const SHADING_RATE_INTERLOCK_UNORDERED_EXT: Self = Self(5371u32);
-    pub const SHADER64_BIT_INDEXING_EXT: Self = Self(5427u32);
+    pub const SHADER_64_BIT_INDEXING_EXT: Self = Self(5427u32);
     pub const SHARED_LOCAL_MEMORY_SIZE_INTEL: Self = Self(5618u32);
     pub const ROUNDING_MODE_RTPINTEL: Self = Self(5620u32);
     pub const ROUNDING_MODE_RTNINTEL: Self = Self(5621u32);
@@ -1950,7 +1950,7 @@ impl Display for ExecutionMode {
             Self::SHADING_RATE_INTERLOCK_UNORDERED_EXT => {
                 write!(f, "ShadingRateInterlockUnorderedEXT")
             }
-            Self::SHADER64_BIT_INDEXING_EXT => write!(f, "Shader64BitIndexingEXT"),
+            Self::SHADER_64_BIT_INDEXING_EXT => write!(f, "Shader64BitIndexingEXT"),
             Self::SHARED_LOCAL_MEMORY_SIZE_INTEL => write!(f, "SharedLocalMemorySizeINTEL"),
             Self::ROUNDING_MODE_RTPINTEL => write!(f, "RoundingModeRTPINTEL"),
             Self::ROUNDING_MODE_RTNINTEL => write!(f, "RoundingModeRTNINTEL"),
@@ -2133,43 +2133,43 @@ impl Display for SamplerFilterMode {
 pub struct ImageFormat(pub(crate) u32);
 impl ImageFormat {
     pub const UNKNOWN: Self = Self(0u32);
-    pub const RGBA32F: Self = Self(1u32);
-    pub const RGBA16F: Self = Self(2u32);
+    pub const RGBA_32F: Self = Self(1u32);
+    pub const RGBA_16F: Self = Self(2u32);
     pub const R32F: Self = Self(3u32);
-    pub const RGBA8: Self = Self(4u32);
-    pub const RGBA8_SNORM: Self = Self(5u32);
-    pub const RG32F: Self = Self(6u32);
-    pub const RG16F: Self = Self(7u32);
+    pub const RGBA_8: Self = Self(4u32);
+    pub const RGBA_8_SNORM: Self = Self(5u32);
+    pub const RG_32F: Self = Self(6u32);
+    pub const RG_16F: Self = Self(7u32);
     pub const R11F_G11F_B10F: Self = Self(8u32);
     pub const R16F: Self = Self(9u32);
-    pub const RGBA16: Self = Self(10u32);
-    pub const RGB10_A2: Self = Self(11u32);
-    pub const RG16: Self = Self(12u32);
-    pub const RG8: Self = Self(13u32);
+    pub const RGBA_16: Self = Self(10u32);
+    pub const RGB_10_A2: Self = Self(11u32);
+    pub const RG_16: Self = Self(12u32);
+    pub const RG_8: Self = Self(13u32);
     pub const R16: Self = Self(14u32);
     pub const R8: Self = Self(15u32);
-    pub const RGBA16_SNORM: Self = Self(16u32);
-    pub const RG16_SNORM: Self = Self(17u32);
-    pub const RG8_SNORM: Self = Self(18u32);
-    pub const R16_SNORM: Self = Self(19u32);
-    pub const R8_SNORM: Self = Self(20u32);
-    pub const RGBA32I: Self = Self(21u32);
-    pub const RGBA16I: Self = Self(22u32);
-    pub const RGBA8I: Self = Self(23u32);
+    pub const RGBA_16_SNORM: Self = Self(16u32);
+    pub const RG_16_SNORM: Self = Self(17u32);
+    pub const RG_8_SNORM: Self = Self(18u32);
+    pub const R16SNORM: Self = Self(19u32);
+    pub const R8SNORM: Self = Self(20u32);
+    pub const RGBA_32I: Self = Self(21u32);
+    pub const RGBA_16I: Self = Self(22u32);
+    pub const RGBA_8I: Self = Self(23u32);
     pub const R32I: Self = Self(24u32);
-    pub const RG32I: Self = Self(25u32);
-    pub const RG16I: Self = Self(26u32);
-    pub const RG8I: Self = Self(27u32);
+    pub const RG_32I: Self = Self(25u32);
+    pub const RG_16I: Self = Self(26u32);
+    pub const RG_8I: Self = Self(27u32);
     pub const R16I: Self = Self(28u32);
     pub const R8I: Self = Self(29u32);
-    pub const RGBA32UI: Self = Self(30u32);
-    pub const RGBA16UI: Self = Self(31u32);
-    pub const RGBA8UI: Self = Self(32u32);
+    pub const RGBA_32UI: Self = Self(30u32);
+    pub const RGBA_16UI: Self = Self(31u32);
+    pub const RGBA_8UI: Self = Self(32u32);
     pub const R32UI: Self = Self(33u32);
-    pub const RGB10A2UI: Self = Self(34u32);
-    pub const RG32UI: Self = Self(35u32);
-    pub const RG16UI: Self = Self(36u32);
-    pub const RG8UI: Self = Self(37u32);
+    pub const RGB_10A_2UI: Self = Self(34u32);
+    pub const RG_32UI: Self = Self(35u32);
+    pub const RG_16UI: Self = Self(36u32);
+    pub const RG_8UI: Self = Self(37u32);
     pub const R16UI: Self = Self(38u32);
     pub const R8UI: Self = Self(39u32);
     pub const R64UI: Self = Self(40u32);
@@ -2185,43 +2185,43 @@ impl Display for ImageFormat {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
             Self::UNKNOWN => write!(f, "Unknown"),
-            Self::RGBA32F => write!(f, "Rgba32f"),
-            Self::RGBA16F => write!(f, "Rgba16f"),
+            Self::RGBA_32F => write!(f, "Rgba32f"),
+            Self::RGBA_16F => write!(f, "Rgba16f"),
             Self::R32F => write!(f, "R32f"),
-            Self::RGBA8 => write!(f, "Rgba8"),
-            Self::RGBA8_SNORM => write!(f, "Rgba8Snorm"),
-            Self::RG32F => write!(f, "Rg32f"),
-            Self::RG16F => write!(f, "Rg16f"),
+            Self::RGBA_8 => write!(f, "Rgba8"),
+            Self::RGBA_8_SNORM => write!(f, "Rgba8Snorm"),
+            Self::RG_32F => write!(f, "Rg32f"),
+            Self::RG_16F => write!(f, "Rg16f"),
             Self::R11F_G11F_B10F => write!(f, "R11fG11fB10f"),
             Self::R16F => write!(f, "R16f"),
-            Self::RGBA16 => write!(f, "Rgba16"),
-            Self::RGB10_A2 => write!(f, "Rgb10A2"),
-            Self::RG16 => write!(f, "Rg16"),
-            Self::RG8 => write!(f, "Rg8"),
+            Self::RGBA_16 => write!(f, "Rgba16"),
+            Self::RGB_10_A2 => write!(f, "Rgb10A2"),
+            Self::RG_16 => write!(f, "Rg16"),
+            Self::RG_8 => write!(f, "Rg8"),
             Self::R16 => write!(f, "R16"),
             Self::R8 => write!(f, "R8"),
-            Self::RGBA16_SNORM => write!(f, "Rgba16Snorm"),
-            Self::RG16_SNORM => write!(f, "Rg16Snorm"),
-            Self::RG8_SNORM => write!(f, "Rg8Snorm"),
-            Self::R16_SNORM => write!(f, "R16Snorm"),
-            Self::R8_SNORM => write!(f, "R8Snorm"),
-            Self::RGBA32I => write!(f, "Rgba32i"),
-            Self::RGBA16I => write!(f, "Rgba16i"),
-            Self::RGBA8I => write!(f, "Rgba8i"),
+            Self::RGBA_16_SNORM => write!(f, "Rgba16Snorm"),
+            Self::RG_16_SNORM => write!(f, "Rg16Snorm"),
+            Self::RG_8_SNORM => write!(f, "Rg8Snorm"),
+            Self::R16SNORM => write!(f, "R16Snorm"),
+            Self::R8SNORM => write!(f, "R8Snorm"),
+            Self::RGBA_32I => write!(f, "Rgba32i"),
+            Self::RGBA_16I => write!(f, "Rgba16i"),
+            Self::RGBA_8I => write!(f, "Rgba8i"),
             Self::R32I => write!(f, "R32i"),
-            Self::RG32I => write!(f, "Rg32i"),
-            Self::RG16I => write!(f, "Rg16i"),
-            Self::RG8I => write!(f, "Rg8i"),
+            Self::RG_32I => write!(f, "Rg32i"),
+            Self::RG_16I => write!(f, "Rg16i"),
+            Self::RG_8I => write!(f, "Rg8i"),
             Self::R16I => write!(f, "R16i"),
             Self::R8I => write!(f, "R8i"),
-            Self::RGBA32UI => write!(f, "Rgba32ui"),
-            Self::RGBA16UI => write!(f, "Rgba16ui"),
-            Self::RGBA8UI => write!(f, "Rgba8ui"),
+            Self::RGBA_32UI => write!(f, "Rgba32ui"),
+            Self::RGBA_16UI => write!(f, "Rgba16ui"),
+            Self::RGBA_8UI => write!(f, "Rgba8ui"),
             Self::R32UI => write!(f, "R32ui"),
-            Self::RGB10A2UI => write!(f, "Rgb10a2ui"),
-            Self::RG32UI => write!(f, "Rg32ui"),
-            Self::RG16UI => write!(f, "Rg16ui"),
-            Self::RG8UI => write!(f, "Rg8ui"),
+            Self::RGB_10A_2UI => write!(f, "Rgb10a2ui"),
+            Self::RG_32UI => write!(f, "Rg32ui"),
+            Self::RG_16UI => write!(f, "Rg16ui"),
+            Self::RG_8UI => write!(f, "Rg8ui"),
             Self::R16UI => write!(f, "R16ui"),
             Self::R8UI => write!(f, "R8ui"),
             Self::R64UI => write!(f, "R64ui"),
@@ -2290,32 +2290,32 @@ impl Display for ImageChannelOrder {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct ImageChannelDataType(pub(crate) u32);
 impl ImageChannelDataType {
-    pub const SNORM_INT8: Self = Self(0u32);
-    pub const SNORM_INT16: Self = Self(1u32);
-    pub const UNORM_INT8: Self = Self(2u32);
-    pub const UNORM_INT16: Self = Self(3u32);
-    pub const UNORM_SHORT565: Self = Self(4u32);
-    pub const UNORM_SHORT555: Self = Self(5u32);
-    pub const UNORM_INT101010: Self = Self(6u32);
-    pub const SIGNED_INT8: Self = Self(7u32);
-    pub const SIGNED_INT16: Self = Self(8u32);
-    pub const SIGNED_INT32: Self = Self(9u32);
-    pub const UNSIGNED_INT8: Self = Self(10u32);
-    pub const UNSIGNED_INT16: Self = Self(11u32);
-    pub const UNSIGNED_INT32: Self = Self(12u32);
+    pub const SNORM_INT_8: Self = Self(0u32);
+    pub const SNORM_INT_16: Self = Self(1u32);
+    pub const UNORM_INT_8: Self = Self(2u32);
+    pub const UNORM_INT_16: Self = Self(3u32);
+    pub const UNORM_SHORT_565: Self = Self(4u32);
+    pub const UNORM_SHORT_555: Self = Self(5u32);
+    pub const UNORM_INT_101010: Self = Self(6u32);
+    pub const SIGNED_INT_8: Self = Self(7u32);
+    pub const SIGNED_INT_16: Self = Self(8u32);
+    pub const SIGNED_INT_32: Self = Self(9u32);
+    pub const UNSIGNED_INT_8: Self = Self(10u32);
+    pub const UNSIGNED_INT_16: Self = Self(11u32);
+    pub const UNSIGNED_INT_32: Self = Self(12u32);
     pub const HALF_FLOAT: Self = Self(13u32);
     pub const FLOAT: Self = Self(14u32);
-    pub const UNORM_INT24: Self = Self(15u32);
-    pub const UNORM_INT101010_2: Self = Self(16u32);
-    pub const UNORM_INT10_X6_EXT: Self = Self(17u32);
-    pub const UNSIGNED_INT_RAW10_EXT: Self = Self(19u32);
-    pub const UNSIGNED_INT_RAW12_EXT: Self = Self(20u32);
-    pub const UNORM_INT2_101010_EXT: Self = Self(21u32);
-    pub const UNSIGNED_INT10_X6_EXT: Self = Self(22u32);
-    pub const UNSIGNED_INT12_X4_EXT: Self = Self(23u32);
-    pub const UNSIGNED_INT14_X2_EXT: Self = Self(24u32);
-    pub const UNORM_INT12_X4_EXT: Self = Self(25u32);
-    pub const UNORM_INT14_X2_EXT: Self = Self(26u32);
+    pub const UNORM_INT_24: Self = Self(15u32);
+    pub const UNORM_INT_101010_2: Self = Self(16u32);
+    pub const UNORM_INT_10_X6EXT: Self = Self(17u32);
+    pub const UNSIGNED_INT_RAW_10_EXT: Self = Self(19u32);
+    pub const UNSIGNED_INT_RAW_12_EXT: Self = Self(20u32);
+    pub const UNORM_INT_2_101010_EXT: Self = Self(21u32);
+    pub const UNSIGNED_INT_10_X6EXT: Self = Self(22u32);
+    pub const UNSIGNED_INT_12_X4EXT: Self = Self(23u32);
+    pub const UNSIGNED_INT_14_X2EXT: Self = Self(24u32);
+    pub const UNORM_INT_12_X4EXT: Self = Self(25u32);
+    pub const UNORM_INT_14_X2EXT: Self = Self(26u32);
 }
 impl Word for ImageChannelDataType {
     #[inline]
@@ -2326,32 +2326,32 @@ impl Word for ImageChannelDataType {
 impl Display for ImageChannelDataType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::SNORM_INT8 => write!(f, "SnormInt8"),
-            Self::SNORM_INT16 => write!(f, "SnormInt16"),
-            Self::UNORM_INT8 => write!(f, "UnormInt8"),
-            Self::UNORM_INT16 => write!(f, "UnormInt16"),
-            Self::UNORM_SHORT565 => write!(f, "UnormShort565"),
-            Self::UNORM_SHORT555 => write!(f, "UnormShort555"),
-            Self::UNORM_INT101010 => write!(f, "UnormInt101010"),
-            Self::SIGNED_INT8 => write!(f, "SignedInt8"),
-            Self::SIGNED_INT16 => write!(f, "SignedInt16"),
-            Self::SIGNED_INT32 => write!(f, "SignedInt32"),
-            Self::UNSIGNED_INT8 => write!(f, "UnsignedInt8"),
-            Self::UNSIGNED_INT16 => write!(f, "UnsignedInt16"),
-            Self::UNSIGNED_INT32 => write!(f, "UnsignedInt32"),
+            Self::SNORM_INT_8 => write!(f, "SnormInt8"),
+            Self::SNORM_INT_16 => write!(f, "SnormInt16"),
+            Self::UNORM_INT_8 => write!(f, "UnormInt8"),
+            Self::UNORM_INT_16 => write!(f, "UnormInt16"),
+            Self::UNORM_SHORT_565 => write!(f, "UnormShort565"),
+            Self::UNORM_SHORT_555 => write!(f, "UnormShort555"),
+            Self::UNORM_INT_101010 => write!(f, "UnormInt101010"),
+            Self::SIGNED_INT_8 => write!(f, "SignedInt8"),
+            Self::SIGNED_INT_16 => write!(f, "SignedInt16"),
+            Self::SIGNED_INT_32 => write!(f, "SignedInt32"),
+            Self::UNSIGNED_INT_8 => write!(f, "UnsignedInt8"),
+            Self::UNSIGNED_INT_16 => write!(f, "UnsignedInt16"),
+            Self::UNSIGNED_INT_32 => write!(f, "UnsignedInt32"),
             Self::HALF_FLOAT => write!(f, "HalfFloat"),
             Self::FLOAT => write!(f, "Float"),
-            Self::UNORM_INT24 => write!(f, "UnormInt24"),
-            Self::UNORM_INT101010_2 => write!(f, "UnormInt101010_2"),
-            Self::UNORM_INT10_X6_EXT => write!(f, "UnormInt10X6EXT"),
-            Self::UNSIGNED_INT_RAW10_EXT => write!(f, "UnsignedIntRaw10EXT"),
-            Self::UNSIGNED_INT_RAW12_EXT => write!(f, "UnsignedIntRaw12EXT"),
-            Self::UNORM_INT2_101010_EXT => write!(f, "UnormInt2_101010EXT"),
-            Self::UNSIGNED_INT10_X6_EXT => write!(f, "UnsignedInt10X6EXT"),
-            Self::UNSIGNED_INT12_X4_EXT => write!(f, "UnsignedInt12X4EXT"),
-            Self::UNSIGNED_INT14_X2_EXT => write!(f, "UnsignedInt14X2EXT"),
-            Self::UNORM_INT12_X4_EXT => write!(f, "UnormInt12X4EXT"),
-            Self::UNORM_INT14_X2_EXT => write!(f, "UnormInt14X2EXT"),
+            Self::UNORM_INT_24 => write!(f, "UnormInt24"),
+            Self::UNORM_INT_101010_2 => write!(f, "UnormInt101010_2"),
+            Self::UNORM_INT_10_X6EXT => write!(f, "UnormInt10X6EXT"),
+            Self::UNSIGNED_INT_RAW_10_EXT => write!(f, "UnsignedIntRaw10EXT"),
+            Self::UNSIGNED_INT_RAW_12_EXT => write!(f, "UnsignedIntRaw12EXT"),
+            Self::UNORM_INT_2_101010_EXT => write!(f, "UnormInt2_101010EXT"),
+            Self::UNSIGNED_INT_10_X6EXT => write!(f, "UnsignedInt10X6EXT"),
+            Self::UNSIGNED_INT_12_X4EXT => write!(f, "UnsignedInt12X4EXT"),
+            Self::UNSIGNED_INT_14_X2EXT => write!(f, "UnsignedInt14X2EXT"),
+            Self::UNORM_INT_12_X4EXT => write!(f, "UnormInt12X4EXT"),
+            Self::UNORM_INT_14_X2EXT => write!(f, "UnormInt14X2EXT"),
             x => write!(f, "{x}"),
         }
     }
@@ -3833,7 +3833,7 @@ impl Decoration {
     pub const MAX_BYTE_OFFSET: Self = Self(45u32);
     pub const ALIGNMENT_ID: Self = Self(46u32);
     pub const MAX_BYTE_OFFSET_ID: Self = Self(47u32);
-    pub const SATURATED_TO_LARGEST_FLOAT8_NORMAL_CONVERSION_EXT: Self = Self(4216u32);
+    pub const SATURATED_TO_LARGEST_FLOAT_8_NORMAL_CONVERSION_EXT: Self = Self(4216u32);
     pub const NO_SIGNED_WRAP: Self = Self(4469u32);
     pub const NO_UNSIGNED_WRAP: Self = Self(4470u32);
     pub const WEIGHT_TEXTURE_QCOM: Self = Self(4487u32);
@@ -3895,7 +3895,7 @@ impl Decoration {
     pub const SIMPLE_DUAL_PORT_ALTERA: Self = Self(5833u32);
     pub const MERGE_ALTERA: Self = Self(5834u32);
     pub const BANK_BITS_ALTERA: Self = Self(5835u32);
-    pub const FORCE_POW2_DEPTH_ALTERA: Self = Self(5836u32);
+    pub const FORCE_POW_2DEPTH_ALTERA: Self = Self(5836u32);
     pub const STRIDESIZE_ALTERA: Self = Self(5883u32);
     pub const WORDSIZE_ALTERA: Self = Self(5884u32);
     pub const TRUE_DUAL_PORT_ALTERA: Self = Self(5885u32);
@@ -3993,7 +3993,7 @@ impl Display for Decoration {
             Self::MAX_BYTE_OFFSET => write!(f, "MaxByteOffset"),
             Self::ALIGNMENT_ID => write!(f, "AlignmentId"),
             Self::MAX_BYTE_OFFSET_ID => write!(f, "MaxByteOffsetId"),
-            Self::SATURATED_TO_LARGEST_FLOAT8_NORMAL_CONVERSION_EXT => {
+            Self::SATURATED_TO_LARGEST_FLOAT_8_NORMAL_CONVERSION_EXT => {
                 write!(f, "SaturatedToLargestFloat8NormalConversionEXT")
             }
             Self::NO_SIGNED_WRAP => write!(f, "NoSignedWrap"),
@@ -4061,7 +4061,7 @@ impl Display for Decoration {
             Self::SIMPLE_DUAL_PORT_ALTERA => write!(f, "SimpleDualPortALTERA"),
             Self::MERGE_ALTERA => write!(f, "MergeALTERA"),
             Self::BANK_BITS_ALTERA => write!(f, "BankBitsALTERA"),
-            Self::FORCE_POW2_DEPTH_ALTERA => write!(f, "ForcePow2DepthALTERA"),
+            Self::FORCE_POW_2DEPTH_ALTERA => write!(f, "ForcePow2DepthALTERA"),
             Self::STRIDESIZE_ALTERA => write!(f, "StridesizeALTERA"),
             Self::WORDSIZE_ALTERA => write!(f, "WordsizeALTERA"),
             Self::TRUE_DUAL_PORT_ALTERA => write!(f, "TrueDualPortALTERA"),
@@ -4492,12 +4492,12 @@ impl Capability {
     pub const ADDRESSES: Self = Self(4u32);
     pub const LINKAGE: Self = Self(5u32);
     pub const KERNEL: Self = Self(6u32);
-    pub const VECTOR16: Self = Self(7u32);
-    pub const FLOAT16_BUFFER: Self = Self(8u32);
-    pub const FLOAT16: Self = Self(9u32);
-    pub const FLOAT64: Self = Self(10u32);
-    pub const INT64: Self = Self(11u32);
-    pub const INT64_ATOMICS: Self = Self(12u32);
+    pub const VECTOR_16: Self = Self(7u32);
+    pub const FLOAT_16_BUFFER: Self = Self(8u32);
+    pub const FLOAT_16: Self = Self(9u32);
+    pub const FLOAT_64: Self = Self(10u32);
+    pub const INT_64: Self = Self(11u32);
+    pub const INT_64_ATOMICS: Self = Self(12u32);
     pub const IMAGE_BASIC: Self = Self(13u32);
     pub const IMAGE_READ_WRITE: Self = Self(14u32);
     pub const IMAGE_MIPMAP: Self = Self(15u32);
@@ -4506,7 +4506,7 @@ impl Capability {
     pub const DEVICE_ENQUEUE: Self = Self(19u32);
     pub const LITERAL_SAMPLER: Self = Self(20u32);
     pub const ATOMIC_STORAGE: Self = Self(21u32);
-    pub const INT16: Self = Self(22u32);
+    pub const INT_16: Self = Self(22u32);
     pub const TESSELLATION_POINT_SIZE: Self = Self(23u32);
     pub const GEOMETRY_POINT_SIZE: Self = Self(24u32);
     pub const IMAGE_GATHER_EXTENDED: Self = Self(25u32);
@@ -4522,12 +4522,12 @@ impl Capability {
     pub const IMAGE_RECT: Self = Self(36u32);
     pub const SAMPLED_RECT: Self = Self(37u32);
     pub const GENERIC_POINTER: Self = Self(38u32);
-    pub const INT8: Self = Self(39u32);
+    pub const INT_8: Self = Self(39u32);
     pub const INPUT_ATTACHMENT: Self = Self(40u32);
     pub const SPARSE_RESIDENCY: Self = Self(41u32);
     pub const MIN_LOD: Self = Self(42u32);
-    pub const SAMPLED1_D: Self = Self(43u32);
-    pub const IMAGE1_D: Self = Self(44u32);
+    pub const SAMPLED_1D: Self = Self(43u32);
+    pub const IMAGE_1D: Self = Self(44u32);
     pub const SAMPLED_CUBE_ARRAY: Self = Self(45u32);
     pub const SAMPLED_BUFFER: Self = Self(46u32);
     pub const IMAGE_BUFFER: Self = Self(47u32);
@@ -4564,28 +4564,28 @@ impl Capability {
     pub const STORAGE_TENSOR_ARRAY_NON_UNIFORM_INDEXING_ARM: Self = Self(4176u32);
     pub const GRAPH_ARM: Self = Self(4191u32);
     pub const COOPERATIVE_MATRIX_LAYOUTS_ARM: Self = Self(4201u32);
-    pub const FLOAT8_EXT: Self = Self(4212u32);
-    pub const FLOAT8_COOPERATIVE_MATRIX_EXT: Self = Self(4213u32);
+    pub const FLOAT_8_EXT: Self = Self(4212u32);
+    pub const FLOAT_8_COOPERATIVE_MATRIX_EXT: Self = Self(4213u32);
     pub const FRAGMENT_SHADING_RATE_KHR: Self = Self(4422u32);
     pub const SUBGROUP_BALLOT_KHR: Self = Self(4423u32);
     pub const DRAW_PARAMETERS: Self = Self(4427u32);
     pub const WORKGROUP_MEMORY_EXPLICIT_LAYOUT_KHR: Self = Self(4428u32);
-    pub const WORKGROUP_MEMORY_EXPLICIT_LAYOUT8_BIT_ACCESS_KHR: Self = Self(4429u32);
-    pub const WORKGROUP_MEMORY_EXPLICIT_LAYOUT16_BIT_ACCESS_KHR: Self = Self(4430u32);
+    pub const WORKGROUP_MEMORY_EXPLICIT_LAYOUT_8_BIT_ACCESS_KHR: Self = Self(4429u32);
+    pub const WORKGROUP_MEMORY_EXPLICIT_LAYOUT_16_BIT_ACCESS_KHR: Self = Self(4430u32);
     pub const SUBGROUP_VOTE_KHR: Self = Self(4431u32);
-    pub const STORAGE_BUFFER16_BIT_ACCESS: Self = Self(4433u32);
-    pub const UNIFORM_AND_STORAGE_BUFFER16_BIT_ACCESS: Self = Self(4434u32);
-    pub const STORAGE_PUSH_CONSTANT16: Self = Self(4435u32);
-    pub const STORAGE_INPUT_OUTPUT16: Self = Self(4436u32);
+    pub const STORAGE_BUFFER_16_BIT_ACCESS: Self = Self(4433u32);
+    pub const UNIFORM_AND_STORAGE_BUFFER_16_BIT_ACCESS: Self = Self(4434u32);
+    pub const STORAGE_PUSH_CONSTANT_16: Self = Self(4435u32);
+    pub const STORAGE_INPUT_OUTPUT_16: Self = Self(4436u32);
     pub const DEVICE_GROUP: Self = Self(4437u32);
     pub const MULTI_VIEW: Self = Self(4439u32);
     pub const VARIABLE_POINTERS_STORAGE_BUFFER: Self = Self(4441u32);
     pub const VARIABLE_POINTERS: Self = Self(4442u32);
     pub const ATOMIC_STORAGE_OPS: Self = Self(4445u32);
     pub const SAMPLE_MASK_POST_DEPTH_COVERAGE: Self = Self(4447u32);
-    pub const STORAGE_BUFFER8_BIT_ACCESS: Self = Self(4448u32);
-    pub const UNIFORM_AND_STORAGE_BUFFER8_BIT_ACCESS: Self = Self(4449u32);
-    pub const STORAGE_PUSH_CONSTANT8: Self = Self(4450u32);
+    pub const STORAGE_BUFFER_8_BIT_ACCESS: Self = Self(4448u32);
+    pub const UNIFORM_AND_STORAGE_BUFFER_8_BIT_ACCESS: Self = Self(4449u32);
+    pub const STORAGE_PUSH_CONSTANT_8: Self = Self(4450u32);
     pub const DENORM_PRESERVE: Self = Self(4464u32);
     pub const DENORM_FLUSH_TO_ZERO: Self = Self(4465u32);
     pub const SIGNED_ZERO_INF_NAN_PRESERVE: Self = Self(4466u32);
@@ -4601,21 +4601,21 @@ impl Capability {
     pub const TEXTURE_BLOCK_MATCH_QCOM: Self = Self(4486u32);
     pub const TILE_SHADING_QCOM: Self = Self(4495u32);
     pub const COOPERATIVE_MATRIX_CONVERSION_QCOM: Self = Self(4496u32);
-    pub const TEXTURE_BLOCK_MATCH2_QCOM: Self = Self(4498u32);
-    pub const FLOAT16_IMAGE_AMD: Self = Self(5008u32);
+    pub const TEXTURE_BLOCK_MATCH_2_QCOM: Self = Self(4498u32);
+    pub const FLOAT_16_IMAGE_AMD: Self = Self(5008u32);
     pub const IMAGE_GATHER_BIAS_LOD_AMD: Self = Self(5009u32);
     pub const FRAGMENT_MASK_AMD: Self = Self(5010u32);
     pub const STENCIL_EXPORT_EXT: Self = Self(5013u32);
     pub const IMAGE_READ_WRITE_LOD_AMD: Self = Self(5015u32);
-    pub const INT64_IMAGE_EXT: Self = Self(5016u32);
+    pub const INT_64_IMAGE_EXT: Self = Self(5016u32);
     pub const SHADER_CLOCK_KHR: Self = Self(5055u32);
     pub const SHADER_ENQUEUE_AMDX: Self = Self(5067u32);
     pub const QUAD_CONTROL_KHR: Self = Self(5087u32);
-    pub const INT4_TYPE_INTEL: Self = Self(5112u32);
-    pub const INT4_COOPERATIVE_MATRIX_INTEL: Self = Self(5114u32);
-    pub const BFLOAT16_TYPE_KHR: Self = Self(5116u32);
-    pub const BFLOAT16_DOT_PRODUCT_KHR: Self = Self(5117u32);
-    pub const BFLOAT16_COOPERATIVE_MATRIX_KHR: Self = Self(5118u32);
+    pub const INT_4_TYPE_INTEL: Self = Self(5112u32);
+    pub const INT_4_COOPERATIVE_MATRIX_INTEL: Self = Self(5114u32);
+    pub const BFLOAT_16_TYPE_KHR: Self = Self(5116u32);
+    pub const BFLOAT_16DOT_PRODUCT_KHR: Self = Self(5117u32);
+    pub const BFLOAT_16_COOPERATIVE_MATRIX_KHR: Self = Self(5118u32);
     pub const ABORT_KHR: Self = Self(5120u32);
     pub const DESCRIPTOR_HEAP_EXT: Self = Self(5128u32);
     pub const CONSTANT_DATA_KHR: Self = Self(5146u32);
@@ -4667,14 +4667,14 @@ impl Capability {
     pub const BINDLESS_TEXTURE_NV: Self = Self(5390u32);
     pub const RAY_QUERY_POSITION_FETCH_KHR: Self = Self(5391u32);
     pub const COOPERATIVE_VECTOR_NV: Self = Self(5394u32);
-    pub const ATOMIC_FLOAT16_VECTOR_NV: Self = Self(5404u32);
+    pub const ATOMIC_FLOAT_16_VECTOR_NV: Self = Self(5404u32);
     pub const RAY_TRACING_DISPLACEMENT_MICROMAP_NV: Self = Self(5409u32);
     pub const RAW_ACCESS_CHAINS_NV: Self = Self(5414u32);
     pub const RAY_TRACING_SPHERES_GEOMETRY_NV: Self = Self(5418u32);
     pub const RAY_TRACING_LINEAR_SWEPT_SPHERES_GEOMETRY_NV: Self = Self(5419u32);
     pub const PUSH_CONSTANT_BANKS_NV: Self = Self(5423u32);
     pub const LONG_VECTOR_EXT: Self = Self(5425u32);
-    pub const SHADER64_BIT_INDEXING_EXT: Self = Self(5426u32);
+    pub const SHADER_64_BIT_INDEXING_EXT: Self = Self(5426u32);
     pub const COOPERATIVE_MATRIX_REDUCTIONS_NV: Self = Self(5430u32);
     pub const COOPERATIVE_MATRIX_CONVERSIONS_NV: Self = Self(5431u32);
     pub const COOPERATIVE_MATRIX_PER_ELEMENT_OPERATIONS_NV: Self = Self(5432u32);
@@ -4689,13 +4689,13 @@ impl Capability {
     pub const SUBGROUP_IMAGE_MEDIA_BLOCK_IOINTEL: Self = Self(5579u32);
     pub const ROUND_TO_INFINITY_INTEL: Self = Self(5582u32);
     pub const FLOATING_POINT_MODE_INTEL: Self = Self(5583u32);
-    pub const INTEGER_FUNCTIONS2_INTEL: Self = Self(5584u32);
+    pub const INTEGER_FUNCTIONS_2_INTEL: Self = Self(5584u32);
     pub const FUNCTION_POINTERS_INTEL: Self = Self(5603u32);
     pub const INDIRECT_REFERENCES_INTEL: Self = Self(5604u32);
     pub const ASM_INTEL: Self = Self(5606u32);
-    pub const ATOMIC_FLOAT32_MIN_MAX_EXT: Self = Self(5612u32);
-    pub const ATOMIC_FLOAT64_MIN_MAX_EXT: Self = Self(5613u32);
-    pub const ATOMIC_FLOAT16_MIN_MAX_EXT: Self = Self(5616u32);
+    pub const ATOMIC_FLOAT_32_MIN_MAX_EXT: Self = Self(5612u32);
+    pub const ATOMIC_FLOAT_64_MIN_MAX_EXT: Self = Self(5613u32);
+    pub const ATOMIC_FLOAT_16_MIN_MAX_EXT: Self = Self(5616u32);
     pub const VECTOR_COMPUTE_INTEL: Self = Self(5617u32);
     pub const VECTOR_ANY_INTEL: Self = Self(5619u32);
     pub const EXPECT_ASSUME_KHR: Self = Self(5629u32);
@@ -4726,27 +4726,27 @@ impl Capability {
     pub const BLOCKING_PIPES_ALTERA: Self = Self(5945u32);
     pub const FPGAREG_ALTERA: Self = Self(5948u32);
     pub const DOT_PRODUCT_INPUT_ALL: Self = Self(6016u32);
-    pub const DOT_PRODUCT_INPUT4X8_BIT: Self = Self(6017u32);
-    pub const DOT_PRODUCT_INPUT4X8_BIT_PACKED: Self = Self(6018u32);
+    pub const DOT_PRODUCT_INPUT_4X_8_BIT: Self = Self(6017u32);
+    pub const DOT_PRODUCT_INPUT_4X_8_BIT_PACKED: Self = Self(6018u32);
     pub const DOT_PRODUCT: Self = Self(6019u32);
     pub const RAY_CULL_MASK_KHR: Self = Self(6020u32);
     pub const COOPERATIVE_MATRIX_KHR: Self = Self(6022u32);
     pub const REPLICATED_COMPOSITES_EXT: Self = Self(6024u32);
     pub const BIT_INSTRUCTIONS: Self = Self(6025u32);
     pub const GROUP_NON_UNIFORM_ROTATE_KHR: Self = Self(6026u32);
-    pub const FLOAT_CONTROLS2: Self = Self(6029u32);
+    pub const FLOAT_CONTROLS_2: Self = Self(6029u32);
     pub const FMAKHR: Self = Self(6030u32);
-    pub const ATOMIC_FLOAT32_ADD_EXT: Self = Self(6033u32);
-    pub const ATOMIC_FLOAT64_ADD_EXT: Self = Self(6034u32);
+    pub const ATOMIC_FLOAT_32_ADD_EXT: Self = Self(6033u32);
+    pub const ATOMIC_FLOAT_64_ADD_EXT: Self = Self(6034u32);
     pub const LONG_COMPOSITES_INTEL: Self = Self(6089u32);
     pub const OPT_NONE_EXT: Self = Self(6094u32);
-    pub const ATOMIC_FLOAT16_ADD_EXT: Self = Self(6095u32);
+    pub const ATOMIC_FLOAT_16_ADD_EXT: Self = Self(6095u32);
     pub const DEBUG_INFO_MODULE_INTEL: Self = Self(6114u32);
-    pub const BFLOAT16_CONVERSION_INTEL: Self = Self(6115u32);
+    pub const BFLOAT_16_CONVERSION_INTEL: Self = Self(6115u32);
     pub const SPLIT_BARRIER_INTEL: Self = Self(6141u32);
     pub const ARITHMETIC_FENCE_EXT: Self = Self(6144u32);
-    pub const FPGACLUSTER_ATTRIBUTES_V2_ALTERA: Self = Self(6150u32);
-    pub const FPGAKERNEL_ATTRIBUTESV2_INTEL: Self = Self(6161u32);
+    pub const FPGACLUSTER_ATTRIBUTES_V2ALTERA: Self = Self(6150u32);
+    pub const FPGAKERNEL_ATTRIBUTESV_2_INTEL: Self = Self(6161u32);
     pub const TASK_SEQUENCE_ALTERA: Self = Self(6162u32);
     pub const FPMAX_ERROR_INTEL: Self = Self(6169u32);
     pub const FPGALATENCY_CONTROL_ALTERA: Self = Self(6171u32);
@@ -4754,24 +4754,24 @@ impl Capability {
     pub const GLOBAL_VARIABLE_HOST_ACCESS_INTEL: Self = Self(6187u32);
     pub const GLOBAL_VARIABLE_FPGADECORATIONS_ALTERA: Self = Self(6189u32);
     pub const SUBGROUP_BUFFER_PREFETCH_INTEL: Self = Self(6220u32);
-    pub const SUBGROUP2_DBLOCK_IOINTEL: Self = Self(6228u32);
-    pub const SUBGROUP2_DBLOCK_TRANSFORM_INTEL: Self = Self(6229u32);
-    pub const SUBGROUP2_DBLOCK_TRANSPOSE_INTEL: Self = Self(6230u32);
+    pub const SUBGROUP_2D_BLOCK_IOINTEL: Self = Self(6228u32);
+    pub const SUBGROUP_2D_BLOCK_TRANSFORM_INTEL: Self = Self(6229u32);
+    pub const SUBGROUP_2D_BLOCK_TRANSPOSE_INTEL: Self = Self(6230u32);
     pub const SUBGROUP_MATRIX_MULTIPLY_ACCUMULATE_INTEL: Self = Self(6236u32);
     pub const TERNARY_BITWISE_FUNCTION_INTEL: Self = Self(6241u32);
     pub const UNTYPED_VARIABLE_LENGTH_ARRAY_INTEL: Self = Self(6243u32);
     pub const SPEC_CONDITIONAL_INTEL: Self = Self(6245u32);
     pub const FUNCTION_VARIANTS_INTEL: Self = Self(6246u32);
     pub const GROUP_UNIFORM_ARITHMETIC_KHR: Self = Self(6400u32);
-    pub const TENSOR_FLOAT32_ROUNDING_INTEL: Self = Self(6425u32);
+    pub const TENSOR_FLOAT_32_ROUNDING_INTEL: Self = Self(6425u32);
     pub const MASKED_GATHER_SCATTER_INTEL: Self = Self(6427u32);
     pub const CACHE_CONTROLS_INTEL: Self = Self(6441u32);
     pub const REGISTER_LIMITS_INTEL: Self = Self(6460u32);
     pub const BINDLESS_IMAGES_INTEL: Self = Self(6528u32);
-    pub const DOT_PRODUCT_FLOAT16_ACC_FLOAT32_VALVE: Self = Self(6912u32);
-    pub const DOT_PRODUCT_FLOAT16_ACC_FLOAT16_VALVE: Self = Self(6913u32);
-    pub const DOT_PRODUCT_BFLOAT16_ACC_VALVE: Self = Self(6914u32);
-    pub const DOT_PRODUCT_FLOAT8_ACC_FLOAT32_VALVE: Self = Self(6915u32);
+    pub const DOT_PRODUCT_FLOAT_16_ACC_FLOAT_32_VALVE: Self = Self(6912u32);
+    pub const DOT_PRODUCT_FLOAT_16_ACC_FLOAT_16_VALVE: Self = Self(6913u32);
+    pub const DOT_PRODUCT_BFLOAT_16_ACC_VALVE: Self = Self(6914u32);
+    pub const DOT_PRODUCT_FLOAT_8_ACC_FLOAT_32_VALVE: Self = Self(6915u32);
 }
 impl Word for Capability {
     #[inline]
@@ -4789,12 +4789,12 @@ impl Display for Capability {
             Self::ADDRESSES => write!(f, "Addresses"),
             Self::LINKAGE => write!(f, "Linkage"),
             Self::KERNEL => write!(f, "Kernel"),
-            Self::VECTOR16 => write!(f, "Vector16"),
-            Self::FLOAT16_BUFFER => write!(f, "Float16Buffer"),
-            Self::FLOAT16 => write!(f, "Float16"),
-            Self::FLOAT64 => write!(f, "Float64"),
-            Self::INT64 => write!(f, "Int64"),
-            Self::INT64_ATOMICS => write!(f, "Int64Atomics"),
+            Self::VECTOR_16 => write!(f, "Vector16"),
+            Self::FLOAT_16_BUFFER => write!(f, "Float16Buffer"),
+            Self::FLOAT_16 => write!(f, "Float16"),
+            Self::FLOAT_64 => write!(f, "Float64"),
+            Self::INT_64 => write!(f, "Int64"),
+            Self::INT_64_ATOMICS => write!(f, "Int64Atomics"),
             Self::IMAGE_BASIC => write!(f, "ImageBasic"),
             Self::IMAGE_READ_WRITE => write!(f, "ImageReadWrite"),
             Self::IMAGE_MIPMAP => write!(f, "ImageMipmap"),
@@ -4803,7 +4803,7 @@ impl Display for Capability {
             Self::DEVICE_ENQUEUE => write!(f, "DeviceEnqueue"),
             Self::LITERAL_SAMPLER => write!(f, "LiteralSampler"),
             Self::ATOMIC_STORAGE => write!(f, "AtomicStorage"),
-            Self::INT16 => write!(f, "Int16"),
+            Self::INT_16 => write!(f, "Int16"),
             Self::TESSELLATION_POINT_SIZE => write!(f, "TessellationPointSize"),
             Self::GEOMETRY_POINT_SIZE => write!(f, "GeometryPointSize"),
             Self::IMAGE_GATHER_EXTENDED => write!(f, "ImageGatherExtended"),
@@ -4827,12 +4827,12 @@ impl Display for Capability {
             Self::IMAGE_RECT => write!(f, "ImageRect"),
             Self::SAMPLED_RECT => write!(f, "SampledRect"),
             Self::GENERIC_POINTER => write!(f, "GenericPointer"),
-            Self::INT8 => write!(f, "Int8"),
+            Self::INT_8 => write!(f, "Int8"),
             Self::INPUT_ATTACHMENT => write!(f, "InputAttachment"),
             Self::SPARSE_RESIDENCY => write!(f, "SparseResidency"),
             Self::MIN_LOD => write!(f, "MinLod"),
-            Self::SAMPLED1_D => write!(f, "Sampled1D"),
-            Self::IMAGE1_D => write!(f, "Image1D"),
+            Self::SAMPLED_1D => write!(f, "Sampled1D"),
+            Self::IMAGE_1D => write!(f, "Image1D"),
             Self::SAMPLED_CUBE_ARRAY => write!(f, "SampledCubeArray"),
             Self::SAMPLED_BUFFER => write!(f, "SampledBuffer"),
             Self::IMAGE_BUFFER => write!(f, "ImageBuffer"),
@@ -4873,38 +4873,38 @@ impl Display for Capability {
             }
             Self::GRAPH_ARM => write!(f, "GraphARM"),
             Self::COOPERATIVE_MATRIX_LAYOUTS_ARM => write!(f, "CooperativeMatrixLayoutsARM"),
-            Self::FLOAT8_EXT => write!(f, "Float8EXT"),
-            Self::FLOAT8_COOPERATIVE_MATRIX_EXT => write!(f, "Float8CooperativeMatrixEXT"),
+            Self::FLOAT_8_EXT => write!(f, "Float8EXT"),
+            Self::FLOAT_8_COOPERATIVE_MATRIX_EXT => write!(f, "Float8CooperativeMatrixEXT"),
             Self::FRAGMENT_SHADING_RATE_KHR => write!(f, "FragmentShadingRateKHR"),
             Self::SUBGROUP_BALLOT_KHR => write!(f, "SubgroupBallotKHR"),
             Self::DRAW_PARAMETERS => write!(f, "DrawParameters"),
             Self::WORKGROUP_MEMORY_EXPLICIT_LAYOUT_KHR => {
                 write!(f, "WorkgroupMemoryExplicitLayoutKHR")
             }
-            Self::WORKGROUP_MEMORY_EXPLICIT_LAYOUT8_BIT_ACCESS_KHR => {
+            Self::WORKGROUP_MEMORY_EXPLICIT_LAYOUT_8_BIT_ACCESS_KHR => {
                 write!(f, "WorkgroupMemoryExplicitLayout8BitAccessKHR")
             }
-            Self::WORKGROUP_MEMORY_EXPLICIT_LAYOUT16_BIT_ACCESS_KHR => {
+            Self::WORKGROUP_MEMORY_EXPLICIT_LAYOUT_16_BIT_ACCESS_KHR => {
                 write!(f, "WorkgroupMemoryExplicitLayout16BitAccessKHR")
             }
             Self::SUBGROUP_VOTE_KHR => write!(f, "SubgroupVoteKHR"),
-            Self::STORAGE_BUFFER16_BIT_ACCESS => write!(f, "StorageBuffer16BitAccess"),
-            Self::UNIFORM_AND_STORAGE_BUFFER16_BIT_ACCESS => {
+            Self::STORAGE_BUFFER_16_BIT_ACCESS => write!(f, "StorageBuffer16BitAccess"),
+            Self::UNIFORM_AND_STORAGE_BUFFER_16_BIT_ACCESS => {
                 write!(f, "UniformAndStorageBuffer16BitAccess")
             }
-            Self::STORAGE_PUSH_CONSTANT16 => write!(f, "StoragePushConstant16"),
-            Self::STORAGE_INPUT_OUTPUT16 => write!(f, "StorageInputOutput16"),
+            Self::STORAGE_PUSH_CONSTANT_16 => write!(f, "StoragePushConstant16"),
+            Self::STORAGE_INPUT_OUTPUT_16 => write!(f, "StorageInputOutput16"),
             Self::DEVICE_GROUP => write!(f, "DeviceGroup"),
             Self::MULTI_VIEW => write!(f, "MultiView"),
             Self::VARIABLE_POINTERS_STORAGE_BUFFER => write!(f, "VariablePointersStorageBuffer"),
             Self::VARIABLE_POINTERS => write!(f, "VariablePointers"),
             Self::ATOMIC_STORAGE_OPS => write!(f, "AtomicStorageOps"),
             Self::SAMPLE_MASK_POST_DEPTH_COVERAGE => write!(f, "SampleMaskPostDepthCoverage"),
-            Self::STORAGE_BUFFER8_BIT_ACCESS => write!(f, "StorageBuffer8BitAccess"),
-            Self::UNIFORM_AND_STORAGE_BUFFER8_BIT_ACCESS => {
+            Self::STORAGE_BUFFER_8_BIT_ACCESS => write!(f, "StorageBuffer8BitAccess"),
+            Self::UNIFORM_AND_STORAGE_BUFFER_8_BIT_ACCESS => {
                 write!(f, "UniformAndStorageBuffer8BitAccess")
             }
-            Self::STORAGE_PUSH_CONSTANT8 => write!(f, "StoragePushConstant8"),
+            Self::STORAGE_PUSH_CONSTANT_8 => write!(f, "StoragePushConstant8"),
             Self::DENORM_PRESERVE => write!(f, "DenormPreserve"),
             Self::DENORM_FLUSH_TO_ZERO => write!(f, "DenormFlushToZero"),
             Self::SIGNED_ZERO_INF_NAN_PRESERVE => write!(f, "SignedZeroInfNanPreserve"),
@@ -4924,21 +4924,21 @@ impl Display for Capability {
             Self::COOPERATIVE_MATRIX_CONVERSION_QCOM => {
                 write!(f, "CooperativeMatrixConversionQCOM")
             }
-            Self::TEXTURE_BLOCK_MATCH2_QCOM => write!(f, "TextureBlockMatch2QCOM"),
-            Self::FLOAT16_IMAGE_AMD => write!(f, "Float16ImageAMD"),
+            Self::TEXTURE_BLOCK_MATCH_2_QCOM => write!(f, "TextureBlockMatch2QCOM"),
+            Self::FLOAT_16_IMAGE_AMD => write!(f, "Float16ImageAMD"),
             Self::IMAGE_GATHER_BIAS_LOD_AMD => write!(f, "ImageGatherBiasLodAMD"),
             Self::FRAGMENT_MASK_AMD => write!(f, "FragmentMaskAMD"),
             Self::STENCIL_EXPORT_EXT => write!(f, "StencilExportEXT"),
             Self::IMAGE_READ_WRITE_LOD_AMD => write!(f, "ImageReadWriteLodAMD"),
-            Self::INT64_IMAGE_EXT => write!(f, "Int64ImageEXT"),
+            Self::INT_64_IMAGE_EXT => write!(f, "Int64ImageEXT"),
             Self::SHADER_CLOCK_KHR => write!(f, "ShaderClockKHR"),
             Self::SHADER_ENQUEUE_AMDX => write!(f, "ShaderEnqueueAMDX"),
             Self::QUAD_CONTROL_KHR => write!(f, "QuadControlKHR"),
-            Self::INT4_TYPE_INTEL => write!(f, "Int4TypeINTEL"),
-            Self::INT4_COOPERATIVE_MATRIX_INTEL => write!(f, "Int4CooperativeMatrixINTEL"),
-            Self::BFLOAT16_TYPE_KHR => write!(f, "BFloat16TypeKHR"),
-            Self::BFLOAT16_DOT_PRODUCT_KHR => write!(f, "BFloat16DotProductKHR"),
-            Self::BFLOAT16_COOPERATIVE_MATRIX_KHR => write!(f, "BFloat16CooperativeMatrixKHR"),
+            Self::INT_4_TYPE_INTEL => write!(f, "Int4TypeINTEL"),
+            Self::INT_4_COOPERATIVE_MATRIX_INTEL => write!(f, "Int4CooperativeMatrixINTEL"),
+            Self::BFLOAT_16_TYPE_KHR => write!(f, "BFloat16TypeKHR"),
+            Self::BFLOAT_16DOT_PRODUCT_KHR => write!(f, "BFloat16DotProductKHR"),
+            Self::BFLOAT_16_COOPERATIVE_MATRIX_KHR => write!(f, "BFloat16CooperativeMatrixKHR"),
             Self::ABORT_KHR => write!(f, "AbortKHR"),
             Self::DESCRIPTOR_HEAP_EXT => write!(f, "DescriptorHeapEXT"),
             Self::CONSTANT_DATA_KHR => write!(f, "ConstantDataKHR"),
@@ -5018,7 +5018,7 @@ impl Display for Capability {
             Self::BINDLESS_TEXTURE_NV => write!(f, "BindlessTextureNV"),
             Self::RAY_QUERY_POSITION_FETCH_KHR => write!(f, "RayQueryPositionFetchKHR"),
             Self::COOPERATIVE_VECTOR_NV => write!(f, "CooperativeVectorNV"),
-            Self::ATOMIC_FLOAT16_VECTOR_NV => write!(f, "AtomicFloat16VectorNV"),
+            Self::ATOMIC_FLOAT_16_VECTOR_NV => write!(f, "AtomicFloat16VectorNV"),
             Self::RAY_TRACING_DISPLACEMENT_MICROMAP_NV => {
                 write!(f, "RayTracingDisplacementMicromapNV")
             }
@@ -5029,7 +5029,7 @@ impl Display for Capability {
             }
             Self::PUSH_CONSTANT_BANKS_NV => write!(f, "PushConstantBanksNV"),
             Self::LONG_VECTOR_EXT => write!(f, "LongVectorEXT"),
-            Self::SHADER64_BIT_INDEXING_EXT => write!(f, "Shader64BitIndexingEXT"),
+            Self::SHADER_64_BIT_INDEXING_EXT => write!(f, "Shader64BitIndexingEXT"),
             Self::COOPERATIVE_MATRIX_REDUCTIONS_NV => write!(f, "CooperativeMatrixReductionsNV"),
             Self::COOPERATIVE_MATRIX_CONVERSIONS_NV => write!(f, "CooperativeMatrixConversionsNV"),
             Self::COOPERATIVE_MATRIX_PER_ELEMENT_OPERATIONS_NV => {
@@ -5050,13 +5050,13 @@ impl Display for Capability {
             Self::SUBGROUP_IMAGE_MEDIA_BLOCK_IOINTEL => write!(f, "SubgroupImageMediaBlockIOINTEL"),
             Self::ROUND_TO_INFINITY_INTEL => write!(f, "RoundToInfinityINTEL"),
             Self::FLOATING_POINT_MODE_INTEL => write!(f, "FloatingPointModeINTEL"),
-            Self::INTEGER_FUNCTIONS2_INTEL => write!(f, "IntegerFunctions2INTEL"),
+            Self::INTEGER_FUNCTIONS_2_INTEL => write!(f, "IntegerFunctions2INTEL"),
             Self::FUNCTION_POINTERS_INTEL => write!(f, "FunctionPointersINTEL"),
             Self::INDIRECT_REFERENCES_INTEL => write!(f, "IndirectReferencesINTEL"),
             Self::ASM_INTEL => write!(f, "AsmINTEL"),
-            Self::ATOMIC_FLOAT32_MIN_MAX_EXT => write!(f, "AtomicFloat32MinMaxEXT"),
-            Self::ATOMIC_FLOAT64_MIN_MAX_EXT => write!(f, "AtomicFloat64MinMaxEXT"),
-            Self::ATOMIC_FLOAT16_MIN_MAX_EXT => write!(f, "AtomicFloat16MinMaxEXT"),
+            Self::ATOMIC_FLOAT_32_MIN_MAX_EXT => write!(f, "AtomicFloat32MinMaxEXT"),
+            Self::ATOMIC_FLOAT_64_MIN_MAX_EXT => write!(f, "AtomicFloat64MinMaxEXT"),
+            Self::ATOMIC_FLOAT_16_MIN_MAX_EXT => write!(f, "AtomicFloat16MinMaxEXT"),
             Self::VECTOR_COMPUTE_INTEL => write!(f, "VectorComputeINTEL"),
             Self::VECTOR_ANY_INTEL => write!(f, "VectorAnyINTEL"),
             Self::EXPECT_ASSUME_KHR => write!(f, "ExpectAssumeKHR"),
@@ -5101,27 +5101,27 @@ impl Display for Capability {
             Self::BLOCKING_PIPES_ALTERA => write!(f, "BlockingPipesALTERA"),
             Self::FPGAREG_ALTERA => write!(f, "FPGARegALTERA"),
             Self::DOT_PRODUCT_INPUT_ALL => write!(f, "DotProductInputAll"),
-            Self::DOT_PRODUCT_INPUT4X8_BIT => write!(f, "DotProductInput4x8Bit"),
-            Self::DOT_PRODUCT_INPUT4X8_BIT_PACKED => write!(f, "DotProductInput4x8BitPacked"),
+            Self::DOT_PRODUCT_INPUT_4X_8_BIT => write!(f, "DotProductInput4x8Bit"),
+            Self::DOT_PRODUCT_INPUT_4X_8_BIT_PACKED => write!(f, "DotProductInput4x8BitPacked"),
             Self::DOT_PRODUCT => write!(f, "DotProduct"),
             Self::RAY_CULL_MASK_KHR => write!(f, "RayCullMaskKHR"),
             Self::COOPERATIVE_MATRIX_KHR => write!(f, "CooperativeMatrixKHR"),
             Self::REPLICATED_COMPOSITES_EXT => write!(f, "ReplicatedCompositesEXT"),
             Self::BIT_INSTRUCTIONS => write!(f, "BitInstructions"),
             Self::GROUP_NON_UNIFORM_ROTATE_KHR => write!(f, "GroupNonUniformRotateKHR"),
-            Self::FLOAT_CONTROLS2 => write!(f, "FloatControls2"),
+            Self::FLOAT_CONTROLS_2 => write!(f, "FloatControls2"),
             Self::FMAKHR => write!(f, "FMAKHR"),
-            Self::ATOMIC_FLOAT32_ADD_EXT => write!(f, "AtomicFloat32AddEXT"),
-            Self::ATOMIC_FLOAT64_ADD_EXT => write!(f, "AtomicFloat64AddEXT"),
+            Self::ATOMIC_FLOAT_32_ADD_EXT => write!(f, "AtomicFloat32AddEXT"),
+            Self::ATOMIC_FLOAT_64_ADD_EXT => write!(f, "AtomicFloat64AddEXT"),
             Self::LONG_COMPOSITES_INTEL => write!(f, "LongCompositesINTEL"),
             Self::OPT_NONE_EXT => write!(f, "OptNoneEXT"),
-            Self::ATOMIC_FLOAT16_ADD_EXT => write!(f, "AtomicFloat16AddEXT"),
+            Self::ATOMIC_FLOAT_16_ADD_EXT => write!(f, "AtomicFloat16AddEXT"),
             Self::DEBUG_INFO_MODULE_INTEL => write!(f, "DebugInfoModuleINTEL"),
-            Self::BFLOAT16_CONVERSION_INTEL => write!(f, "BFloat16ConversionINTEL"),
+            Self::BFLOAT_16_CONVERSION_INTEL => write!(f, "BFloat16ConversionINTEL"),
             Self::SPLIT_BARRIER_INTEL => write!(f, "SplitBarrierINTEL"),
             Self::ARITHMETIC_FENCE_EXT => write!(f, "ArithmeticFenceEXT"),
-            Self::FPGACLUSTER_ATTRIBUTES_V2_ALTERA => write!(f, "FPGAClusterAttributesV2ALTERA"),
-            Self::FPGAKERNEL_ATTRIBUTESV2_INTEL => write!(f, "FPGAKernelAttributesv2INTEL"),
+            Self::FPGACLUSTER_ATTRIBUTES_V2ALTERA => write!(f, "FPGAClusterAttributesV2ALTERA"),
+            Self::FPGAKERNEL_ATTRIBUTESV_2_INTEL => write!(f, "FPGAKernelAttributesv2INTEL"),
             Self::TASK_SEQUENCE_ALTERA => write!(f, "TaskSequenceALTERA"),
             Self::FPMAX_ERROR_INTEL => write!(f, "FPMaxErrorINTEL"),
             Self::FPGALATENCY_CONTROL_ALTERA => write!(f, "FPGALatencyControlALTERA"),
@@ -5131,9 +5131,9 @@ impl Display for Capability {
                 write!(f, "GlobalVariableFPGADecorationsALTERA")
             }
             Self::SUBGROUP_BUFFER_PREFETCH_INTEL => write!(f, "SubgroupBufferPrefetchINTEL"),
-            Self::SUBGROUP2_DBLOCK_IOINTEL => write!(f, "Subgroup2DBlockIOINTEL"),
-            Self::SUBGROUP2_DBLOCK_TRANSFORM_INTEL => write!(f, "Subgroup2DBlockTransformINTEL"),
-            Self::SUBGROUP2_DBLOCK_TRANSPOSE_INTEL => write!(f, "Subgroup2DBlockTransposeINTEL"),
+            Self::SUBGROUP_2D_BLOCK_IOINTEL => write!(f, "Subgroup2DBlockIOINTEL"),
+            Self::SUBGROUP_2D_BLOCK_TRANSFORM_INTEL => write!(f, "Subgroup2DBlockTransformINTEL"),
+            Self::SUBGROUP_2D_BLOCK_TRANSPOSE_INTEL => write!(f, "Subgroup2DBlockTransposeINTEL"),
             Self::SUBGROUP_MATRIX_MULTIPLY_ACCUMULATE_INTEL => {
                 write!(f, "SubgroupMatrixMultiplyAccumulateINTEL")
             }
@@ -5144,19 +5144,19 @@ impl Display for Capability {
             Self::SPEC_CONDITIONAL_INTEL => write!(f, "SpecConditionalINTEL"),
             Self::FUNCTION_VARIANTS_INTEL => write!(f, "FunctionVariantsINTEL"),
             Self::GROUP_UNIFORM_ARITHMETIC_KHR => write!(f, "GroupUniformArithmeticKHR"),
-            Self::TENSOR_FLOAT32_ROUNDING_INTEL => write!(f, "TensorFloat32RoundingINTEL"),
+            Self::TENSOR_FLOAT_32_ROUNDING_INTEL => write!(f, "TensorFloat32RoundingINTEL"),
             Self::MASKED_GATHER_SCATTER_INTEL => write!(f, "MaskedGatherScatterINTEL"),
             Self::CACHE_CONTROLS_INTEL => write!(f, "CacheControlsINTEL"),
             Self::REGISTER_LIMITS_INTEL => write!(f, "RegisterLimitsINTEL"),
             Self::BINDLESS_IMAGES_INTEL => write!(f, "BindlessImagesINTEL"),
-            Self::DOT_PRODUCT_FLOAT16_ACC_FLOAT32_VALVE => {
+            Self::DOT_PRODUCT_FLOAT_16_ACC_FLOAT_32_VALVE => {
                 write!(f, "DotProductFloat16AccFloat32VALVE")
             }
-            Self::DOT_PRODUCT_FLOAT16_ACC_FLOAT16_VALVE => {
+            Self::DOT_PRODUCT_FLOAT_16_ACC_FLOAT_16_VALVE => {
                 write!(f, "DotProductFloat16AccFloat16VALVE")
             }
-            Self::DOT_PRODUCT_BFLOAT16_ACC_VALVE => write!(f, "DotProductBFloat16AccVALVE"),
-            Self::DOT_PRODUCT_FLOAT8_ACC_FLOAT32_VALVE => {
+            Self::DOT_PRODUCT_BFLOAT_16_ACC_VALVE => write!(f, "DotProductBFloat16AccVALVE"),
+            Self::DOT_PRODUCT_FLOAT_8_ACC_FLOAT_32_VALVE => {
                 write!(f, "DotProductFloat8AccFloat32VALVE")
             }
             x => write!(f, "{x}"),
@@ -5245,7 +5245,7 @@ impl Display for RayQueryCandidateIntersectionType {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct PackedVectorFormat(pub(crate) u32);
 impl PackedVectorFormat {
-    pub const PACKED_VECTOR_FORMAT4X8_BIT: Self = Self(0u32);
+    pub const PACKED_VECTOR_FORMAT_4X_8_BIT: Self = Self(0u32);
 }
 impl Word for PackedVectorFormat {
     #[inline]
@@ -5256,7 +5256,7 @@ impl Word for PackedVectorFormat {
 impl Display for PackedVectorFormat {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::PACKED_VECTOR_FORMAT4X8_BIT => write!(f, "PackedVectorFormat4x8Bit"),
+            Self::PACKED_VECTOR_FORMAT_4X_8_BIT => write!(f, "PackedVectorFormat4x8Bit"),
             x => write!(f, "{x}"),
         }
     }
@@ -5375,7 +5375,7 @@ pub struct CooperativeMatrixReduce(pub(crate) u32);
 impl CooperativeMatrixReduce {
     pub const ROW: Self = Self(0x0001);
     pub const COLUMN: Self = Self(0x0002);
-    pub const TYPE_2X2: Self = Self(0x0004);
+    pub const TYPE_2X_2: Self = Self(0x0004);
 }
 impl Word for CooperativeMatrixReduce {
     #[inline]
@@ -5411,8 +5411,8 @@ impl Display for CooperativeMatrixReduce {
             bitfmt.fmt(Self::COLUMN.0, f)?;
             write!(f, "Column")?;
         }
-        if *self & Self::TYPE_2X2 == Self::TYPE_2X2 {
-            bitfmt.fmt(Self::TYPE_2X2.0, f)?;
+        if *self & Self::TYPE_2X_2 == Self::TYPE_2X_2 {
+            bitfmt.fmt(Self::TYPE_2X_2.0, f)?;
             write!(f, "2x2")?;
         }
         Ok(())
@@ -5587,18 +5587,18 @@ impl MatrixMultiplyAccumulateOperands {
     pub const NONE: Self = Self(0x0);
     pub const MATRIX_ASIGNED_COMPONENTS_INTEL: Self = Self(0x1);
     pub const MATRIX_BSIGNED_COMPONENTS_INTEL: Self = Self(0x2);
-    pub const MATRIX_CBFLOAT16_INTEL: Self = Self(0x4);
-    pub const MATRIX_RESULT_BFLOAT16_INTEL: Self = Self(0x8);
-    pub const MATRIX_APACKED_INT8_INTEL: Self = Self(0x10);
-    pub const MATRIX_BPACKED_INT8_INTEL: Self = Self(0x20);
-    pub const MATRIX_APACKED_INT4_INTEL: Self = Self(0x40);
-    pub const MATRIX_BPACKED_INT4_INTEL: Self = Self(0x80);
-    pub const MATRIX_ATF32_INTEL: Self = Self(0x100);
-    pub const MATRIX_BTF32_INTEL: Self = Self(0x200);
-    pub const MATRIX_APACKED_FLOAT16_INTEL: Self = Self(0x400);
-    pub const MATRIX_BPACKED_FLOAT16_INTEL: Self = Self(0x800);
-    pub const MATRIX_APACKED_BFLOAT16_INTEL: Self = Self(0x1000);
-    pub const MATRIX_BPACKED_BFLOAT16_INTEL: Self = Self(0x2000);
+    pub const MATRIX_CBFLOAT_16_INTEL: Self = Self(0x4);
+    pub const MATRIX_RESULT_BFLOAT_16_INTEL: Self = Self(0x8);
+    pub const MATRIX_APACKED_INT_8_INTEL: Self = Self(0x10);
+    pub const MATRIX_BPACKED_INT_8_INTEL: Self = Self(0x20);
+    pub const MATRIX_APACKED_INT_4_INTEL: Self = Self(0x40);
+    pub const MATRIX_BPACKED_INT_4_INTEL: Self = Self(0x80);
+    pub const MATRIX_ATF32INTEL: Self = Self(0x100);
+    pub const MATRIX_BTF32INTEL: Self = Self(0x200);
+    pub const MATRIX_APACKED_FLOAT_16_INTEL: Self = Self(0x400);
+    pub const MATRIX_BPACKED_FLOAT_16_INTEL: Self = Self(0x800);
+    pub const MATRIX_APACKED_BFLOAT_16_INTEL: Self = Self(0x1000);
+    pub const MATRIX_BPACKED_BFLOAT_16_INTEL: Self = Self(0x2000);
 }
 impl Word for MatrixMultiplyAccumulateOperands {
     #[inline]
@@ -5634,52 +5634,52 @@ impl Display for MatrixMultiplyAccumulateOperands {
             bitfmt.fmt(Self::MATRIX_BSIGNED_COMPONENTS_INTEL.0, f)?;
             write!(f, "MatrixBSignedComponentsINTEL")?;
         }
-        if *self & Self::MATRIX_CBFLOAT16_INTEL == Self::MATRIX_CBFLOAT16_INTEL {
-            bitfmt.fmt(Self::MATRIX_CBFLOAT16_INTEL.0, f)?;
+        if *self & Self::MATRIX_CBFLOAT_16_INTEL == Self::MATRIX_CBFLOAT_16_INTEL {
+            bitfmt.fmt(Self::MATRIX_CBFLOAT_16_INTEL.0, f)?;
             write!(f, "MatrixCBFloat16INTEL")?;
         }
-        if *self & Self::MATRIX_RESULT_BFLOAT16_INTEL == Self::MATRIX_RESULT_BFLOAT16_INTEL {
-            bitfmt.fmt(Self::MATRIX_RESULT_BFLOAT16_INTEL.0, f)?;
+        if *self & Self::MATRIX_RESULT_BFLOAT_16_INTEL == Self::MATRIX_RESULT_BFLOAT_16_INTEL {
+            bitfmt.fmt(Self::MATRIX_RESULT_BFLOAT_16_INTEL.0, f)?;
             write!(f, "MatrixResultBFloat16INTEL")?;
         }
-        if *self & Self::MATRIX_APACKED_INT8_INTEL == Self::MATRIX_APACKED_INT8_INTEL {
-            bitfmt.fmt(Self::MATRIX_APACKED_INT8_INTEL.0, f)?;
+        if *self & Self::MATRIX_APACKED_INT_8_INTEL == Self::MATRIX_APACKED_INT_8_INTEL {
+            bitfmt.fmt(Self::MATRIX_APACKED_INT_8_INTEL.0, f)?;
             write!(f, "MatrixAPackedInt8INTEL")?;
         }
-        if *self & Self::MATRIX_BPACKED_INT8_INTEL == Self::MATRIX_BPACKED_INT8_INTEL {
-            bitfmt.fmt(Self::MATRIX_BPACKED_INT8_INTEL.0, f)?;
+        if *self & Self::MATRIX_BPACKED_INT_8_INTEL == Self::MATRIX_BPACKED_INT_8_INTEL {
+            bitfmt.fmt(Self::MATRIX_BPACKED_INT_8_INTEL.0, f)?;
             write!(f, "MatrixBPackedInt8INTEL")?;
         }
-        if *self & Self::MATRIX_APACKED_INT4_INTEL == Self::MATRIX_APACKED_INT4_INTEL {
-            bitfmt.fmt(Self::MATRIX_APACKED_INT4_INTEL.0, f)?;
+        if *self & Self::MATRIX_APACKED_INT_4_INTEL == Self::MATRIX_APACKED_INT_4_INTEL {
+            bitfmt.fmt(Self::MATRIX_APACKED_INT_4_INTEL.0, f)?;
             write!(f, "MatrixAPackedInt4INTEL")?;
         }
-        if *self & Self::MATRIX_BPACKED_INT4_INTEL == Self::MATRIX_BPACKED_INT4_INTEL {
-            bitfmt.fmt(Self::MATRIX_BPACKED_INT4_INTEL.0, f)?;
+        if *self & Self::MATRIX_BPACKED_INT_4_INTEL == Self::MATRIX_BPACKED_INT_4_INTEL {
+            bitfmt.fmt(Self::MATRIX_BPACKED_INT_4_INTEL.0, f)?;
             write!(f, "MatrixBPackedInt4INTEL")?;
         }
-        if *self & Self::MATRIX_ATF32_INTEL == Self::MATRIX_ATF32_INTEL {
-            bitfmt.fmt(Self::MATRIX_ATF32_INTEL.0, f)?;
+        if *self & Self::MATRIX_ATF32INTEL == Self::MATRIX_ATF32INTEL {
+            bitfmt.fmt(Self::MATRIX_ATF32INTEL.0, f)?;
             write!(f, "MatrixATF32INTEL")?;
         }
-        if *self & Self::MATRIX_BTF32_INTEL == Self::MATRIX_BTF32_INTEL {
-            bitfmt.fmt(Self::MATRIX_BTF32_INTEL.0, f)?;
+        if *self & Self::MATRIX_BTF32INTEL == Self::MATRIX_BTF32INTEL {
+            bitfmt.fmt(Self::MATRIX_BTF32INTEL.0, f)?;
             write!(f, "MatrixBTF32INTEL")?;
         }
-        if *self & Self::MATRIX_APACKED_FLOAT16_INTEL == Self::MATRIX_APACKED_FLOAT16_INTEL {
-            bitfmt.fmt(Self::MATRIX_APACKED_FLOAT16_INTEL.0, f)?;
+        if *self & Self::MATRIX_APACKED_FLOAT_16_INTEL == Self::MATRIX_APACKED_FLOAT_16_INTEL {
+            bitfmt.fmt(Self::MATRIX_APACKED_FLOAT_16_INTEL.0, f)?;
             write!(f, "MatrixAPackedFloat16INTEL")?;
         }
-        if *self & Self::MATRIX_BPACKED_FLOAT16_INTEL == Self::MATRIX_BPACKED_FLOAT16_INTEL {
-            bitfmt.fmt(Self::MATRIX_BPACKED_FLOAT16_INTEL.0, f)?;
+        if *self & Self::MATRIX_BPACKED_FLOAT_16_INTEL == Self::MATRIX_BPACKED_FLOAT_16_INTEL {
+            bitfmt.fmt(Self::MATRIX_BPACKED_FLOAT_16_INTEL.0, f)?;
             write!(f, "MatrixBPackedFloat16INTEL")?;
         }
-        if *self & Self::MATRIX_APACKED_BFLOAT16_INTEL == Self::MATRIX_APACKED_BFLOAT16_INTEL {
-            bitfmt.fmt(Self::MATRIX_APACKED_BFLOAT16_INTEL.0, f)?;
+        if *self & Self::MATRIX_APACKED_BFLOAT_16_INTEL == Self::MATRIX_APACKED_BFLOAT_16_INTEL {
+            bitfmt.fmt(Self::MATRIX_APACKED_BFLOAT_16_INTEL.0, f)?;
             write!(f, "MatrixAPackedBFloat16INTEL")?;
         }
-        if *self & Self::MATRIX_BPACKED_BFLOAT16_INTEL == Self::MATRIX_BPACKED_BFLOAT16_INTEL {
-            bitfmt.fmt(Self::MATRIX_BPACKED_BFLOAT16_INTEL.0, f)?;
+        if *self & Self::MATRIX_BPACKED_BFLOAT_16_INTEL == Self::MATRIX_BPACKED_BFLOAT_16_INTEL {
+            bitfmt.fmt(Self::MATRIX_BPACKED_BFLOAT_16_INTEL.0, f)?;
             write!(f, "MatrixBPackedBFloat16INTEL")?;
         }
         Ok(())
@@ -5688,9 +5688,9 @@ impl Display for MatrixMultiplyAccumulateOperands {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct FPEncoding(pub(crate) u32);
 impl FPEncoding {
-    pub const BFLOAT16_KHR: Self = Self(0u32);
-    pub const FLOAT8_E4_M3_EXT: Self = Self(4214u32);
-    pub const FLOAT8_E5_M2_EXT: Self = Self(4215u32);
+    pub const BFLOAT_16_KHR: Self = Self(0u32);
+    pub const FLOAT_8_E4M3EXT: Self = Self(4214u32);
+    pub const FLOAT_8_E5M2EXT: Self = Self(4215u32);
 }
 impl Word for FPEncoding {
     #[inline]
@@ -5701,9 +5701,9 @@ impl Word for FPEncoding {
 impl Display for FPEncoding {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::BFLOAT16_KHR => write!(f, "BFloat16KHR"),
-            Self::FLOAT8_E4_M3_EXT => write!(f, "Float8E4M3EXT"),
-            Self::FLOAT8_E5_M2_EXT => write!(f, "Float8E5M2EXT"),
+            Self::BFLOAT_16_KHR => write!(f, "BFloat16KHR"),
+            Self::FLOAT_8_E4M3EXT => write!(f, "Float8E4M3EXT"),
+            Self::FLOAT_8_E5M2EXT => write!(f, "Float8E5M2EXT"),
             x => write!(f, "{x}"),
         }
     }
@@ -5736,21 +5736,21 @@ impl Display for CooperativeVectorMatrixLayout {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct ComponentType(pub(crate) u32);
 impl ComponentType {
-    pub const FLOAT16_NV: Self = Self(0u32);
-    pub const FLOAT32_NV: Self = Self(1u32);
-    pub const FLOAT64_NV: Self = Self(2u32);
-    pub const SIGNED_INT8_NV: Self = Self(3u32);
-    pub const SIGNED_INT16_NV: Self = Self(4u32);
-    pub const SIGNED_INT32_NV: Self = Self(5u32);
-    pub const SIGNED_INT64_NV: Self = Self(6u32);
-    pub const UNSIGNED_INT8_NV: Self = Self(7u32);
-    pub const UNSIGNED_INT16_NV: Self = Self(8u32);
-    pub const UNSIGNED_INT32_NV: Self = Self(9u32);
-    pub const UNSIGNED_INT64_NV: Self = Self(10u32);
-    pub const SIGNED_INT8_PACKED_NV: Self = Self(1000491000u32);
-    pub const UNSIGNED_INT8_PACKED_NV: Self = Self(1000491001u32);
-    pub const FLOAT_E4_M3_NV: Self = Self(1000491002u32);
-    pub const FLOAT_E5_M2_NV: Self = Self(1000491003u32);
+    pub const FLOAT_16_NV: Self = Self(0u32);
+    pub const FLOAT_32_NV: Self = Self(1u32);
+    pub const FLOAT_64_NV: Self = Self(2u32);
+    pub const SIGNED_INT_8_NV: Self = Self(3u32);
+    pub const SIGNED_INT_16_NV: Self = Self(4u32);
+    pub const SIGNED_INT_32_NV: Self = Self(5u32);
+    pub const SIGNED_INT_64_NV: Self = Self(6u32);
+    pub const UNSIGNED_INT_8_NV: Self = Self(7u32);
+    pub const UNSIGNED_INT_16_NV: Self = Self(8u32);
+    pub const UNSIGNED_INT_32_NV: Self = Self(9u32);
+    pub const UNSIGNED_INT_64_NV: Self = Self(10u32);
+    pub const SIGNED_INT_8_PACKED_NV: Self = Self(1000491000u32);
+    pub const UNSIGNED_INT_8_PACKED_NV: Self = Self(1000491001u32);
+    pub const FLOAT_E4M3NV: Self = Self(1000491002u32);
+    pub const FLOAT_E5M2NV: Self = Self(1000491003u32);
 }
 impl Word for ComponentType {
     #[inline]
@@ -5761,21 +5761,21 @@ impl Word for ComponentType {
 impl Display for ComponentType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::FLOAT16_NV => write!(f, "Float16NV"),
-            Self::FLOAT32_NV => write!(f, "Float32NV"),
-            Self::FLOAT64_NV => write!(f, "Float64NV"),
-            Self::SIGNED_INT8_NV => write!(f, "SignedInt8NV"),
-            Self::SIGNED_INT16_NV => write!(f, "SignedInt16NV"),
-            Self::SIGNED_INT32_NV => write!(f, "SignedInt32NV"),
-            Self::SIGNED_INT64_NV => write!(f, "SignedInt64NV"),
-            Self::UNSIGNED_INT8_NV => write!(f, "UnsignedInt8NV"),
-            Self::UNSIGNED_INT16_NV => write!(f, "UnsignedInt16NV"),
-            Self::UNSIGNED_INT32_NV => write!(f, "UnsignedInt32NV"),
-            Self::UNSIGNED_INT64_NV => write!(f, "UnsignedInt64NV"),
-            Self::SIGNED_INT8_PACKED_NV => write!(f, "SignedInt8PackedNV"),
-            Self::UNSIGNED_INT8_PACKED_NV => write!(f, "UnsignedInt8PackedNV"),
-            Self::FLOAT_E4_M3_NV => write!(f, "FloatE4M3NV"),
-            Self::FLOAT_E5_M2_NV => write!(f, "FloatE5M2NV"),
+            Self::FLOAT_16_NV => write!(f, "Float16NV"),
+            Self::FLOAT_32_NV => write!(f, "Float32NV"),
+            Self::FLOAT_64_NV => write!(f, "Float64NV"),
+            Self::SIGNED_INT_8_NV => write!(f, "SignedInt8NV"),
+            Self::SIGNED_INT_16_NV => write!(f, "SignedInt16NV"),
+            Self::SIGNED_INT_32_NV => write!(f, "SignedInt32NV"),
+            Self::SIGNED_INT_64_NV => write!(f, "SignedInt64NV"),
+            Self::UNSIGNED_INT_8_NV => write!(f, "UnsignedInt8NV"),
+            Self::UNSIGNED_INT_16_NV => write!(f, "UnsignedInt16NV"),
+            Self::UNSIGNED_INT_32_NV => write!(f, "UnsignedInt32NV"),
+            Self::UNSIGNED_INT_64_NV => write!(f, "UnsignedInt64NV"),
+            Self::SIGNED_INT_8_PACKED_NV => write!(f, "SignedInt8PackedNV"),
+            Self::UNSIGNED_INT_8_PACKED_NV => write!(f, "UnsignedInt8PackedNV"),
+            Self::FLOAT_E4M3NV => write!(f, "FloatE4M3NV"),
+            Self::FLOAT_E5M2NV => write!(f, "FloatE5M2NV"),
             x => write!(f, "{x}"),
         }
     }

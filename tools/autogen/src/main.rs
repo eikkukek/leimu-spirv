@@ -11,12 +11,23 @@ use proc_macro2::{Ident, Span};
 
 fn upper_snake_case(name: &str) -> Ident {
     let mut uppercase = vec![];
+    let mut first_of_section = None;
     let mut last_uppercase = 0;
     let mut last_char = ' ';
     for (i, ch) in name.char_indices().skip(1) {
-        if ch.is_uppercase() {
-            if last_uppercase != i - 1 && last_char != '_' {
+        if ch.is_uppercase() || ch.is_numeric() {
+            if last_uppercase != i - 1 && last_char != '_'
+            {
                 uppercase.push(i);
+                first_of_section = Some(i);
+            } else if let Some(idx) = first_of_section
+                && !ch.is_numeric()
+                && ch != 'D'
+                && name.chars().nth(idx)
+                        .unwrap().is_numeric()
+            {
+                uppercase.push(i);
+                first_of_section = Some(i);
             }
             last_uppercase = i;
         }
