@@ -1,5 +1,11 @@
 # Cangelog
 All changes to this project will be documented in this file.
+## [0.5.4] - 2026-11-19
+### Changed
+- Internal result storage.
+### Removed
+- `fmt::Display` implementations for "c-enums" and Rust enums.
+- manual bitmask implementations in favor using the `bitflags` macro.
 ## [0.5.3] - 2026-11-18
 ### Added
 - Exposed `InstInfo` with `op::Code::get_inst_info`.
@@ -59,6 +65,7 @@ All changes to this project will be documented in this file.
 - Initial crate release
 - Basic reflection
 
+[0.5.4]: https://crates.io/crates/leimu-spirv/0.5.4
 [0.5.3]: https://crates.io/crates/leimu-spirv/0.5.3
 [0.5.2]: https://crates.io/crates/leimu-spirv/0.5.2
 [0.5.1]: https://crates.io/crates/leimu-spirv/0.5.1

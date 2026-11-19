@@ -673,9 +673,9 @@ impl<'a> Reflector<'a> {
         Ok(None)
     }
 
-    /// Returns an iterator over all resources of [`type`][1].
+    /// Returns an iterator over all resources of [type][1].
     ///
-    /// Entry point *must* be [`set`][2] before calling this function.
+    /// Entry point *must* be [set][2] before calling this function.
     ///
     /// If the SPIR-V version is >= 1.4, the resources are filtered to only include ones used by
     /// the current entry point.
@@ -772,7 +772,7 @@ impl<'a> Reflector<'a> {
                         break
                     },
                 };
-            } 
+            }
             if resource_class == op::StorageClass::UNIFORM_CONSTANT {
                 match ty {
                     ResourceType::InputAttachment => {

@@ -7,6 +7,10 @@ use core::{
     slice,
 };
 
+use rustc_hash::FxBuildHasher;
+
+use indexmap::IndexMap;
+
 use crate::{
     stream::*,
     op,
@@ -80,51 +84,11 @@ pub enum ParseError {
     Utf8Error(Utf8Error),
 }
 
-#[derive(Clone)]
-struct ResultStorage<'a> {
-    data: Vec<Option<InstructionStream<'a>>>,
-}
-
-impl<'a> ResultStorage<'a>
-{
-
-    #[inline]
-    fn new(bound: u32) -> Self {
-        Self {
-            data: vec![None; bound as usize],
-        }
-    }
-
-    #[inline]
-    fn insert(&mut self,
-        id: op::IdResult,
-        mut stream: InstructionStream<'a>
-    ) -> ParseResult<()>
-    {
-        stream.reset();
-        let idx = id.0 as usize;
-        if idx >= self.data.len() {
-            return Err(ParseError::IdOutOfBounds {
-                bound: self.data.len() as u32,
-                id
-            })
-        }
-        self.data[idx] = Some(stream);
-        Ok(())
-    }
-
-    #[inline]
-    fn get(&self, id: op::IdRef) -> Option<InstructionStream<'a>> {
-        self.data.get(id.0 as usize)
-            .and_then(|&value| value)
-    }
-}
-
 /// Represents a SPIR-V module.
 #[derive(Clone)]
 pub struct Module<'a> {
     stream: Stream<'a>,
-    results: ResultStorage<'a>,
+    results: IndexMap<op::IdResult, InstructionStream<'a>, rustc_hash::FxBuildHasher>,
 }
 
 /// The [`Result`] from a parsing operation,
@@ -137,7 +101,10 @@ impl<'a> Module<'a> {
     pub fn new(spirv: &'a [u32]) -> ParseResult<Self> {
         let stream = Stream::new(spirv)?;
         Ok(Self {
-            results: ResultStorage::new(stream.bound()),
+            results: IndexMap::with_capacity_and_hasher(
+                stream.bound() as usize,
+                FxBuildHasher,
+            ),
             stream,
         })
     }
@@ -156,7 +123,10 @@ impl<'a> Module<'a> {
         };
         let stream = Stream::new(spirv)?;
         Ok(Self {
-            results: ResultStorage::new(stream.bound()),
+            results: IndexMap::with_capacity_and_hasher(
+                stream.bound() as usize,
+                FxBuildHasher,
+            ),
             stream,
         })
     }
@@ -181,10 +151,11 @@ impl<'a> Module<'a> {
                 let _ = instruction.read()?;
             }
             let id = op::IdResult(instruction.read()?);
+            instruction.reset();
             self.results.insert(
                 id,
                 instruction,
-            )?;
+            );
         }
         Ok(true)
     }
@@ -219,19 +190,17 @@ impl<'a> Module<'a> {
     /// [1]: InstructionStream
     #[inline]
     pub fn results(&self) -> impl Iterator<Item = (op::IdRef, InstructionStream<'a>)> {
-        self.results.data
+        self.results
             .iter()
-            .enumerate()
-            .filter_map(|(i, result)| {
-                result
-                    .map(|result| (op::IdRef::from_native(i as u32), result))
+            .map(|(&id, &inst)| {
+                (op::IdRef::from_native(id.0), inst)
             })
     }
 
     /// Gets a result with `id`, returning [`None`] if the result is not present.
     #[inline]
     pub fn get_result(&self, id: op::IdRef) -> Option<InstructionStream<'a>> {
-        self.results.get(id)
+        self.results.get(&op::IdResult::from_native(id.0)).copied()
     }
 }
 

@@ -2,844 +2,86 @@
 #![doc = r""]
 #![doc = r" This file is auto-generated, do not modify manually."]
 use crate::{core::*, module::*, op::*, stream::*};
-use core::fmt::{self, Display};
-use core::ops::{BitAnd, BitOr};
-struct BitFmt(u32);
-impl BitFmt {
-    pub fn fmt(&mut self, value: u32, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 != 0 {
-            write!(f, "|")?;
-        }
-        self.0 |= value;
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct ImageOperands(pub(crate) u32);
-impl ImageOperands {
-    pub const NONE: Self = Self(0x0000);
-    pub const BIAS: Self = Self(0x0001);
-    pub const LOD: Self = Self(0x0002);
-    pub const GRAD: Self = Self(0x0004);
-    pub const CONST_OFFSET: Self = Self(0x0008);
-    pub const OFFSET: Self = Self(0x0010);
-    pub const CONST_OFFSETS: Self = Self(0x0020);
-    pub const SAMPLE: Self = Self(0x0040);
-    pub const MIN_LOD: Self = Self(0x0080);
-    pub const MAKE_TEXEL_AVAILABLE: Self = Self(0x0100);
-    pub const MAKE_TEXEL_VISIBLE: Self = Self(0x0200);
-    pub const NON_PRIVATE_TEXEL: Self = Self(0x0400);
-    pub const VOLATILE_TEXEL: Self = Self(0x0800);
-    pub const SIGN_EXTEND: Self = Self(0x1000);
-    pub const ZERO_EXTEND: Self = Self(0x2000);
-    pub const NONTEMPORAL: Self = Self(0x4000);
-    pub const OFFSETS: Self = Self(0x10000);
-}
+use bitflags::bitflags;
+use core::fmt::{self, Debug, Display};
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct ImageOperands : u32 { const NONE = 0x0000 ; const BIAS = 0x0001 ; const LOD = 0x0002 ; const GRAD = 0x0004 ; const CONST_OFFSET = 0x0008 ; const OFFSET = 0x0010 ; const CONST_OFFSETS = 0x0020 ; const SAMPLE = 0x0040 ; const MIN_LOD = 0x0080 ; const MAKE_TEXEL_AVAILABLE = 0x0100 ; const MAKE_TEXEL_VISIBLE = 0x0200 ; const NON_PRIVATE_TEXEL = 0x0400 ; const VOLATILE_TEXEL = 0x0800 ; const SIGN_EXTEND = 0x1000 ; const ZERO_EXTEND = 0x2000 ; const NONTEMPORAL = 0x4000 ; const OFFSETS = 0x10000 ; } }
 impl Word for ImageOperands {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
+        Self::from_bits_retain(word)
     }
 }
-impl BitAnd for ImageOperands {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for ImageOperands {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for ImageOperands {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::BIAS == Self::BIAS {
-            bitfmt.fmt(Self::BIAS.0, f)?;
-            write!(f, "Bias")?;
-        }
-        if *self & Self::LOD == Self::LOD {
-            bitfmt.fmt(Self::LOD.0, f)?;
-            write!(f, "Lod")?;
-        }
-        if *self & Self::GRAD == Self::GRAD {
-            bitfmt.fmt(Self::GRAD.0, f)?;
-            write!(f, "Grad")?;
-        }
-        if *self & Self::CONST_OFFSET == Self::CONST_OFFSET {
-            bitfmt.fmt(Self::CONST_OFFSET.0, f)?;
-            write!(f, "ConstOffset")?;
-        }
-        if *self & Self::OFFSET == Self::OFFSET {
-            bitfmt.fmt(Self::OFFSET.0, f)?;
-            write!(f, "Offset")?;
-        }
-        if *self & Self::CONST_OFFSETS == Self::CONST_OFFSETS {
-            bitfmt.fmt(Self::CONST_OFFSETS.0, f)?;
-            write!(f, "ConstOffsets")?;
-        }
-        if *self & Self::SAMPLE == Self::SAMPLE {
-            bitfmt.fmt(Self::SAMPLE.0, f)?;
-            write!(f, "Sample")?;
-        }
-        if *self & Self::MIN_LOD == Self::MIN_LOD {
-            bitfmt.fmt(Self::MIN_LOD.0, f)?;
-            write!(f, "MinLod")?;
-        }
-        if *self & Self::MAKE_TEXEL_AVAILABLE == Self::MAKE_TEXEL_AVAILABLE {
-            bitfmt.fmt(Self::MAKE_TEXEL_AVAILABLE.0, f)?;
-            write!(f, "MakeTexelAvailable")?;
-        }
-        if *self & Self::MAKE_TEXEL_VISIBLE == Self::MAKE_TEXEL_VISIBLE {
-            bitfmt.fmt(Self::MAKE_TEXEL_VISIBLE.0, f)?;
-            write!(f, "MakeTexelVisible")?;
-        }
-        if *self & Self::NON_PRIVATE_TEXEL == Self::NON_PRIVATE_TEXEL {
-            bitfmt.fmt(Self::NON_PRIVATE_TEXEL.0, f)?;
-            write!(f, "NonPrivateTexel")?;
-        }
-        if *self & Self::VOLATILE_TEXEL == Self::VOLATILE_TEXEL {
-            bitfmt.fmt(Self::VOLATILE_TEXEL.0, f)?;
-            write!(f, "VolatileTexel")?;
-        }
-        if *self & Self::SIGN_EXTEND == Self::SIGN_EXTEND {
-            bitfmt.fmt(Self::SIGN_EXTEND.0, f)?;
-            write!(f, "SignExtend")?;
-        }
-        if *self & Self::ZERO_EXTEND == Self::ZERO_EXTEND {
-            bitfmt.fmt(Self::ZERO_EXTEND.0, f)?;
-            write!(f, "ZeroExtend")?;
-        }
-        if *self & Self::NONTEMPORAL == Self::NONTEMPORAL {
-            bitfmt.fmt(Self::NONTEMPORAL.0, f)?;
-            write!(f, "Nontemporal")?;
-        }
-        if *self & Self::OFFSETS == Self::OFFSETS {
-            bitfmt.fmt(Self::OFFSETS.0, f)?;
-            write!(f, "Offsets")?;
-        }
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct FPFastMathMode(pub(crate) u32);
-impl FPFastMathMode {
-    pub const NONE: Self = Self(0x0000);
-    pub const NOT_NA_N: Self = Self(0x0001);
-    pub const NOT_INF: Self = Self(0x0002);
-    pub const NSZ: Self = Self(0x0004);
-    pub const ALLOW_RECIP: Self = Self(0x0008);
-    pub const FAST: Self = Self(0x0010);
-    pub const ALLOW_CONTRACT: Self = Self(0x10000);
-    pub const ALLOW_REASSOC: Self = Self(0x20000);
-    pub const ALLOW_TRANSFORM: Self = Self(0x40000);
-}
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct FPFastMathMode : u32 { const NONE = 0x0000 ; const NOT_NA_N = 0x0001 ; const NOT_INF = 0x0002 ; const NSZ = 0x0004 ; const ALLOW_RECIP = 0x0008 ; const FAST = 0x0010 ; const ALLOW_CONTRACT = 0x10000 ; const ALLOW_REASSOC = 0x20000 ; const ALLOW_TRANSFORM = 0x40000 ; } }
 impl Word for FPFastMathMode {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
+        Self::from_bits_retain(word)
     }
 }
-impl BitAnd for FPFastMathMode {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for FPFastMathMode {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for FPFastMathMode {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::NOT_NA_N == Self::NOT_NA_N {
-            bitfmt.fmt(Self::NOT_NA_N.0, f)?;
-            write!(f, "NotNaN")?;
-        }
-        if *self & Self::NOT_INF == Self::NOT_INF {
-            bitfmt.fmt(Self::NOT_INF.0, f)?;
-            write!(f, "NotInf")?;
-        }
-        if *self & Self::NSZ == Self::NSZ {
-            bitfmt.fmt(Self::NSZ.0, f)?;
-            write!(f, "NSZ")?;
-        }
-        if *self & Self::ALLOW_RECIP == Self::ALLOW_RECIP {
-            bitfmt.fmt(Self::ALLOW_RECIP.0, f)?;
-            write!(f, "AllowRecip")?;
-        }
-        if *self & Self::FAST == Self::FAST {
-            bitfmt.fmt(Self::FAST.0, f)?;
-            write!(f, "Fast")?;
-        }
-        if *self & Self::ALLOW_CONTRACT == Self::ALLOW_CONTRACT {
-            bitfmt.fmt(Self::ALLOW_CONTRACT.0, f)?;
-            write!(f, "AllowContract")?;
-        }
-        if *self & Self::ALLOW_REASSOC == Self::ALLOW_REASSOC {
-            bitfmt.fmt(Self::ALLOW_REASSOC.0, f)?;
-            write!(f, "AllowReassoc")?;
-        }
-        if *self & Self::ALLOW_TRANSFORM == Self::ALLOW_TRANSFORM {
-            bitfmt.fmt(Self::ALLOW_TRANSFORM.0, f)?;
-            write!(f, "AllowTransform")?;
-        }
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct SelectionControl(pub(crate) u32);
-impl SelectionControl {
-    pub const NONE: Self = Self(0x0000);
-    pub const FLATTEN: Self = Self(0x0001);
-    pub const DONT_FLATTEN: Self = Self(0x0002);
-}
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct SelectionControl : u32 { const NONE = 0x0000 ; const FLATTEN = 0x0001 ; const DONT_FLATTEN = 0x0002 ; } }
 impl Word for SelectionControl {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
+        Self::from_bits_retain(word)
     }
 }
-impl BitAnd for SelectionControl {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for SelectionControl {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for SelectionControl {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::FLATTEN == Self::FLATTEN {
-            bitfmt.fmt(Self::FLATTEN.0, f)?;
-            write!(f, "Flatten")?;
-        }
-        if *self & Self::DONT_FLATTEN == Self::DONT_FLATTEN {
-            bitfmt.fmt(Self::DONT_FLATTEN.0, f)?;
-            write!(f, "DontFlatten")?;
-        }
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct LoopControl(pub(crate) u32);
-impl LoopControl {
-    pub const NONE: Self = Self(0x0000);
-    pub const UNROLL: Self = Self(0x0001);
-    pub const DONT_UNROLL: Self = Self(0x0002);
-    pub const DEPENDENCY_INFINITE: Self = Self(0x0004);
-    pub const DEPENDENCY_LENGTH: Self = Self(0x0008);
-    pub const MIN_ITERATIONS: Self = Self(0x0010);
-    pub const MAX_ITERATIONS: Self = Self(0x0020);
-    pub const ITERATION_MULTIPLE: Self = Self(0x0040);
-    pub const PEEL_COUNT: Self = Self(0x0080);
-    pub const PARTIAL_COUNT: Self = Self(0x0100);
-    pub const INITIATION_INTERVAL_ALTERA: Self = Self(0x10000);
-    pub const MAX_CONCURRENCY_ALTERA: Self = Self(0x20000);
-    pub const DEPENDENCY_ARRAY_ALTERA: Self = Self(0x40000);
-    pub const PIPELINE_ENABLE_ALTERA: Self = Self(0x80000);
-    pub const LOOP_COALESCE_ALTERA: Self = Self(0x100000);
-    pub const MAX_INTERLEAVING_ALTERA: Self = Self(0x200000);
-    pub const SPECULATED_ITERATIONS_ALTERA: Self = Self(0x400000);
-    pub const NO_FUSION_ALTERA: Self = Self(0x800000);
-    pub const LOOP_COUNT_ALTERA: Self = Self(0x1000000);
-    pub const MAX_REINVOCATION_DELAY_ALTERA: Self = Self(0x2000000);
-}
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct LoopControl : u32 { const NONE = 0x0000 ; const UNROLL = 0x0001 ; const DONT_UNROLL = 0x0002 ; const DEPENDENCY_INFINITE = 0x0004 ; const DEPENDENCY_LENGTH = 0x0008 ; const MIN_ITERATIONS = 0x0010 ; const MAX_ITERATIONS = 0x0020 ; const ITERATION_MULTIPLE = 0x0040 ; const PEEL_COUNT = 0x0080 ; const PARTIAL_COUNT = 0x0100 ; const INITIATION_INTERVAL_ALTERA = 0x10000 ; const MAX_CONCURRENCY_ALTERA = 0x20000 ; const DEPENDENCY_ARRAY_ALTERA = 0x40000 ; const PIPELINE_ENABLE_ALTERA = 0x80000 ; const LOOP_COALESCE_ALTERA = 0x100000 ; const MAX_INTERLEAVING_ALTERA = 0x200000 ; const SPECULATED_ITERATIONS_ALTERA = 0x400000 ; const NO_FUSION_ALTERA = 0x800000 ; const LOOP_COUNT_ALTERA = 0x1000000 ; const MAX_REINVOCATION_DELAY_ALTERA = 0x2000000 ; } }
 impl Word for LoopControl {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
+        Self::from_bits_retain(word)
     }
 }
-impl BitAnd for LoopControl {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for LoopControl {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for LoopControl {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::UNROLL == Self::UNROLL {
-            bitfmt.fmt(Self::UNROLL.0, f)?;
-            write!(f, "Unroll")?;
-        }
-        if *self & Self::DONT_UNROLL == Self::DONT_UNROLL {
-            bitfmt.fmt(Self::DONT_UNROLL.0, f)?;
-            write!(f, "DontUnroll")?;
-        }
-        if *self & Self::DEPENDENCY_INFINITE == Self::DEPENDENCY_INFINITE {
-            bitfmt.fmt(Self::DEPENDENCY_INFINITE.0, f)?;
-            write!(f, "DependencyInfinite")?;
-        }
-        if *self & Self::DEPENDENCY_LENGTH == Self::DEPENDENCY_LENGTH {
-            bitfmt.fmt(Self::DEPENDENCY_LENGTH.0, f)?;
-            write!(f, "DependencyLength")?;
-        }
-        if *self & Self::MIN_ITERATIONS == Self::MIN_ITERATIONS {
-            bitfmt.fmt(Self::MIN_ITERATIONS.0, f)?;
-            write!(f, "MinIterations")?;
-        }
-        if *self & Self::MAX_ITERATIONS == Self::MAX_ITERATIONS {
-            bitfmt.fmt(Self::MAX_ITERATIONS.0, f)?;
-            write!(f, "MaxIterations")?;
-        }
-        if *self & Self::ITERATION_MULTIPLE == Self::ITERATION_MULTIPLE {
-            bitfmt.fmt(Self::ITERATION_MULTIPLE.0, f)?;
-            write!(f, "IterationMultiple")?;
-        }
-        if *self & Self::PEEL_COUNT == Self::PEEL_COUNT {
-            bitfmt.fmt(Self::PEEL_COUNT.0, f)?;
-            write!(f, "PeelCount")?;
-        }
-        if *self & Self::PARTIAL_COUNT == Self::PARTIAL_COUNT {
-            bitfmt.fmt(Self::PARTIAL_COUNT.0, f)?;
-            write!(f, "PartialCount")?;
-        }
-        if *self & Self::INITIATION_INTERVAL_ALTERA == Self::INITIATION_INTERVAL_ALTERA {
-            bitfmt.fmt(Self::INITIATION_INTERVAL_ALTERA.0, f)?;
-            write!(f, "InitiationIntervalALTERA")?;
-        }
-        if *self & Self::MAX_CONCURRENCY_ALTERA == Self::MAX_CONCURRENCY_ALTERA {
-            bitfmt.fmt(Self::MAX_CONCURRENCY_ALTERA.0, f)?;
-            write!(f, "MaxConcurrencyALTERA")?;
-        }
-        if *self & Self::DEPENDENCY_ARRAY_ALTERA == Self::DEPENDENCY_ARRAY_ALTERA {
-            bitfmt.fmt(Self::DEPENDENCY_ARRAY_ALTERA.0, f)?;
-            write!(f, "DependencyArrayALTERA")?;
-        }
-        if *self & Self::PIPELINE_ENABLE_ALTERA == Self::PIPELINE_ENABLE_ALTERA {
-            bitfmt.fmt(Self::PIPELINE_ENABLE_ALTERA.0, f)?;
-            write!(f, "PipelineEnableALTERA")?;
-        }
-        if *self & Self::LOOP_COALESCE_ALTERA == Self::LOOP_COALESCE_ALTERA {
-            bitfmt.fmt(Self::LOOP_COALESCE_ALTERA.0, f)?;
-            write!(f, "LoopCoalesceALTERA")?;
-        }
-        if *self & Self::MAX_INTERLEAVING_ALTERA == Self::MAX_INTERLEAVING_ALTERA {
-            bitfmt.fmt(Self::MAX_INTERLEAVING_ALTERA.0, f)?;
-            write!(f, "MaxInterleavingALTERA")?;
-        }
-        if *self & Self::SPECULATED_ITERATIONS_ALTERA == Self::SPECULATED_ITERATIONS_ALTERA {
-            bitfmt.fmt(Self::SPECULATED_ITERATIONS_ALTERA.0, f)?;
-            write!(f, "SpeculatedIterationsALTERA")?;
-        }
-        if *self & Self::NO_FUSION_ALTERA == Self::NO_FUSION_ALTERA {
-            bitfmt.fmt(Self::NO_FUSION_ALTERA.0, f)?;
-            write!(f, "NoFusionALTERA")?;
-        }
-        if *self & Self::LOOP_COUNT_ALTERA == Self::LOOP_COUNT_ALTERA {
-            bitfmt.fmt(Self::LOOP_COUNT_ALTERA.0, f)?;
-            write!(f, "LoopCountALTERA")?;
-        }
-        if *self & Self::MAX_REINVOCATION_DELAY_ALTERA == Self::MAX_REINVOCATION_DELAY_ALTERA {
-            bitfmt.fmt(Self::MAX_REINVOCATION_DELAY_ALTERA.0, f)?;
-            write!(f, "MaxReinvocationDelayALTERA")?;
-        }
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct FunctionControl(pub(crate) u32);
-impl FunctionControl {
-    pub const NONE: Self = Self(0x0000);
-    pub const INLINE: Self = Self(0x0001);
-    pub const DONT_INLINE: Self = Self(0x0002);
-    pub const PURE: Self = Self(0x0004);
-    pub const CONST: Self = Self(0x0008);
-    pub const OPT_NONE_EXT: Self = Self(0x10000);
-}
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct FunctionControl : u32 { const NONE = 0x0000 ; const INLINE = 0x0001 ; const DONT_INLINE = 0x0002 ; const PURE = 0x0004 ; const CONST = 0x0008 ; const OPT_NONE_EXT = 0x10000 ; } }
 impl Word for FunctionControl {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
+        Self::from_bits_retain(word)
     }
 }
-impl BitAnd for FunctionControl {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for FunctionControl {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for FunctionControl {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::INLINE == Self::INLINE {
-            bitfmt.fmt(Self::INLINE.0, f)?;
-            write!(f, "Inline")?;
-        }
-        if *self & Self::DONT_INLINE == Self::DONT_INLINE {
-            bitfmt.fmt(Self::DONT_INLINE.0, f)?;
-            write!(f, "DontInline")?;
-        }
-        if *self & Self::PURE == Self::PURE {
-            bitfmt.fmt(Self::PURE.0, f)?;
-            write!(f, "Pure")?;
-        }
-        if *self & Self::CONST == Self::CONST {
-            bitfmt.fmt(Self::CONST.0, f)?;
-            write!(f, "Const")?;
-        }
-        if *self & Self::OPT_NONE_EXT == Self::OPT_NONE_EXT {
-            bitfmt.fmt(Self::OPT_NONE_EXT.0, f)?;
-            write!(f, "OptNoneEXT")?;
-        }
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct MemorySemantics(pub(crate) u32);
-impl MemorySemantics {
-    pub const RELAXED: Self = Self(0x0000);
-    pub const ACQUIRE: Self = Self(0x0002);
-    pub const RELEASE: Self = Self(0x0004);
-    pub const ACQUIRE_RELEASE: Self = Self(0x0008);
-    pub const SEQUENTIALLY_CONSISTENT: Self = Self(0x0010);
-    pub const UNIFORM_MEMORY: Self = Self(0x0040);
-    pub const SUBGROUP_MEMORY: Self = Self(0x0080);
-    pub const WORKGROUP_MEMORY: Self = Self(0x0100);
-    pub const CROSS_WORKGROUP_MEMORY: Self = Self(0x0200);
-    pub const ATOMIC_COUNTER_MEMORY: Self = Self(0x0400);
-    pub const IMAGE_MEMORY: Self = Self(0x0800);
-    pub const OUTPUT_MEMORY: Self = Self(0x1000);
-    pub const MAKE_AVAILABLE: Self = Self(0x2000);
-    pub const MAKE_VISIBLE: Self = Self(0x4000);
-    pub const VOLATILE: Self = Self(0x8000);
-}
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct MemorySemantics : u32 { const RELAXED = 0x0000 ; const ACQUIRE = 0x0002 ; const RELEASE = 0x0004 ; const ACQUIRE_RELEASE = 0x0008 ; const SEQUENTIALLY_CONSISTENT = 0x0010 ; const UNIFORM_MEMORY = 0x0040 ; const SUBGROUP_MEMORY = 0x0080 ; const WORKGROUP_MEMORY = 0x0100 ; const CROSS_WORKGROUP_MEMORY = 0x0200 ; const ATOMIC_COUNTER_MEMORY = 0x0400 ; const IMAGE_MEMORY = 0x0800 ; const OUTPUT_MEMORY = 0x1000 ; const MAKE_AVAILABLE = 0x2000 ; const MAKE_VISIBLE = 0x4000 ; const VOLATILE = 0x8000 ; } }
 impl Word for MemorySemantics {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
+        Self::from_bits_retain(word)
     }
 }
-impl BitAnd for MemorySemantics {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for MemorySemantics {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for MemorySemantics {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::ACQUIRE == Self::ACQUIRE {
-            bitfmt.fmt(Self::ACQUIRE.0, f)?;
-            write!(f, "Acquire")?;
-        }
-        if *self & Self::RELEASE == Self::RELEASE {
-            bitfmt.fmt(Self::RELEASE.0, f)?;
-            write!(f, "Release")?;
-        }
-        if *self & Self::ACQUIRE_RELEASE == Self::ACQUIRE_RELEASE {
-            bitfmt.fmt(Self::ACQUIRE_RELEASE.0, f)?;
-            write!(f, "AcquireRelease")?;
-        }
-        if *self & Self::SEQUENTIALLY_CONSISTENT == Self::SEQUENTIALLY_CONSISTENT {
-            bitfmt.fmt(Self::SEQUENTIALLY_CONSISTENT.0, f)?;
-            write!(f, "SequentiallyConsistent")?;
-        }
-        if *self & Self::UNIFORM_MEMORY == Self::UNIFORM_MEMORY {
-            bitfmt.fmt(Self::UNIFORM_MEMORY.0, f)?;
-            write!(f, "UniformMemory")?;
-        }
-        if *self & Self::SUBGROUP_MEMORY == Self::SUBGROUP_MEMORY {
-            bitfmt.fmt(Self::SUBGROUP_MEMORY.0, f)?;
-            write!(f, "SubgroupMemory")?;
-        }
-        if *self & Self::WORKGROUP_MEMORY == Self::WORKGROUP_MEMORY {
-            bitfmt.fmt(Self::WORKGROUP_MEMORY.0, f)?;
-            write!(f, "WorkgroupMemory")?;
-        }
-        if *self & Self::CROSS_WORKGROUP_MEMORY == Self::CROSS_WORKGROUP_MEMORY {
-            bitfmt.fmt(Self::CROSS_WORKGROUP_MEMORY.0, f)?;
-            write!(f, "CrossWorkgroupMemory")?;
-        }
-        if *self & Self::ATOMIC_COUNTER_MEMORY == Self::ATOMIC_COUNTER_MEMORY {
-            bitfmt.fmt(Self::ATOMIC_COUNTER_MEMORY.0, f)?;
-            write!(f, "AtomicCounterMemory")?;
-        }
-        if *self & Self::IMAGE_MEMORY == Self::IMAGE_MEMORY {
-            bitfmt.fmt(Self::IMAGE_MEMORY.0, f)?;
-            write!(f, "ImageMemory")?;
-        }
-        if *self & Self::OUTPUT_MEMORY == Self::OUTPUT_MEMORY {
-            bitfmt.fmt(Self::OUTPUT_MEMORY.0, f)?;
-            write!(f, "OutputMemory")?;
-        }
-        if *self & Self::MAKE_AVAILABLE == Self::MAKE_AVAILABLE {
-            bitfmt.fmt(Self::MAKE_AVAILABLE.0, f)?;
-            write!(f, "MakeAvailable")?;
-        }
-        if *self & Self::MAKE_VISIBLE == Self::MAKE_VISIBLE {
-            bitfmt.fmt(Self::MAKE_VISIBLE.0, f)?;
-            write!(f, "MakeVisible")?;
-        }
-        if *self & Self::VOLATILE == Self::VOLATILE {
-            bitfmt.fmt(Self::VOLATILE.0, f)?;
-            write!(f, "Volatile")?;
-        }
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct MemoryAccess(pub(crate) u32);
-impl MemoryAccess {
-    pub const NONE: Self = Self(0x0000);
-    pub const VOLATILE: Self = Self(0x0001);
-    pub const ALIGNED: Self = Self(0x0002);
-    pub const NONTEMPORAL: Self = Self(0x0004);
-    pub const MAKE_POINTER_AVAILABLE: Self = Self(0x0008);
-    pub const MAKE_POINTER_VISIBLE: Self = Self(0x0010);
-    pub const NON_PRIVATE_POINTER: Self = Self(0x0020);
-    pub const ALIAS_SCOPE_INTELMASK: Self = Self(0x10000);
-    pub const NO_ALIAS_INTELMASK: Self = Self(0x20000);
-}
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct MemoryAccess : u32 { const NONE = 0x0000 ; const VOLATILE = 0x0001 ; const ALIGNED = 0x0002 ; const NONTEMPORAL = 0x0004 ; const MAKE_POINTER_AVAILABLE = 0x0008 ; const MAKE_POINTER_VISIBLE = 0x0010 ; const NON_PRIVATE_POINTER = 0x0020 ; const ALIAS_SCOPE_INTELMASK = 0x10000 ; const NO_ALIAS_INTELMASK = 0x20000 ; } }
 impl Word for MemoryAccess {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
+        Self::from_bits_retain(word)
     }
 }
-impl BitAnd for MemoryAccess {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for MemoryAccess {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for MemoryAccess {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::VOLATILE == Self::VOLATILE {
-            bitfmt.fmt(Self::VOLATILE.0, f)?;
-            write!(f, "Volatile")?;
-        }
-        if *self & Self::ALIGNED == Self::ALIGNED {
-            bitfmt.fmt(Self::ALIGNED.0, f)?;
-            write!(f, "Aligned")?;
-        }
-        if *self & Self::NONTEMPORAL == Self::NONTEMPORAL {
-            bitfmt.fmt(Self::NONTEMPORAL.0, f)?;
-            write!(f, "Nontemporal")?;
-        }
-        if *self & Self::MAKE_POINTER_AVAILABLE == Self::MAKE_POINTER_AVAILABLE {
-            bitfmt.fmt(Self::MAKE_POINTER_AVAILABLE.0, f)?;
-            write!(f, "MakePointerAvailable")?;
-        }
-        if *self & Self::MAKE_POINTER_VISIBLE == Self::MAKE_POINTER_VISIBLE {
-            bitfmt.fmt(Self::MAKE_POINTER_VISIBLE.0, f)?;
-            write!(f, "MakePointerVisible")?;
-        }
-        if *self & Self::NON_PRIVATE_POINTER == Self::NON_PRIVATE_POINTER {
-            bitfmt.fmt(Self::NON_PRIVATE_POINTER.0, f)?;
-            write!(f, "NonPrivatePointer")?;
-        }
-        if *self & Self::ALIAS_SCOPE_INTELMASK == Self::ALIAS_SCOPE_INTELMASK {
-            bitfmt.fmt(Self::ALIAS_SCOPE_INTELMASK.0, f)?;
-            write!(f, "AliasScopeINTELMask")?;
-        }
-        if *self & Self::NO_ALIAS_INTELMASK == Self::NO_ALIAS_INTELMASK {
-            bitfmt.fmt(Self::NO_ALIAS_INTELMASK.0, f)?;
-            write!(f, "NoAliasINTELMask")?;
-        }
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct KernelProfilingInfo(pub(crate) u32);
-impl KernelProfilingInfo {
-    pub const NONE: Self = Self(0x0000);
-    pub const CMD_EXEC_TIME: Self = Self(0x0001);
-}
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct KernelProfilingInfo : u32 { const NONE = 0x0000 ; const CMD_EXEC_TIME = 0x0001 ; } }
 impl Word for KernelProfilingInfo {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
+        Self::from_bits_retain(word)
     }
 }
-impl BitAnd for KernelProfilingInfo {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for KernelProfilingInfo {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for KernelProfilingInfo {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::CMD_EXEC_TIME == Self::CMD_EXEC_TIME {
-            bitfmt.fmt(Self::CMD_EXEC_TIME.0, f)?;
-            write!(f, "CmdExecTime")?;
-        }
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct RayFlags(pub(crate) u32);
-impl RayFlags {
-    pub const NONE_KHR: Self = Self(0x0000);
-    pub const OPAQUE_KHR: Self = Self(0x0001);
-    pub const NO_OPAQUE_KHR: Self = Self(0x0002);
-    pub const TERMINATE_ON_FIRST_HIT_KHR: Self = Self(0x0004);
-    pub const SKIP_CLOSEST_HIT_SHADER_KHR: Self = Self(0x0008);
-    pub const CULL_BACK_FACING_TRIANGLES_KHR: Self = Self(0x0010);
-    pub const CULL_FRONT_FACING_TRIANGLES_KHR: Self = Self(0x0020);
-    pub const CULL_OPAQUE_KHR: Self = Self(0x0040);
-    pub const CULL_NO_OPAQUE_KHR: Self = Self(0x0080);
-    pub const SKIP_TRIANGLES_KHR: Self = Self(0x0100);
-    pub const SKIP_AABBS_KHR: Self = Self(0x0200);
-    pub const FORCE_OPACITY_MICROMAP_2_STATE_EXT: Self = Self(0x0400);
-}
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct RayFlags : u32 { const NONE_KHR = 0x0000 ; const OPAQUE_KHR = 0x0001 ; const NO_OPAQUE_KHR = 0x0002 ; const TERMINATE_ON_FIRST_HIT_KHR = 0x0004 ; const SKIP_CLOSEST_HIT_SHADER_KHR = 0x0008 ; const CULL_BACK_FACING_TRIANGLES_KHR = 0x0010 ; const CULL_FRONT_FACING_TRIANGLES_KHR = 0x0020 ; const CULL_OPAQUE_KHR = 0x0040 ; const CULL_NO_OPAQUE_KHR = 0x0080 ; const SKIP_TRIANGLES_KHR = 0x0100 ; const SKIP_AABBS_KHR = 0x0200 ; const FORCE_OPACITY_MICROMAP_2_STATE_EXT = 0x0400 ; } }
 impl Word for RayFlags {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
+        Self::from_bits_retain(word)
     }
 }
-impl BitAnd for RayFlags {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for RayFlags {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for RayFlags {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::OPAQUE_KHR == Self::OPAQUE_KHR {
-            bitfmt.fmt(Self::OPAQUE_KHR.0, f)?;
-            write!(f, "OpaqueKHR")?;
-        }
-        if *self & Self::NO_OPAQUE_KHR == Self::NO_OPAQUE_KHR {
-            bitfmt.fmt(Self::NO_OPAQUE_KHR.0, f)?;
-            write!(f, "NoOpaqueKHR")?;
-        }
-        if *self & Self::TERMINATE_ON_FIRST_HIT_KHR == Self::TERMINATE_ON_FIRST_HIT_KHR {
-            bitfmt.fmt(Self::TERMINATE_ON_FIRST_HIT_KHR.0, f)?;
-            write!(f, "TerminateOnFirstHitKHR")?;
-        }
-        if *self & Self::SKIP_CLOSEST_HIT_SHADER_KHR == Self::SKIP_CLOSEST_HIT_SHADER_KHR {
-            bitfmt.fmt(Self::SKIP_CLOSEST_HIT_SHADER_KHR.0, f)?;
-            write!(f, "SkipClosestHitShaderKHR")?;
-        }
-        if *self & Self::CULL_BACK_FACING_TRIANGLES_KHR == Self::CULL_BACK_FACING_TRIANGLES_KHR {
-            bitfmt.fmt(Self::CULL_BACK_FACING_TRIANGLES_KHR.0, f)?;
-            write!(f, "CullBackFacingTrianglesKHR")?;
-        }
-        if *self & Self::CULL_FRONT_FACING_TRIANGLES_KHR == Self::CULL_FRONT_FACING_TRIANGLES_KHR {
-            bitfmt.fmt(Self::CULL_FRONT_FACING_TRIANGLES_KHR.0, f)?;
-            write!(f, "CullFrontFacingTrianglesKHR")?;
-        }
-        if *self & Self::CULL_OPAQUE_KHR == Self::CULL_OPAQUE_KHR {
-            bitfmt.fmt(Self::CULL_OPAQUE_KHR.0, f)?;
-            write!(f, "CullOpaqueKHR")?;
-        }
-        if *self & Self::CULL_NO_OPAQUE_KHR == Self::CULL_NO_OPAQUE_KHR {
-            bitfmt.fmt(Self::CULL_NO_OPAQUE_KHR.0, f)?;
-            write!(f, "CullNoOpaqueKHR")?;
-        }
-        if *self & Self::SKIP_TRIANGLES_KHR == Self::SKIP_TRIANGLES_KHR {
-            bitfmt.fmt(Self::SKIP_TRIANGLES_KHR.0, f)?;
-            write!(f, "SkipTrianglesKHR")?;
-        }
-        if *self & Self::SKIP_AABBS_KHR == Self::SKIP_AABBS_KHR {
-            bitfmt.fmt(Self::SKIP_AABBS_KHR.0, f)?;
-            write!(f, "SkipAABBsKHR")?;
-        }
-        if *self & Self::FORCE_OPACITY_MICROMAP_2_STATE_EXT
-            == Self::FORCE_OPACITY_MICROMAP_2_STATE_EXT
-        {
-            bitfmt.fmt(Self::FORCE_OPACITY_MICROMAP_2_STATE_EXT.0, f)?;
-            write!(f, "ForceOpacityMicromap2StateEXT")?;
-        }
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct FragmentShadingRate(pub(crate) u32);
-impl FragmentShadingRate {
-    pub const VERTICAL_2_PIXELS: Self = Self(0x0001);
-    pub const VERTICAL_4_PIXELS: Self = Self(0x0002);
-    pub const HORIZONTAL_2_PIXELS: Self = Self(0x0004);
-    pub const HORIZONTAL_4_PIXELS: Self = Self(0x0008);
-}
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct FragmentShadingRate : u32 { const VERTICAL_2_PIXELS = 0x0001 ; const VERTICAL_4_PIXELS = 0x0002 ; const HORIZONTAL_2_PIXELS = 0x0004 ; const HORIZONTAL_4_PIXELS = 0x0008 ; } }
 impl Word for FragmentShadingRate {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
+        Self::from_bits_retain(word)
     }
 }
-impl BitAnd for FragmentShadingRate {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for FragmentShadingRate {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for FragmentShadingRate {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::VERTICAL_2_PIXELS == Self::VERTICAL_2_PIXELS {
-            bitfmt.fmt(Self::VERTICAL_2_PIXELS.0, f)?;
-            write!(f, "Vertical2Pixels")?;
-        }
-        if *self & Self::VERTICAL_4_PIXELS == Self::VERTICAL_4_PIXELS {
-            bitfmt.fmt(Self::VERTICAL_4_PIXELS.0, f)?;
-            write!(f, "Vertical4Pixels")?;
-        }
-        if *self & Self::HORIZONTAL_2_PIXELS == Self::HORIZONTAL_2_PIXELS {
-            bitfmt.fmt(Self::HORIZONTAL_2_PIXELS.0, f)?;
-            write!(f, "Horizontal2Pixels")?;
-        }
-        if *self & Self::HORIZONTAL_4_PIXELS == Self::HORIZONTAL_4_PIXELS {
-            bitfmt.fmt(Self::HORIZONTAL_4_PIXELS.0, f)?;
-            write!(f, "Horizontal4Pixels")?;
-        }
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct RawAccessChainOperands(pub(crate) u32);
-impl RawAccessChainOperands {
-    pub const NONE: Self = Self(0x0000);
-    pub const ROBUSTNESS_PER_COMPONENT_NV: Self = Self(0x0001);
-    pub const ROBUSTNESS_PER_ELEMENT_NV: Self = Self(0x0002);
-}
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct RawAccessChainOperands : u32 { const NONE = 0x0000 ; const ROBUSTNESS_PER_COMPONENT_NV = 0x0001 ; const ROBUSTNESS_PER_ELEMENT_NV = 0x0002 ; } }
 impl Word for RawAccessChainOperands {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
+        Self::from_bits_retain(word)
     }
 }
-impl BitAnd for RawAccessChainOperands {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for RawAccessChainOperands {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for RawAccessChainOperands {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::ROBUSTNESS_PER_COMPONENT_NV == Self::ROBUSTNESS_PER_COMPONENT_NV {
-            bitfmt.fmt(Self::ROBUSTNESS_PER_COMPONENT_NV.0, f)?;
-            write!(f, "RobustnessPerComponentNV")?;
-        }
-        if *self & Self::ROBUSTNESS_PER_ELEMENT_NV == Self::ROBUSTNESS_PER_ELEMENT_NV {
-            bitfmt.fmt(Self::ROBUSTNESS_PER_ELEMENT_NV.0, f)?;
-            write!(f, "RobustnessPerElementNV")?;
-        }
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct SourceLanguage(pub(crate) u32);
 impl SourceLanguage {
     pub const UNKNOWN: Self = Self(0u32);
@@ -863,28 +105,29 @@ impl Word for SourceLanguage {
         Self(word)
     }
 }
-impl Display for SourceLanguage {
+impl Debug for SourceLanguage {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::UNKNOWN => write!(f, "Unknown"),
-            Self::ESSL => write!(f, "ESSL"),
-            Self::GLSL => write!(f, "GLSL"),
-            Self::OPEN_CL_C => write!(f, "OpenCL_C"),
-            Self::OPEN_CL_CPP => write!(f, "OpenCL_CPP"),
-            Self::HLSL => write!(f, "HLSL"),
-            Self::CPP_FOR_OPEN_CL => write!(f, "CPP_for_OpenCL"),
-            Self::SYCL => write!(f, "SYCL"),
-            Self::HERO_C => write!(f, "HERO_C"),
-            Self::NZSL => write!(f, "NZSL"),
-            Self::WGSL => write!(f, "WGSL"),
-            Self::SLANG => write!(f, "Slang"),
-            Self::ZIG => write!(f, "Zig"),
-            Self::RUST => write!(f, "Rust"),
-            x => write!(f, "{x}"),
+            Self::UNKNOWN => Display::fmt(stringify!(UNKNOWN), f),
+            Self::ESSL => Display::fmt(stringify!(ESSL), f),
+            Self::GLSL => Display::fmt(stringify!(GLSL), f),
+            Self::OPEN_CL_C => Display::fmt(stringify!(OPEN_CL_C), f),
+            Self::OPEN_CL_CPP => Display::fmt(stringify!(OPEN_CL_CPP), f),
+            Self::HLSL => Display::fmt(stringify!(HLSL), f),
+            Self::CPP_FOR_OPEN_CL => Display::fmt(stringify!(CPP_FOR_OPEN_CL), f),
+            Self::SYCL => Display::fmt(stringify!(SYCL), f),
+            Self::HERO_C => Display::fmt(stringify!(HERO_C), f),
+            Self::NZSL => Display::fmt(stringify!(NZSL), f),
+            Self::WGSL => Display::fmt(stringify!(WGSL), f),
+            Self::SLANG => Display::fmt(stringify!(SLANG), f),
+            Self::ZIG => Display::fmt(stringify!(ZIG), f),
+            Self::RUST => Display::fmt(stringify!(RUST), f),
+            x => write!(f, "{}({})", stringify!(SourceLanguage), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct ExecutionModel(pub(crate) u32);
 impl ExecutionModel {
     pub const VERTEX: Self = Self(0u32);
@@ -911,31 +154,32 @@ impl Word for ExecutionModel {
         Self(word)
     }
 }
-impl Display for ExecutionModel {
+impl Debug for ExecutionModel {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::VERTEX => write!(f, "Vertex"),
-            Self::TESSELLATION_CONTROL => write!(f, "TessellationControl"),
-            Self::TESSELLATION_EVALUATION => write!(f, "TessellationEvaluation"),
-            Self::GEOMETRY => write!(f, "Geometry"),
-            Self::FRAGMENT => write!(f, "Fragment"),
-            Self::GLCOMPUTE => write!(f, "GLCompute"),
-            Self::KERNEL => write!(f, "Kernel"),
-            Self::TASK_NV => write!(f, "TaskNV"),
-            Self::MESH_NV => write!(f, "MeshNV"),
-            Self::RAY_GENERATION_KHR => write!(f, "RayGenerationKHR"),
-            Self::INTERSECTION_KHR => write!(f, "IntersectionKHR"),
-            Self::ANY_HIT_KHR => write!(f, "AnyHitKHR"),
-            Self::CLOSEST_HIT_KHR => write!(f, "ClosestHitKHR"),
-            Self::MISS_KHR => write!(f, "MissKHR"),
-            Self::CALLABLE_KHR => write!(f, "CallableKHR"),
-            Self::TASK_EXT => write!(f, "TaskEXT"),
-            Self::MESH_EXT => write!(f, "MeshEXT"),
-            x => write!(f, "{x}"),
+            Self::VERTEX => Display::fmt(stringify!(VERTEX), f),
+            Self::TESSELLATION_CONTROL => Display::fmt(stringify!(TESSELLATION_CONTROL), f),
+            Self::TESSELLATION_EVALUATION => Display::fmt(stringify!(TESSELLATION_EVALUATION), f),
+            Self::GEOMETRY => Display::fmt(stringify!(GEOMETRY), f),
+            Self::FRAGMENT => Display::fmt(stringify!(FRAGMENT), f),
+            Self::GLCOMPUTE => Display::fmt(stringify!(GLCOMPUTE), f),
+            Self::KERNEL => Display::fmt(stringify!(KERNEL), f),
+            Self::TASK_NV => Display::fmt(stringify!(TASK_NV), f),
+            Self::MESH_NV => Display::fmt(stringify!(MESH_NV), f),
+            Self::RAY_GENERATION_KHR => Display::fmt(stringify!(RAY_GENERATION_KHR), f),
+            Self::INTERSECTION_KHR => Display::fmt(stringify!(INTERSECTION_KHR), f),
+            Self::ANY_HIT_KHR => Display::fmt(stringify!(ANY_HIT_KHR), f),
+            Self::CLOSEST_HIT_KHR => Display::fmt(stringify!(CLOSEST_HIT_KHR), f),
+            Self::MISS_KHR => Display::fmt(stringify!(MISS_KHR), f),
+            Self::CALLABLE_KHR => Display::fmt(stringify!(CALLABLE_KHR), f),
+            Self::TASK_EXT => Display::fmt(stringify!(TASK_EXT), f),
+            Self::MESH_EXT => Display::fmt(stringify!(MESH_EXT), f),
+            x => write!(f, "{}({})", stringify!(ExecutionModel), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct AddressingModel(pub(crate) u32);
 impl AddressingModel {
     pub const LOGICAL: Self = Self(0u32);
@@ -949,18 +193,21 @@ impl Word for AddressingModel {
         Self(word)
     }
 }
-impl Display for AddressingModel {
+impl Debug for AddressingModel {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::LOGICAL => write!(f, "Logical"),
-            Self::PHYSICAL_32 => write!(f, "Physical32"),
-            Self::PHYSICAL_64 => write!(f, "Physical64"),
-            Self::PHYSICAL_STORAGE_BUFFER_64 => write!(f, "PhysicalStorageBuffer64"),
-            x => write!(f, "{x}"),
+            Self::LOGICAL => Display::fmt(stringify!(LOGICAL), f),
+            Self::PHYSICAL_32 => Display::fmt(stringify!(PHYSICAL_32), f),
+            Self::PHYSICAL_64 => Display::fmt(stringify!(PHYSICAL_64), f),
+            Self::PHYSICAL_STORAGE_BUFFER_64 => {
+                Display::fmt(stringify!(PHYSICAL_STORAGE_BUFFER_64), f)
+            }
+            x => write!(f, "{}({})", stringify!(AddressingModel), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct MemoryModel(pub(crate) u32);
 impl MemoryModel {
     pub const SIMPLE: Self = Self(0u32);
@@ -974,14 +221,15 @@ impl Word for MemoryModel {
         Self(word)
     }
 }
-impl Display for MemoryModel {
+impl Debug for MemoryModel {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::SIMPLE => write!(f, "Simple"),
-            Self::GLSL450 => write!(f, "GLSL450"),
-            Self::OPEN_CL => write!(f, "OpenCL"),
-            Self::VULKAN => write!(f, "Vulkan"),
-            x => write!(f, "{x}"),
+            Self::SIMPLE => Display::fmt(stringify!(SIMPLE), f),
+            Self::GLSL450 => Display::fmt(stringify!(GLSL450), f),
+            Self::OPEN_CL => Display::fmt(stringify!(OPEN_CL), f),
+            Self::VULKAN => Display::fmt(stringify!(VULKAN), f),
+            x => write!(f, "{}({})", stringify!(MemoryModel), x.0),
         }
     }
 }
@@ -1390,367 +638,7 @@ impl<'a> ExecutionModeOperands {
         }
     }
 }
-impl Display for ExecutionModeOperands {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Self::Invocations {
-                number_of_invocations,
-            } => {
-                write!(f, "{}", stringify!(Invocations))?;
-                write!(f, " {}", number_of_invocations)?;
-                Ok(())
-            }
-            Self::SpacingEqual => write!(f, "{}", stringify!(SpacingEqual)),
-            Self::SpacingFractionalEven => write!(f, "{}", stringify!(SpacingFractionalEven)),
-            Self::SpacingFractionalOdd => write!(f, "{}", stringify!(SpacingFractionalOdd)),
-            Self::VertexOrderCw => write!(f, "{}", stringify!(VertexOrderCw)),
-            Self::VertexOrderCcw => write!(f, "{}", stringify!(VertexOrderCcw)),
-            Self::PixelCenterInteger => write!(f, "{}", stringify!(PixelCenterInteger)),
-            Self::OriginUpperLeft => write!(f, "{}", stringify!(OriginUpperLeft)),
-            Self::OriginLowerLeft => write!(f, "{}", stringify!(OriginLowerLeft)),
-            Self::EarlyFragmentTests => write!(f, "{}", stringify!(EarlyFragmentTests)),
-            Self::PointMode => write!(f, "{}", stringify!(PointMode)),
-            Self::Xfb => write!(f, "{}", stringify!(Xfb)),
-            Self::DepthReplacing => write!(f, "{}", stringify!(DepthReplacing)),
-            Self::DepthGreater => write!(f, "{}", stringify!(DepthGreater)),
-            Self::DepthLess => write!(f, "{}", stringify!(DepthLess)),
-            Self::DepthUnchanged => write!(f, "{}", stringify!(DepthUnchanged)),
-            Self::LocalSize {
-                x_size,
-                y_size,
-                z_size,
-            } => {
-                write!(f, "{}", stringify!(LocalSize))?;
-                write!(f, " {}", x_size)?;
-                write!(f, " {}", y_size)?;
-                write!(f, " {}", z_size)?;
-                Ok(())
-            }
-            Self::LocalSizeHint {
-                x_size,
-                y_size,
-                z_size,
-            } => {
-                write!(f, "{}", stringify!(LocalSizeHint))?;
-                write!(f, " {}", x_size)?;
-                write!(f, " {}", y_size)?;
-                write!(f, " {}", z_size)?;
-                Ok(())
-            }
-            Self::InputPoints => write!(f, "{}", stringify!(InputPoints)),
-            Self::InputLines => write!(f, "{}", stringify!(InputLines)),
-            Self::InputLinesAdjacency => write!(f, "{}", stringify!(InputLinesAdjacency)),
-            Self::Triangles => write!(f, "{}", stringify!(Triangles)),
-            Self::InputTrianglesAdjacency => write!(f, "{}", stringify!(InputTrianglesAdjacency)),
-            Self::Quads => write!(f, "{}", stringify!(Quads)),
-            Self::Isolines => write!(f, "{}", stringify!(Isolines)),
-            Self::OutputVertices { vertex_count } => {
-                write!(f, "{}", stringify!(OutputVertices))?;
-                write!(f, " {}", vertex_count)?;
-                Ok(())
-            }
-            Self::OutputPoints => write!(f, "{}", stringify!(OutputPoints)),
-            Self::OutputLineStrip => write!(f, "{}", stringify!(OutputLineStrip)),
-            Self::OutputTriangleStrip => write!(f, "{}", stringify!(OutputTriangleStrip)),
-            Self::VecTypeHint { vector_type } => {
-                write!(f, "{}", stringify!(VecTypeHint))?;
-                write!(f, " {}", vector_type)?;
-                Ok(())
-            }
-            Self::ContractionOff => write!(f, "{}", stringify!(ContractionOff)),
-            Self::Initializer => write!(f, "{}", stringify!(Initializer)),
-            Self::Finalizer => write!(f, "{}", stringify!(Finalizer)),
-            Self::SubgroupSize { subgroup_size } => {
-                write!(f, "{}", stringify!(SubgroupSize))?;
-                write!(f, " {}", subgroup_size)?;
-                Ok(())
-            }
-            Self::SubgroupsPerWorkgroup {
-                subgroups_per_workgroup,
-            } => {
-                write!(f, "{}", stringify!(SubgroupsPerWorkgroup))?;
-                write!(f, " {}", subgroups_per_workgroup)?;
-                Ok(())
-            }
-            Self::SubgroupsPerWorkgroupId {
-                subgroups_per_workgroup,
-            } => {
-                write!(f, "{}", stringify!(SubgroupsPerWorkgroupId))?;
-                write!(f, " {}", subgroups_per_workgroup)?;
-                Ok(())
-            }
-            Self::LocalSizeId {
-                x_size,
-                y_size,
-                z_size,
-            } => {
-                write!(f, "{}", stringify!(LocalSizeId))?;
-                write!(f, " {}", x_size)?;
-                write!(f, " {}", y_size)?;
-                write!(f, " {}", z_size)?;
-                Ok(())
-            }
-            Self::LocalSizeHintId {
-                x_size_hint,
-                y_size_hint,
-                z_size_hint,
-            } => {
-                write!(f, "{}", stringify!(LocalSizeHintId))?;
-                write!(f, " {}", x_size_hint)?;
-                write!(f, " {}", y_size_hint)?;
-                write!(f, " {}", z_size_hint)?;
-                Ok(())
-            }
-            Self::NonCoherentColorAttachmentReadEXT => {
-                write!(f, "{}", stringify!(NonCoherentColorAttachmentReadEXT))
-            }
-            Self::NonCoherentDepthAttachmentReadEXT => {
-                write!(f, "{}", stringify!(NonCoherentDepthAttachmentReadEXT))
-            }
-            Self::NonCoherentStencilAttachmentReadEXT => {
-                write!(f, "{}", stringify!(NonCoherentStencilAttachmentReadEXT))
-            }
-            Self::SubgroupUniformControlFlowKHR => {
-                write!(f, "{}", stringify!(SubgroupUniformControlFlowKHR))
-            }
-            Self::PostDepthCoverage => write!(f, "{}", stringify!(PostDepthCoverage)),
-            Self::DenormPreserve { target_width } => {
-                write!(f, "{}", stringify!(DenormPreserve))?;
-                write!(f, " {}", target_width)?;
-                Ok(())
-            }
-            Self::DenormFlushToZero { target_width } => {
-                write!(f, "{}", stringify!(DenormFlushToZero))?;
-                write!(f, " {}", target_width)?;
-                Ok(())
-            }
-            Self::SignedZeroInfNanPreserve { target_width } => {
-                write!(f, "{}", stringify!(SignedZeroInfNanPreserve))?;
-                write!(f, " {}", target_width)?;
-                Ok(())
-            }
-            Self::RoundingModeRTE { target_width } => {
-                write!(f, "{}", stringify!(RoundingModeRTE))?;
-                write!(f, " {}", target_width)?;
-                Ok(())
-            }
-            Self::RoundingModeRTZ { target_width } => {
-                write!(f, "{}", stringify!(RoundingModeRTZ))?;
-                write!(f, " {}", target_width)?;
-                Ok(())
-            }
-            Self::NonCoherentTileAttachmentReadQCOM => {
-                write!(f, "{}", stringify!(NonCoherentTileAttachmentReadQCOM))
-            }
-            Self::TileShadingRateQCOM {
-                x_rate,
-                y_rate,
-                z_rate,
-            } => {
-                write!(f, "{}", stringify!(TileShadingRateQCOM))?;
-                write!(f, " {}", x_rate)?;
-                write!(f, " {}", y_rate)?;
-                write!(f, " {}", z_rate)?;
-                Ok(())
-            }
-            Self::EarlyAndLateFragmentTestsAMD => {
-                write!(f, "{}", stringify!(EarlyAndLateFragmentTestsAMD))
-            }
-            Self::StencilRefReplacingEXT => write!(f, "{}", stringify!(StencilRefReplacingEXT)),
-            Self::CoalescingAMDX => write!(f, "{}", stringify!(CoalescingAMDX)),
-            Self::IsApiEntryAMDX { is_entry } => {
-                write!(f, "{}", stringify!(IsApiEntryAMDX))?;
-                write!(f, " {}", is_entry)?;
-                Ok(())
-            }
-            Self::MaxNodeRecursionAMDX {
-                number_of_recursions,
-            } => {
-                write!(f, "{}", stringify!(MaxNodeRecursionAMDX))?;
-                write!(f, " {}", number_of_recursions)?;
-                Ok(())
-            }
-            Self::StaticNumWorkgroupsAMDX {
-                x_size,
-                y_size,
-                z_size,
-            } => {
-                write!(f, "{}", stringify!(StaticNumWorkgroupsAMDX))?;
-                write!(f, " {}", x_size)?;
-                write!(f, " {}", y_size)?;
-                write!(f, " {}", z_size)?;
-                Ok(())
-            }
-            Self::ShaderIndexAMDX { shader_index } => {
-                write!(f, "{}", stringify!(ShaderIndexAMDX))?;
-                write!(f, " {}", shader_index)?;
-                Ok(())
-            }
-            Self::MaxNumWorkgroupsAMDX {
-                x_size,
-                y_size,
-                z_size,
-            } => {
-                write!(f, "{}", stringify!(MaxNumWorkgroupsAMDX))?;
-                write!(f, " {}", x_size)?;
-                write!(f, " {}", y_size)?;
-                write!(f, " {}", z_size)?;
-                Ok(())
-            }
-            Self::StencilRefUnchangedFrontAMD => {
-                write!(f, "{}", stringify!(StencilRefUnchangedFrontAMD))
-            }
-            Self::StencilRefGreaterFrontAMD => {
-                write!(f, "{}", stringify!(StencilRefGreaterFrontAMD))
-            }
-            Self::StencilRefLessFrontAMD => write!(f, "{}", stringify!(StencilRefLessFrontAMD)),
-            Self::StencilRefUnchangedBackAMD => {
-                write!(f, "{}", stringify!(StencilRefUnchangedBackAMD))
-            }
-            Self::StencilRefGreaterBackAMD => write!(f, "{}", stringify!(StencilRefGreaterBackAMD)),
-            Self::StencilRefLessBackAMD => write!(f, "{}", stringify!(StencilRefLessBackAMD)),
-            Self::QuadDerivativesKHR => write!(f, "{}", stringify!(QuadDerivativesKHR)),
-            Self::RequireFullQuadsKHR => write!(f, "{}", stringify!(RequireFullQuadsKHR)),
-            Self::SharesInputWithAMDX {
-                node_name,
-                shader_index,
-            } => {
-                write!(f, "{}", stringify!(SharesInputWithAMDX))?;
-                write!(f, " {}", node_name)?;
-                write!(f, " {}", shader_index)?;
-                Ok(())
-            }
-            Self::ArithmeticPoisonKHR => write!(f, "{}", stringify!(ArithmeticPoisonKHR)),
-            Self::OutputLinesEXT => write!(f, "{}", stringify!(OutputLinesEXT)),
-            Self::OutputPrimitivesEXT { primitive_count } => {
-                write!(f, "{}", stringify!(OutputPrimitivesEXT))?;
-                write!(f, " {}", primitive_count)?;
-                Ok(())
-            }
-            Self::DerivativeGroupQuadsKHR => write!(f, "{}", stringify!(DerivativeGroupQuadsKHR)),
-            Self::DerivativeGroupLinearKHR => write!(f, "{}", stringify!(DerivativeGroupLinearKHR)),
-            Self::OutputTrianglesEXT => write!(f, "{}", stringify!(OutputTrianglesEXT)),
-            Self::PixelInterlockOrderedEXT => write!(f, "{}", stringify!(PixelInterlockOrderedEXT)),
-            Self::PixelInterlockUnorderedEXT => {
-                write!(f, "{}", stringify!(PixelInterlockUnorderedEXT))
-            }
-            Self::SampleInterlockOrderedEXT => {
-                write!(f, "{}", stringify!(SampleInterlockOrderedEXT))
-            }
-            Self::SampleInterlockUnorderedEXT => {
-                write!(f, "{}", stringify!(SampleInterlockUnorderedEXT))
-            }
-            Self::ShadingRateInterlockOrderedEXT => {
-                write!(f, "{}", stringify!(ShadingRateInterlockOrderedEXT))
-            }
-            Self::ShadingRateInterlockUnorderedEXT => {
-                write!(f, "{}", stringify!(ShadingRateInterlockUnorderedEXT))
-            }
-            Self::Shader64BitIndexingEXT => write!(f, "{}", stringify!(Shader64BitIndexingEXT)),
-            Self::SharedLocalMemorySizeINTEL { size } => {
-                write!(f, "{}", stringify!(SharedLocalMemorySizeINTEL))?;
-                write!(f, " {}", size)?;
-                Ok(())
-            }
-            Self::RoundingModeRTPINTEL { target_width } => {
-                write!(f, "{}", stringify!(RoundingModeRTPINTEL))?;
-                write!(f, " {}", target_width)?;
-                Ok(())
-            }
-            Self::RoundingModeRTNINTEL { target_width } => {
-                write!(f, "{}", stringify!(RoundingModeRTNINTEL))?;
-                write!(f, " {}", target_width)?;
-                Ok(())
-            }
-            Self::FloatingPointModeALTINTEL { target_width } => {
-                write!(f, "{}", stringify!(FloatingPointModeALTINTEL))?;
-                write!(f, " {}", target_width)?;
-                Ok(())
-            }
-            Self::FloatingPointModeIEEEINTEL { target_width } => {
-                write!(f, "{}", stringify!(FloatingPointModeIEEEINTEL))?;
-                write!(f, " {}", target_width)?;
-                Ok(())
-            }
-            Self::MaxWorkgroupSizeINTEL {
-                max_x_size,
-                max_y_size,
-                max_z_size,
-            } => {
-                write!(f, "{}", stringify!(MaxWorkgroupSizeINTEL))?;
-                write!(f, " {}", max_x_size)?;
-                write!(f, " {}", max_y_size)?;
-                write!(f, " {}", max_z_size)?;
-                Ok(())
-            }
-            Self::MaxWorkDimINTEL { max_dimensions } => {
-                write!(f, "{}", stringify!(MaxWorkDimINTEL))?;
-                write!(f, " {}", max_dimensions)?;
-                Ok(())
-            }
-            Self::NoGlobalOffsetINTEL => write!(f, "{}", stringify!(NoGlobalOffsetINTEL)),
-            Self::NumSIMDWorkitemsINTEL { vector_width } => {
-                write!(f, "{}", stringify!(NumSIMDWorkitemsINTEL))?;
-                write!(f, " {}", vector_width)?;
-                Ok(())
-            }
-            Self::SchedulerTargetFmaxMhzINTEL { target_fmax } => {
-                write!(f, "{}", stringify!(SchedulerTargetFmaxMhzINTEL))?;
-                write!(f, " {}", target_fmax)?;
-                Ok(())
-            }
-            Self::MaximallyReconvergesKHR => write!(f, "{}", stringify!(MaximallyReconvergesKHR)),
-            Self::FPFastMathDefault {
-                target_type,
-                fast_math_mode,
-            } => {
-                write!(f, "{}", stringify!(FPFastMathDefault))?;
-                write!(f, " {}", target_type)?;
-                write!(f, " {}", fast_math_mode)?;
-                Ok(())
-            }
-            Self::StreamingInterfaceINTEL { stall_free_return } => {
-                write!(f, "{}", stringify!(StreamingInterfaceINTEL))?;
-                write!(f, " {}", stall_free_return)?;
-                Ok(())
-            }
-            Self::RegisterMapInterfaceINTEL {
-                wait_for_done_write,
-            } => {
-                write!(f, "{}", stringify!(RegisterMapInterfaceINTEL))?;
-                write!(f, " {}", wait_for_done_write)?;
-                Ok(())
-            }
-            Self::NamedBarrierCountINTEL { barrier_count } => {
-                write!(f, "{}", stringify!(NamedBarrierCountINTEL))?;
-                write!(f, " {}", barrier_count)?;
-                Ok(())
-            }
-            Self::MaximumRegistersINTEL {
-                number_of_registers,
-            } => {
-                write!(f, "{}", stringify!(MaximumRegistersINTEL))?;
-                write!(f, " {}", number_of_registers)?;
-                Ok(())
-            }
-            Self::MaximumRegistersIdINTEL {
-                number_of_registers,
-            } => {
-                write!(f, "{}", stringify!(MaximumRegistersIdINTEL))?;
-                write!(f, " {}", number_of_registers)?;
-                Ok(())
-            }
-            Self::NamedMaximumRegistersINTEL {
-                named_maximum_number_of_registers,
-            } => {
-                write!(f, "{}", stringify!(NamedMaximumRegistersINTEL))?;
-                write!(f, " {}", named_maximum_number_of_registers)?;
-                Ok(())
-            }
-        }
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct ExecutionMode(pub(crate) u32);
 impl ExecutionMode {
     pub const INVOCATIONS: Self = Self(0u32);
@@ -1858,122 +746,185 @@ impl Word for ExecutionMode {
         Self(word)
     }
 }
-impl Display for ExecutionMode {
+impl Debug for ExecutionMode {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::INVOCATIONS => write!(f, "Invocations"),
-            Self::SPACING_EQUAL => write!(f, "SpacingEqual"),
-            Self::SPACING_FRACTIONAL_EVEN => write!(f, "SpacingFractionalEven"),
-            Self::SPACING_FRACTIONAL_ODD => write!(f, "SpacingFractionalOdd"),
-            Self::VERTEX_ORDER_CW => write!(f, "VertexOrderCw"),
-            Self::VERTEX_ORDER_CCW => write!(f, "VertexOrderCcw"),
-            Self::PIXEL_CENTER_INTEGER => write!(f, "PixelCenterInteger"),
-            Self::ORIGIN_UPPER_LEFT => write!(f, "OriginUpperLeft"),
-            Self::ORIGIN_LOWER_LEFT => write!(f, "OriginLowerLeft"),
-            Self::EARLY_FRAGMENT_TESTS => write!(f, "EarlyFragmentTests"),
-            Self::POINT_MODE => write!(f, "PointMode"),
-            Self::XFB => write!(f, "Xfb"),
-            Self::DEPTH_REPLACING => write!(f, "DepthReplacing"),
-            Self::DEPTH_GREATER => write!(f, "DepthGreater"),
-            Self::DEPTH_LESS => write!(f, "DepthLess"),
-            Self::DEPTH_UNCHANGED => write!(f, "DepthUnchanged"),
-            Self::LOCAL_SIZE => write!(f, "LocalSize"),
-            Self::LOCAL_SIZE_HINT => write!(f, "LocalSizeHint"),
-            Self::INPUT_POINTS => write!(f, "InputPoints"),
-            Self::INPUT_LINES => write!(f, "InputLines"),
-            Self::INPUT_LINES_ADJACENCY => write!(f, "InputLinesAdjacency"),
-            Self::TRIANGLES => write!(f, "Triangles"),
-            Self::INPUT_TRIANGLES_ADJACENCY => write!(f, "InputTrianglesAdjacency"),
-            Self::QUADS => write!(f, "Quads"),
-            Self::ISOLINES => write!(f, "Isolines"),
-            Self::OUTPUT_VERTICES => write!(f, "OutputVertices"),
-            Self::OUTPUT_POINTS => write!(f, "OutputPoints"),
-            Self::OUTPUT_LINE_STRIP => write!(f, "OutputLineStrip"),
-            Self::OUTPUT_TRIANGLE_STRIP => write!(f, "OutputTriangleStrip"),
-            Self::VEC_TYPE_HINT => write!(f, "VecTypeHint"),
-            Self::CONTRACTION_OFF => write!(f, "ContractionOff"),
-            Self::INITIALIZER => write!(f, "Initializer"),
-            Self::FINALIZER => write!(f, "Finalizer"),
-            Self::SUBGROUP_SIZE => write!(f, "SubgroupSize"),
-            Self::SUBGROUPS_PER_WORKGROUP => write!(f, "SubgroupsPerWorkgroup"),
-            Self::SUBGROUPS_PER_WORKGROUP_ID => write!(f, "SubgroupsPerWorkgroupId"),
-            Self::LOCAL_SIZE_ID => write!(f, "LocalSizeId"),
-            Self::LOCAL_SIZE_HINT_ID => write!(f, "LocalSizeHintId"),
+            Self::INVOCATIONS => Display::fmt(stringify!(INVOCATIONS), f),
+            Self::SPACING_EQUAL => Display::fmt(stringify!(SPACING_EQUAL), f),
+            Self::SPACING_FRACTIONAL_EVEN => Display::fmt(stringify!(SPACING_FRACTIONAL_EVEN), f),
+            Self::SPACING_FRACTIONAL_ODD => Display::fmt(stringify!(SPACING_FRACTIONAL_ODD), f),
+            Self::VERTEX_ORDER_CW => Display::fmt(stringify!(VERTEX_ORDER_CW), f),
+            Self::VERTEX_ORDER_CCW => Display::fmt(stringify!(VERTEX_ORDER_CCW), f),
+            Self::PIXEL_CENTER_INTEGER => Display::fmt(stringify!(PIXEL_CENTER_INTEGER), f),
+            Self::ORIGIN_UPPER_LEFT => Display::fmt(stringify!(ORIGIN_UPPER_LEFT), f),
+            Self::ORIGIN_LOWER_LEFT => Display::fmt(stringify!(ORIGIN_LOWER_LEFT), f),
+            Self::EARLY_FRAGMENT_TESTS => Display::fmt(stringify!(EARLY_FRAGMENT_TESTS), f),
+            Self::POINT_MODE => Display::fmt(stringify!(POINT_MODE), f),
+            Self::XFB => Display::fmt(stringify!(XFB), f),
+            Self::DEPTH_REPLACING => Display::fmt(stringify!(DEPTH_REPLACING), f),
+            Self::DEPTH_GREATER => Display::fmt(stringify!(DEPTH_GREATER), f),
+            Self::DEPTH_LESS => Display::fmt(stringify!(DEPTH_LESS), f),
+            Self::DEPTH_UNCHANGED => Display::fmt(stringify!(DEPTH_UNCHANGED), f),
+            Self::LOCAL_SIZE => Display::fmt(stringify!(LOCAL_SIZE), f),
+            Self::LOCAL_SIZE_HINT => Display::fmt(stringify!(LOCAL_SIZE_HINT), f),
+            Self::INPUT_POINTS => Display::fmt(stringify!(INPUT_POINTS), f),
+            Self::INPUT_LINES => Display::fmt(stringify!(INPUT_LINES), f),
+            Self::INPUT_LINES_ADJACENCY => Display::fmt(stringify!(INPUT_LINES_ADJACENCY), f),
+            Self::TRIANGLES => Display::fmt(stringify!(TRIANGLES), f),
+            Self::INPUT_TRIANGLES_ADJACENCY => {
+                Display::fmt(stringify!(INPUT_TRIANGLES_ADJACENCY), f)
+            }
+            Self::QUADS => Display::fmt(stringify!(QUADS), f),
+            Self::ISOLINES => Display::fmt(stringify!(ISOLINES), f),
+            Self::OUTPUT_VERTICES => Display::fmt(stringify!(OUTPUT_VERTICES), f),
+            Self::OUTPUT_POINTS => Display::fmt(stringify!(OUTPUT_POINTS), f),
+            Self::OUTPUT_LINE_STRIP => Display::fmt(stringify!(OUTPUT_LINE_STRIP), f),
+            Self::OUTPUT_TRIANGLE_STRIP => Display::fmt(stringify!(OUTPUT_TRIANGLE_STRIP), f),
+            Self::VEC_TYPE_HINT => Display::fmt(stringify!(VEC_TYPE_HINT), f),
+            Self::CONTRACTION_OFF => Display::fmt(stringify!(CONTRACTION_OFF), f),
+            Self::INITIALIZER => Display::fmt(stringify!(INITIALIZER), f),
+            Self::FINALIZER => Display::fmt(stringify!(FINALIZER), f),
+            Self::SUBGROUP_SIZE => Display::fmt(stringify!(SUBGROUP_SIZE), f),
+            Self::SUBGROUPS_PER_WORKGROUP => Display::fmt(stringify!(SUBGROUPS_PER_WORKGROUP), f),
+            Self::SUBGROUPS_PER_WORKGROUP_ID => {
+                Display::fmt(stringify!(SUBGROUPS_PER_WORKGROUP_ID), f)
+            }
+            Self::LOCAL_SIZE_ID => Display::fmt(stringify!(LOCAL_SIZE_ID), f),
+            Self::LOCAL_SIZE_HINT_ID => Display::fmt(stringify!(LOCAL_SIZE_HINT_ID), f),
             Self::NON_COHERENT_COLOR_ATTACHMENT_READ_EXT => {
-                write!(f, "NonCoherentColorAttachmentReadEXT")
+                Display::fmt(stringify!(NON_COHERENT_COLOR_ATTACHMENT_READ_EXT), f)
             }
             Self::NON_COHERENT_DEPTH_ATTACHMENT_READ_EXT => {
-                write!(f, "NonCoherentDepthAttachmentReadEXT")
+                Display::fmt(stringify!(NON_COHERENT_DEPTH_ATTACHMENT_READ_EXT), f)
             }
             Self::NON_COHERENT_STENCIL_ATTACHMENT_READ_EXT => {
-                write!(f, "NonCoherentStencilAttachmentReadEXT")
+                Display::fmt(stringify!(NON_COHERENT_STENCIL_ATTACHMENT_READ_EXT), f)
             }
-            Self::SUBGROUP_UNIFORM_CONTROL_FLOW_KHR => write!(f, "SubgroupUniformControlFlowKHR"),
-            Self::POST_DEPTH_COVERAGE => write!(f, "PostDepthCoverage"),
-            Self::DENORM_PRESERVE => write!(f, "DenormPreserve"),
-            Self::DENORM_FLUSH_TO_ZERO => write!(f, "DenormFlushToZero"),
-            Self::SIGNED_ZERO_INF_NAN_PRESERVE => write!(f, "SignedZeroInfNanPreserve"),
-            Self::ROUNDING_MODE_RTE => write!(f, "RoundingModeRTE"),
-            Self::ROUNDING_MODE_RTZ => write!(f, "RoundingModeRTZ"),
+            Self::SUBGROUP_UNIFORM_CONTROL_FLOW_KHR => {
+                Display::fmt(stringify!(SUBGROUP_UNIFORM_CONTROL_FLOW_KHR), f)
+            }
+            Self::POST_DEPTH_COVERAGE => Display::fmt(stringify!(POST_DEPTH_COVERAGE), f),
+            Self::DENORM_PRESERVE => Display::fmt(stringify!(DENORM_PRESERVE), f),
+            Self::DENORM_FLUSH_TO_ZERO => Display::fmt(stringify!(DENORM_FLUSH_TO_ZERO), f),
+            Self::SIGNED_ZERO_INF_NAN_PRESERVE => {
+                Display::fmt(stringify!(SIGNED_ZERO_INF_NAN_PRESERVE), f)
+            }
+            Self::ROUNDING_MODE_RTE => Display::fmt(stringify!(ROUNDING_MODE_RTE), f),
+            Self::ROUNDING_MODE_RTZ => Display::fmt(stringify!(ROUNDING_MODE_RTZ), f),
             Self::NON_COHERENT_TILE_ATTACHMENT_READ_QCOM => {
-                write!(f, "NonCoherentTileAttachmentReadQCOM")
+                Display::fmt(stringify!(NON_COHERENT_TILE_ATTACHMENT_READ_QCOM), f)
             }
-            Self::TILE_SHADING_RATE_QCOM => write!(f, "TileShadingRateQCOM"),
-            Self::EARLY_AND_LATE_FRAGMENT_TESTS_AMD => write!(f, "EarlyAndLateFragmentTestsAMD"),
-            Self::STENCIL_REF_REPLACING_EXT => write!(f, "StencilRefReplacingEXT"),
-            Self::COALESCING_AMDX => write!(f, "CoalescingAMDX"),
-            Self::IS_API_ENTRY_AMDX => write!(f, "IsApiEntryAMDX"),
-            Self::MAX_NODE_RECURSION_AMDX => write!(f, "MaxNodeRecursionAMDX"),
-            Self::STATIC_NUM_WORKGROUPS_AMDX => write!(f, "StaticNumWorkgroupsAMDX"),
-            Self::SHADER_INDEX_AMDX => write!(f, "ShaderIndexAMDX"),
-            Self::MAX_NUM_WORKGROUPS_AMDX => write!(f, "MaxNumWorkgroupsAMDX"),
-            Self::STENCIL_REF_UNCHANGED_FRONT_AMD => write!(f, "StencilRefUnchangedFrontAMD"),
-            Self::STENCIL_REF_GREATER_FRONT_AMD => write!(f, "StencilRefGreaterFrontAMD"),
-            Self::STENCIL_REF_LESS_FRONT_AMD => write!(f, "StencilRefLessFrontAMD"),
-            Self::STENCIL_REF_UNCHANGED_BACK_AMD => write!(f, "StencilRefUnchangedBackAMD"),
-            Self::STENCIL_REF_GREATER_BACK_AMD => write!(f, "StencilRefGreaterBackAMD"),
-            Self::STENCIL_REF_LESS_BACK_AMD => write!(f, "StencilRefLessBackAMD"),
-            Self::QUAD_DERIVATIVES_KHR => write!(f, "QuadDerivativesKHR"),
-            Self::REQUIRE_FULL_QUADS_KHR => write!(f, "RequireFullQuadsKHR"),
-            Self::SHARES_INPUT_WITH_AMDX => write!(f, "SharesInputWithAMDX"),
-            Self::ARITHMETIC_POISON_KHR => write!(f, "ArithmeticPoisonKHR"),
-            Self::OUTPUT_LINES_EXT => write!(f, "OutputLinesEXT"),
-            Self::OUTPUT_PRIMITIVES_EXT => write!(f, "OutputPrimitivesEXT"),
-            Self::DERIVATIVE_GROUP_QUADS_KHR => write!(f, "DerivativeGroupQuadsKHR"),
-            Self::DERIVATIVE_GROUP_LINEAR_KHR => write!(f, "DerivativeGroupLinearKHR"),
-            Self::OUTPUT_TRIANGLES_EXT => write!(f, "OutputTrianglesEXT"),
-            Self::PIXEL_INTERLOCK_ORDERED_EXT => write!(f, "PixelInterlockOrderedEXT"),
-            Self::PIXEL_INTERLOCK_UNORDERED_EXT => write!(f, "PixelInterlockUnorderedEXT"),
-            Self::SAMPLE_INTERLOCK_ORDERED_EXT => write!(f, "SampleInterlockOrderedEXT"),
-            Self::SAMPLE_INTERLOCK_UNORDERED_EXT => write!(f, "SampleInterlockUnorderedEXT"),
-            Self::SHADING_RATE_INTERLOCK_ORDERED_EXT => write!(f, "ShadingRateInterlockOrderedEXT"),
+            Self::TILE_SHADING_RATE_QCOM => Display::fmt(stringify!(TILE_SHADING_RATE_QCOM), f),
+            Self::EARLY_AND_LATE_FRAGMENT_TESTS_AMD => {
+                Display::fmt(stringify!(EARLY_AND_LATE_FRAGMENT_TESTS_AMD), f)
+            }
+            Self::STENCIL_REF_REPLACING_EXT => {
+                Display::fmt(stringify!(STENCIL_REF_REPLACING_EXT), f)
+            }
+            Self::COALESCING_AMDX => Display::fmt(stringify!(COALESCING_AMDX), f),
+            Self::IS_API_ENTRY_AMDX => Display::fmt(stringify!(IS_API_ENTRY_AMDX), f),
+            Self::MAX_NODE_RECURSION_AMDX => Display::fmt(stringify!(MAX_NODE_RECURSION_AMDX), f),
+            Self::STATIC_NUM_WORKGROUPS_AMDX => {
+                Display::fmt(stringify!(STATIC_NUM_WORKGROUPS_AMDX), f)
+            }
+            Self::SHADER_INDEX_AMDX => Display::fmt(stringify!(SHADER_INDEX_AMDX), f),
+            Self::MAX_NUM_WORKGROUPS_AMDX => Display::fmt(stringify!(MAX_NUM_WORKGROUPS_AMDX), f),
+            Self::STENCIL_REF_UNCHANGED_FRONT_AMD => {
+                Display::fmt(stringify!(STENCIL_REF_UNCHANGED_FRONT_AMD), f)
+            }
+            Self::STENCIL_REF_GREATER_FRONT_AMD => {
+                Display::fmt(stringify!(STENCIL_REF_GREATER_FRONT_AMD), f)
+            }
+            Self::STENCIL_REF_LESS_FRONT_AMD => {
+                Display::fmt(stringify!(STENCIL_REF_LESS_FRONT_AMD), f)
+            }
+            Self::STENCIL_REF_UNCHANGED_BACK_AMD => {
+                Display::fmt(stringify!(STENCIL_REF_UNCHANGED_BACK_AMD), f)
+            }
+            Self::STENCIL_REF_GREATER_BACK_AMD => {
+                Display::fmt(stringify!(STENCIL_REF_GREATER_BACK_AMD), f)
+            }
+            Self::STENCIL_REF_LESS_BACK_AMD => {
+                Display::fmt(stringify!(STENCIL_REF_LESS_BACK_AMD), f)
+            }
+            Self::QUAD_DERIVATIVES_KHR => Display::fmt(stringify!(QUAD_DERIVATIVES_KHR), f),
+            Self::REQUIRE_FULL_QUADS_KHR => Display::fmt(stringify!(REQUIRE_FULL_QUADS_KHR), f),
+            Self::SHARES_INPUT_WITH_AMDX => Display::fmt(stringify!(SHARES_INPUT_WITH_AMDX), f),
+            Self::ARITHMETIC_POISON_KHR => Display::fmt(stringify!(ARITHMETIC_POISON_KHR), f),
+            Self::OUTPUT_LINES_EXT => Display::fmt(stringify!(OUTPUT_LINES_EXT), f),
+            Self::OUTPUT_PRIMITIVES_EXT => Display::fmt(stringify!(OUTPUT_PRIMITIVES_EXT), f),
+            Self::DERIVATIVE_GROUP_QUADS_KHR => {
+                Display::fmt(stringify!(DERIVATIVE_GROUP_QUADS_KHR), f)
+            }
+            Self::DERIVATIVE_GROUP_LINEAR_KHR => {
+                Display::fmt(stringify!(DERIVATIVE_GROUP_LINEAR_KHR), f)
+            }
+            Self::OUTPUT_TRIANGLES_EXT => Display::fmt(stringify!(OUTPUT_TRIANGLES_EXT), f),
+            Self::PIXEL_INTERLOCK_ORDERED_EXT => {
+                Display::fmt(stringify!(PIXEL_INTERLOCK_ORDERED_EXT), f)
+            }
+            Self::PIXEL_INTERLOCK_UNORDERED_EXT => {
+                Display::fmt(stringify!(PIXEL_INTERLOCK_UNORDERED_EXT), f)
+            }
+            Self::SAMPLE_INTERLOCK_ORDERED_EXT => {
+                Display::fmt(stringify!(SAMPLE_INTERLOCK_ORDERED_EXT), f)
+            }
+            Self::SAMPLE_INTERLOCK_UNORDERED_EXT => {
+                Display::fmt(stringify!(SAMPLE_INTERLOCK_UNORDERED_EXT), f)
+            }
+            Self::SHADING_RATE_INTERLOCK_ORDERED_EXT => {
+                Display::fmt(stringify!(SHADING_RATE_INTERLOCK_ORDERED_EXT), f)
+            }
             Self::SHADING_RATE_INTERLOCK_UNORDERED_EXT => {
-                write!(f, "ShadingRateInterlockUnorderedEXT")
+                Display::fmt(stringify!(SHADING_RATE_INTERLOCK_UNORDERED_EXT), f)
             }
-            Self::SHADER_64_BIT_INDEXING_EXT => write!(f, "Shader64BitIndexingEXT"),
-            Self::SHARED_LOCAL_MEMORY_SIZE_INTEL => write!(f, "SharedLocalMemorySizeINTEL"),
-            Self::ROUNDING_MODE_RTPINTEL => write!(f, "RoundingModeRTPINTEL"),
-            Self::ROUNDING_MODE_RTNINTEL => write!(f, "RoundingModeRTNINTEL"),
-            Self::FLOATING_POINT_MODE_ALTINTEL => write!(f, "FloatingPointModeALTINTEL"),
-            Self::FLOATING_POINT_MODE_IEEEINTEL => write!(f, "FloatingPointModeIEEEINTEL"),
-            Self::MAX_WORKGROUP_SIZE_INTEL => write!(f, "MaxWorkgroupSizeINTEL"),
-            Self::MAX_WORK_DIM_INTEL => write!(f, "MaxWorkDimINTEL"),
-            Self::NO_GLOBAL_OFFSET_INTEL => write!(f, "NoGlobalOffsetINTEL"),
-            Self::NUM_SIMDWORKITEMS_INTEL => write!(f, "NumSIMDWorkitemsINTEL"),
-            Self::SCHEDULER_TARGET_FMAX_MHZ_INTEL => write!(f, "SchedulerTargetFmaxMhzINTEL"),
-            Self::MAXIMALLY_RECONVERGES_KHR => write!(f, "MaximallyReconvergesKHR"),
-            Self::FPFAST_MATH_DEFAULT => write!(f, "FPFastMathDefault"),
-            Self::STREAMING_INTERFACE_INTEL => write!(f, "StreamingInterfaceINTEL"),
-            Self::REGISTER_MAP_INTERFACE_INTEL => write!(f, "RegisterMapInterfaceINTEL"),
-            Self::NAMED_BARRIER_COUNT_INTEL => write!(f, "NamedBarrierCountINTEL"),
-            Self::MAXIMUM_REGISTERS_INTEL => write!(f, "MaximumRegistersINTEL"),
-            Self::MAXIMUM_REGISTERS_ID_INTEL => write!(f, "MaximumRegistersIdINTEL"),
-            Self::NAMED_MAXIMUM_REGISTERS_INTEL => write!(f, "NamedMaximumRegistersINTEL"),
-            x => write!(f, "{x}"),
+            Self::SHADER_64_BIT_INDEXING_EXT => {
+                Display::fmt(stringify!(SHADER_64_BIT_INDEXING_EXT), f)
+            }
+            Self::SHARED_LOCAL_MEMORY_SIZE_INTEL => {
+                Display::fmt(stringify!(SHARED_LOCAL_MEMORY_SIZE_INTEL), f)
+            }
+            Self::ROUNDING_MODE_RTPINTEL => Display::fmt(stringify!(ROUNDING_MODE_RTPINTEL), f),
+            Self::ROUNDING_MODE_RTNINTEL => Display::fmt(stringify!(ROUNDING_MODE_RTNINTEL), f),
+            Self::FLOATING_POINT_MODE_ALTINTEL => {
+                Display::fmt(stringify!(FLOATING_POINT_MODE_ALTINTEL), f)
+            }
+            Self::FLOATING_POINT_MODE_IEEEINTEL => {
+                Display::fmt(stringify!(FLOATING_POINT_MODE_IEEEINTEL), f)
+            }
+            Self::MAX_WORKGROUP_SIZE_INTEL => Display::fmt(stringify!(MAX_WORKGROUP_SIZE_INTEL), f),
+            Self::MAX_WORK_DIM_INTEL => Display::fmt(stringify!(MAX_WORK_DIM_INTEL), f),
+            Self::NO_GLOBAL_OFFSET_INTEL => Display::fmt(stringify!(NO_GLOBAL_OFFSET_INTEL), f),
+            Self::NUM_SIMDWORKITEMS_INTEL => Display::fmt(stringify!(NUM_SIMDWORKITEMS_INTEL), f),
+            Self::SCHEDULER_TARGET_FMAX_MHZ_INTEL => {
+                Display::fmt(stringify!(SCHEDULER_TARGET_FMAX_MHZ_INTEL), f)
+            }
+            Self::MAXIMALLY_RECONVERGES_KHR => {
+                Display::fmt(stringify!(MAXIMALLY_RECONVERGES_KHR), f)
+            }
+            Self::FPFAST_MATH_DEFAULT => Display::fmt(stringify!(FPFAST_MATH_DEFAULT), f),
+            Self::STREAMING_INTERFACE_INTEL => {
+                Display::fmt(stringify!(STREAMING_INTERFACE_INTEL), f)
+            }
+            Self::REGISTER_MAP_INTERFACE_INTEL => {
+                Display::fmt(stringify!(REGISTER_MAP_INTERFACE_INTEL), f)
+            }
+            Self::NAMED_BARRIER_COUNT_INTEL => {
+                Display::fmt(stringify!(NAMED_BARRIER_COUNT_INTEL), f)
+            }
+            Self::MAXIMUM_REGISTERS_INTEL => Display::fmt(stringify!(MAXIMUM_REGISTERS_INTEL), f),
+            Self::MAXIMUM_REGISTERS_ID_INTEL => {
+                Display::fmt(stringify!(MAXIMUM_REGISTERS_ID_INTEL), f)
+            }
+            Self::NAMED_MAXIMUM_REGISTERS_INTEL => {
+                Display::fmt(stringify!(NAMED_MAXIMUM_REGISTERS_INTEL), f)
+            }
+            x => write!(f, "{}({})", stringify!(ExecutionMode), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct StorageClass(pub(crate) u32);
 impl StorageClass {
     pub const UNIFORM_CONSTANT: Self = Self(0u32);
@@ -2012,43 +963,48 @@ impl Word for StorageClass {
         Self(word)
     }
 }
-impl Display for StorageClass {
+impl Debug for StorageClass {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::UNIFORM_CONSTANT => write!(f, "UniformConstant"),
-            Self::INPUT => write!(f, "Input"),
-            Self::UNIFORM => write!(f, "Uniform"),
-            Self::OUTPUT => write!(f, "Output"),
-            Self::WORKGROUP => write!(f, "Workgroup"),
-            Self::CROSS_WORKGROUP => write!(f, "CrossWorkgroup"),
-            Self::PRIVATE => write!(f, "Private"),
-            Self::FUNCTION => write!(f, "Function"),
-            Self::GENERIC => write!(f, "Generic"),
-            Self::PUSH_CONSTANT => write!(f, "PushConstant"),
-            Self::ATOMIC_COUNTER => write!(f, "AtomicCounter"),
-            Self::IMAGE => write!(f, "Image"),
-            Self::STORAGE_BUFFER => write!(f, "StorageBuffer"),
-            Self::TILE_IMAGE_EXT => write!(f, "TileImageEXT"),
-            Self::TILE_ATTACHMENT_QCOM => write!(f, "TileAttachmentQCOM"),
-            Self::NODE_PAYLOAD_AMDX => write!(f, "NodePayloadAMDX"),
-            Self::CALLABLE_DATA_KHR => write!(f, "CallableDataKHR"),
-            Self::INCOMING_CALLABLE_DATA_KHR => write!(f, "IncomingCallableDataKHR"),
-            Self::RAY_PAYLOAD_KHR => write!(f, "RayPayloadKHR"),
-            Self::HIT_ATTRIBUTE_KHR => write!(f, "HitAttributeKHR"),
-            Self::INCOMING_RAY_PAYLOAD_KHR => write!(f, "IncomingRayPayloadKHR"),
-            Self::SHADER_RECORD_BUFFER_KHR => write!(f, "ShaderRecordBufferKHR"),
-            Self::PHYSICAL_STORAGE_BUFFER => write!(f, "PhysicalStorageBuffer"),
-            Self::HIT_OBJECT_ATTRIBUTE_NV => write!(f, "HitObjectAttributeNV"),
-            Self::TASK_PAYLOAD_WORKGROUP_EXT => write!(f, "TaskPayloadWorkgroupEXT"),
-            Self::HIT_OBJECT_ATTRIBUTE_EXT => write!(f, "HitObjectAttributeEXT"),
-            Self::CODE_SECTION_INTEL => write!(f, "CodeSectionINTEL"),
-            Self::DEVICE_ONLY_ALTERA => write!(f, "DeviceOnlyALTERA"),
-            Self::HOST_ONLY_ALTERA => write!(f, "HostOnlyALTERA"),
-            x => write!(f, "{x}"),
+            Self::UNIFORM_CONSTANT => Display::fmt(stringify!(UNIFORM_CONSTANT), f),
+            Self::INPUT => Display::fmt(stringify!(INPUT), f),
+            Self::UNIFORM => Display::fmt(stringify!(UNIFORM), f),
+            Self::OUTPUT => Display::fmt(stringify!(OUTPUT), f),
+            Self::WORKGROUP => Display::fmt(stringify!(WORKGROUP), f),
+            Self::CROSS_WORKGROUP => Display::fmt(stringify!(CROSS_WORKGROUP), f),
+            Self::PRIVATE => Display::fmt(stringify!(PRIVATE), f),
+            Self::FUNCTION => Display::fmt(stringify!(FUNCTION), f),
+            Self::GENERIC => Display::fmt(stringify!(GENERIC), f),
+            Self::PUSH_CONSTANT => Display::fmt(stringify!(PUSH_CONSTANT), f),
+            Self::ATOMIC_COUNTER => Display::fmt(stringify!(ATOMIC_COUNTER), f),
+            Self::IMAGE => Display::fmt(stringify!(IMAGE), f),
+            Self::STORAGE_BUFFER => Display::fmt(stringify!(STORAGE_BUFFER), f),
+            Self::TILE_IMAGE_EXT => Display::fmt(stringify!(TILE_IMAGE_EXT), f),
+            Self::TILE_ATTACHMENT_QCOM => Display::fmt(stringify!(TILE_ATTACHMENT_QCOM), f),
+            Self::NODE_PAYLOAD_AMDX => Display::fmt(stringify!(NODE_PAYLOAD_AMDX), f),
+            Self::CALLABLE_DATA_KHR => Display::fmt(stringify!(CALLABLE_DATA_KHR), f),
+            Self::INCOMING_CALLABLE_DATA_KHR => {
+                Display::fmt(stringify!(INCOMING_CALLABLE_DATA_KHR), f)
+            }
+            Self::RAY_PAYLOAD_KHR => Display::fmt(stringify!(RAY_PAYLOAD_KHR), f),
+            Self::HIT_ATTRIBUTE_KHR => Display::fmt(stringify!(HIT_ATTRIBUTE_KHR), f),
+            Self::INCOMING_RAY_PAYLOAD_KHR => Display::fmt(stringify!(INCOMING_RAY_PAYLOAD_KHR), f),
+            Self::SHADER_RECORD_BUFFER_KHR => Display::fmt(stringify!(SHADER_RECORD_BUFFER_KHR), f),
+            Self::PHYSICAL_STORAGE_BUFFER => Display::fmt(stringify!(PHYSICAL_STORAGE_BUFFER), f),
+            Self::HIT_OBJECT_ATTRIBUTE_NV => Display::fmt(stringify!(HIT_OBJECT_ATTRIBUTE_NV), f),
+            Self::TASK_PAYLOAD_WORKGROUP_EXT => {
+                Display::fmt(stringify!(TASK_PAYLOAD_WORKGROUP_EXT), f)
+            }
+            Self::HIT_OBJECT_ATTRIBUTE_EXT => Display::fmt(stringify!(HIT_OBJECT_ATTRIBUTE_EXT), f),
+            Self::CODE_SECTION_INTEL => Display::fmt(stringify!(CODE_SECTION_INTEL), f),
+            Self::DEVICE_ONLY_ALTERA => Display::fmt(stringify!(DEVICE_ONLY_ALTERA), f),
+            Self::HOST_ONLY_ALTERA => Display::fmt(stringify!(HOST_ONLY_ALTERA), f),
+            x => write!(f, "{}({})", stringify!(StorageClass), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Dim(pub(crate) u32);
 impl Dim {
     pub const TYPE_1D: Self = Self(0u32);
@@ -2066,22 +1022,23 @@ impl Word for Dim {
         Self(word)
     }
 }
-impl Display for Dim {
+impl Debug for Dim {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::TYPE_1D => write!(f, "1D"),
-            Self::TYPE_2D => write!(f, "2D"),
-            Self::TYPE_3D => write!(f, "3D"),
-            Self::CUBE => write!(f, "Cube"),
-            Self::RECT => write!(f, "Rect"),
-            Self::BUFFER => write!(f, "Buffer"),
-            Self::SUBPASS_DATA => write!(f, "SubpassData"),
-            Self::TILE_IMAGE_DATA_EXT => write!(f, "TileImageDataEXT"),
-            x => write!(f, "{x}"),
+            Self::TYPE_1D => Display::fmt(stringify!(TYPE_1D), f),
+            Self::TYPE_2D => Display::fmt(stringify!(TYPE_2D), f),
+            Self::TYPE_3D => Display::fmt(stringify!(TYPE_3D), f),
+            Self::CUBE => Display::fmt(stringify!(CUBE), f),
+            Self::RECT => Display::fmt(stringify!(RECT), f),
+            Self::BUFFER => Display::fmt(stringify!(BUFFER), f),
+            Self::SUBPASS_DATA => Display::fmt(stringify!(SUBPASS_DATA), f),
+            Self::TILE_IMAGE_DATA_EXT => Display::fmt(stringify!(TILE_IMAGE_DATA_EXT), f),
+            x => write!(f, "{}({})", stringify!(Dim), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct SamplerAddressingMode(pub(crate) u32);
 impl SamplerAddressingMode {
     pub const NONE: Self = Self(0u32);
@@ -2096,19 +1053,20 @@ impl Word for SamplerAddressingMode {
         Self(word)
     }
 }
-impl Display for SamplerAddressingMode {
+impl Debug for SamplerAddressingMode {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::NONE => write!(f, "None"),
-            Self::CLAMP_TO_EDGE => write!(f, "ClampToEdge"),
-            Self::CLAMP => write!(f, "Clamp"),
-            Self::REPEAT => write!(f, "Repeat"),
-            Self::REPEAT_MIRRORED => write!(f, "RepeatMirrored"),
-            x => write!(f, "{x}"),
+            Self::NONE => Display::fmt(stringify!(NONE), f),
+            Self::CLAMP_TO_EDGE => Display::fmt(stringify!(CLAMP_TO_EDGE), f),
+            Self::CLAMP => Display::fmt(stringify!(CLAMP), f),
+            Self::REPEAT => Display::fmt(stringify!(REPEAT), f),
+            Self::REPEAT_MIRRORED => Display::fmt(stringify!(REPEAT_MIRRORED), f),
+            x => write!(f, "{}({})", stringify!(SamplerAddressingMode), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct SamplerFilterMode(pub(crate) u32);
 impl SamplerFilterMode {
     pub const NEAREST: Self = Self(0u32);
@@ -2120,16 +1078,17 @@ impl Word for SamplerFilterMode {
         Self(word)
     }
 }
-impl Display for SamplerFilterMode {
+impl Debug for SamplerFilterMode {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::NEAREST => write!(f, "Nearest"),
-            Self::LINEAR => write!(f, "Linear"),
-            x => write!(f, "{x}"),
+            Self::NEAREST => Display::fmt(stringify!(NEAREST), f),
+            Self::LINEAR => Display::fmt(stringify!(LINEAR), f),
+            x => write!(f, "{}({})", stringify!(SamplerFilterMode), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct ImageFormat(pub(crate) u32);
 impl ImageFormat {
     pub const UNKNOWN: Self = Self(0u32);
@@ -2181,56 +1140,57 @@ impl Word for ImageFormat {
         Self(word)
     }
 }
-impl Display for ImageFormat {
+impl Debug for ImageFormat {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::UNKNOWN => write!(f, "Unknown"),
-            Self::RGBA_32F => write!(f, "Rgba32f"),
-            Self::RGBA_16F => write!(f, "Rgba16f"),
-            Self::R32F => write!(f, "R32f"),
-            Self::RGBA_8 => write!(f, "Rgba8"),
-            Self::RGBA_8_SNORM => write!(f, "Rgba8Snorm"),
-            Self::RG_32F => write!(f, "Rg32f"),
-            Self::RG_16F => write!(f, "Rg16f"),
-            Self::R11F_G11F_B10F => write!(f, "R11fG11fB10f"),
-            Self::R16F => write!(f, "R16f"),
-            Self::RGBA_16 => write!(f, "Rgba16"),
-            Self::RGB_10_A2 => write!(f, "Rgb10A2"),
-            Self::RG_16 => write!(f, "Rg16"),
-            Self::RG_8 => write!(f, "Rg8"),
-            Self::R16 => write!(f, "R16"),
-            Self::R8 => write!(f, "R8"),
-            Self::RGBA_16_SNORM => write!(f, "Rgba16Snorm"),
-            Self::RG_16_SNORM => write!(f, "Rg16Snorm"),
-            Self::RG_8_SNORM => write!(f, "Rg8Snorm"),
-            Self::R16SNORM => write!(f, "R16Snorm"),
-            Self::R8SNORM => write!(f, "R8Snorm"),
-            Self::RGBA_32I => write!(f, "Rgba32i"),
-            Self::RGBA_16I => write!(f, "Rgba16i"),
-            Self::RGBA_8I => write!(f, "Rgba8i"),
-            Self::R32I => write!(f, "R32i"),
-            Self::RG_32I => write!(f, "Rg32i"),
-            Self::RG_16I => write!(f, "Rg16i"),
-            Self::RG_8I => write!(f, "Rg8i"),
-            Self::R16I => write!(f, "R16i"),
-            Self::R8I => write!(f, "R8i"),
-            Self::RGBA_32UI => write!(f, "Rgba32ui"),
-            Self::RGBA_16UI => write!(f, "Rgba16ui"),
-            Self::RGBA_8UI => write!(f, "Rgba8ui"),
-            Self::R32UI => write!(f, "R32ui"),
-            Self::RGB_10A_2UI => write!(f, "Rgb10a2ui"),
-            Self::RG_32UI => write!(f, "Rg32ui"),
-            Self::RG_16UI => write!(f, "Rg16ui"),
-            Self::RG_8UI => write!(f, "Rg8ui"),
-            Self::R16UI => write!(f, "R16ui"),
-            Self::R8UI => write!(f, "R8ui"),
-            Self::R64UI => write!(f, "R64ui"),
-            Self::R64I => write!(f, "R64i"),
-            x => write!(f, "{x}"),
+            Self::UNKNOWN => Display::fmt(stringify!(UNKNOWN), f),
+            Self::RGBA_32F => Display::fmt(stringify!(RGBA_32F), f),
+            Self::RGBA_16F => Display::fmt(stringify!(RGBA_16F), f),
+            Self::R32F => Display::fmt(stringify!(R32F), f),
+            Self::RGBA_8 => Display::fmt(stringify!(RGBA_8), f),
+            Self::RGBA_8_SNORM => Display::fmt(stringify!(RGBA_8_SNORM), f),
+            Self::RG_32F => Display::fmt(stringify!(RG_32F), f),
+            Self::RG_16F => Display::fmt(stringify!(RG_16F), f),
+            Self::R11F_G11F_B10F => Display::fmt(stringify!(R11F_G11F_B10F), f),
+            Self::R16F => Display::fmt(stringify!(R16F), f),
+            Self::RGBA_16 => Display::fmt(stringify!(RGBA_16), f),
+            Self::RGB_10_A2 => Display::fmt(stringify!(RGB_10_A2), f),
+            Self::RG_16 => Display::fmt(stringify!(RG_16), f),
+            Self::RG_8 => Display::fmt(stringify!(RG_8), f),
+            Self::R16 => Display::fmt(stringify!(R16), f),
+            Self::R8 => Display::fmt(stringify!(R8), f),
+            Self::RGBA_16_SNORM => Display::fmt(stringify!(RGBA_16_SNORM), f),
+            Self::RG_16_SNORM => Display::fmt(stringify!(RG_16_SNORM), f),
+            Self::RG_8_SNORM => Display::fmt(stringify!(RG_8_SNORM), f),
+            Self::R16SNORM => Display::fmt(stringify!(R16SNORM), f),
+            Self::R8SNORM => Display::fmt(stringify!(R8SNORM), f),
+            Self::RGBA_32I => Display::fmt(stringify!(RGBA_32I), f),
+            Self::RGBA_16I => Display::fmt(stringify!(RGBA_16I), f),
+            Self::RGBA_8I => Display::fmt(stringify!(RGBA_8I), f),
+            Self::R32I => Display::fmt(stringify!(R32I), f),
+            Self::RG_32I => Display::fmt(stringify!(RG_32I), f),
+            Self::RG_16I => Display::fmt(stringify!(RG_16I), f),
+            Self::RG_8I => Display::fmt(stringify!(RG_8I), f),
+            Self::R16I => Display::fmt(stringify!(R16I), f),
+            Self::R8I => Display::fmt(stringify!(R8I), f),
+            Self::RGBA_32UI => Display::fmt(stringify!(RGBA_32UI), f),
+            Self::RGBA_16UI => Display::fmt(stringify!(RGBA_16UI), f),
+            Self::RGBA_8UI => Display::fmt(stringify!(RGBA_8UI), f),
+            Self::R32UI => Display::fmt(stringify!(R32UI), f),
+            Self::RGB_10A_2UI => Display::fmt(stringify!(RGB_10A_2UI), f),
+            Self::RG_32UI => Display::fmt(stringify!(RG_32UI), f),
+            Self::RG_16UI => Display::fmt(stringify!(RG_16UI), f),
+            Self::RG_8UI => Display::fmt(stringify!(RG_8UI), f),
+            Self::R16UI => Display::fmt(stringify!(R16UI), f),
+            Self::R8UI => Display::fmt(stringify!(R8UI), f),
+            Self::R64UI => Display::fmt(stringify!(R64UI), f),
+            Self::R64I => Display::fmt(stringify!(R64I), f),
+            x => write!(f, "{}({})", stringify!(ImageFormat), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct ImageChannelOrder(pub(crate) u32);
 impl ImageChannelOrder {
     pub const R: Self = Self(0u32);
@@ -2260,34 +1220,35 @@ impl Word for ImageChannelOrder {
         Self(word)
     }
 }
-impl Display for ImageChannelOrder {
+impl Debug for ImageChannelOrder {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::R => write!(f, "R"),
-            Self::A => write!(f, "A"),
-            Self::RG => write!(f, "RG"),
-            Self::RA => write!(f, "RA"),
-            Self::RGB => write!(f, "RGB"),
-            Self::RGBA => write!(f, "RGBA"),
-            Self::BGRA => write!(f, "BGRA"),
-            Self::ARGB => write!(f, "ARGB"),
-            Self::INTENSITY => write!(f, "Intensity"),
-            Self::LUMINANCE => write!(f, "Luminance"),
-            Self::RX => write!(f, "Rx"),
-            Self::RGX => write!(f, "RGx"),
-            Self::RGBX => write!(f, "RGBx"),
-            Self::DEPTH => write!(f, "Depth"),
-            Self::DEPTH_STENCIL => write!(f, "DepthStencil"),
-            Self::SRGB => write!(f, "sRGB"),
-            Self::SRGBX => write!(f, "sRGBx"),
-            Self::SRGBA => write!(f, "sRGBA"),
-            Self::SBGRA => write!(f, "sBGRA"),
-            Self::ABGR => write!(f, "ABGR"),
-            x => write!(f, "{x}"),
+            Self::R => Display::fmt(stringify!(R), f),
+            Self::A => Display::fmt(stringify!(A), f),
+            Self::RG => Display::fmt(stringify!(RG), f),
+            Self::RA => Display::fmt(stringify!(RA), f),
+            Self::RGB => Display::fmt(stringify!(RGB), f),
+            Self::RGBA => Display::fmt(stringify!(RGBA), f),
+            Self::BGRA => Display::fmt(stringify!(BGRA), f),
+            Self::ARGB => Display::fmt(stringify!(ARGB), f),
+            Self::INTENSITY => Display::fmt(stringify!(INTENSITY), f),
+            Self::LUMINANCE => Display::fmt(stringify!(LUMINANCE), f),
+            Self::RX => Display::fmt(stringify!(RX), f),
+            Self::RGX => Display::fmt(stringify!(RGX), f),
+            Self::RGBX => Display::fmt(stringify!(RGBX), f),
+            Self::DEPTH => Display::fmt(stringify!(DEPTH), f),
+            Self::DEPTH_STENCIL => Display::fmt(stringify!(DEPTH_STENCIL), f),
+            Self::SRGB => Display::fmt(stringify!(SRGB), f),
+            Self::SRGBX => Display::fmt(stringify!(SRGBX), f),
+            Self::SRGBA => Display::fmt(stringify!(SRGBA), f),
+            Self::SBGRA => Display::fmt(stringify!(SBGRA), f),
+            Self::ABGR => Display::fmt(stringify!(ABGR), f),
+            x => write!(f, "{}({})", stringify!(ImageChannelOrder), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct ImageChannelDataType(pub(crate) u32);
 impl ImageChannelDataType {
     pub const SNORM_INT_8: Self = Self(0u32);
@@ -2323,40 +1284,41 @@ impl Word for ImageChannelDataType {
         Self(word)
     }
 }
-impl Display for ImageChannelDataType {
+impl Debug for ImageChannelDataType {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::SNORM_INT_8 => write!(f, "SnormInt8"),
-            Self::SNORM_INT_16 => write!(f, "SnormInt16"),
-            Self::UNORM_INT_8 => write!(f, "UnormInt8"),
-            Self::UNORM_INT_16 => write!(f, "UnormInt16"),
-            Self::UNORM_SHORT_565 => write!(f, "UnormShort565"),
-            Self::UNORM_SHORT_555 => write!(f, "UnormShort555"),
-            Self::UNORM_INT_101010 => write!(f, "UnormInt101010"),
-            Self::SIGNED_INT_8 => write!(f, "SignedInt8"),
-            Self::SIGNED_INT_16 => write!(f, "SignedInt16"),
-            Self::SIGNED_INT_32 => write!(f, "SignedInt32"),
-            Self::UNSIGNED_INT_8 => write!(f, "UnsignedInt8"),
-            Self::UNSIGNED_INT_16 => write!(f, "UnsignedInt16"),
-            Self::UNSIGNED_INT_32 => write!(f, "UnsignedInt32"),
-            Self::HALF_FLOAT => write!(f, "HalfFloat"),
-            Self::FLOAT => write!(f, "Float"),
-            Self::UNORM_INT_24 => write!(f, "UnormInt24"),
-            Self::UNORM_INT_101010_2 => write!(f, "UnormInt101010_2"),
-            Self::UNORM_INT_10_X6EXT => write!(f, "UnormInt10X6EXT"),
-            Self::UNSIGNED_INT_RAW_10_EXT => write!(f, "UnsignedIntRaw10EXT"),
-            Self::UNSIGNED_INT_RAW_12_EXT => write!(f, "UnsignedIntRaw12EXT"),
-            Self::UNORM_INT_2_101010_EXT => write!(f, "UnormInt2_101010EXT"),
-            Self::UNSIGNED_INT_10_X6EXT => write!(f, "UnsignedInt10X6EXT"),
-            Self::UNSIGNED_INT_12_X4EXT => write!(f, "UnsignedInt12X4EXT"),
-            Self::UNSIGNED_INT_14_X2EXT => write!(f, "UnsignedInt14X2EXT"),
-            Self::UNORM_INT_12_X4EXT => write!(f, "UnormInt12X4EXT"),
-            Self::UNORM_INT_14_X2EXT => write!(f, "UnormInt14X2EXT"),
-            x => write!(f, "{x}"),
+            Self::SNORM_INT_8 => Display::fmt(stringify!(SNORM_INT_8), f),
+            Self::SNORM_INT_16 => Display::fmt(stringify!(SNORM_INT_16), f),
+            Self::UNORM_INT_8 => Display::fmt(stringify!(UNORM_INT_8), f),
+            Self::UNORM_INT_16 => Display::fmt(stringify!(UNORM_INT_16), f),
+            Self::UNORM_SHORT_565 => Display::fmt(stringify!(UNORM_SHORT_565), f),
+            Self::UNORM_SHORT_555 => Display::fmt(stringify!(UNORM_SHORT_555), f),
+            Self::UNORM_INT_101010 => Display::fmt(stringify!(UNORM_INT_101010), f),
+            Self::SIGNED_INT_8 => Display::fmt(stringify!(SIGNED_INT_8), f),
+            Self::SIGNED_INT_16 => Display::fmt(stringify!(SIGNED_INT_16), f),
+            Self::SIGNED_INT_32 => Display::fmt(stringify!(SIGNED_INT_32), f),
+            Self::UNSIGNED_INT_8 => Display::fmt(stringify!(UNSIGNED_INT_8), f),
+            Self::UNSIGNED_INT_16 => Display::fmt(stringify!(UNSIGNED_INT_16), f),
+            Self::UNSIGNED_INT_32 => Display::fmt(stringify!(UNSIGNED_INT_32), f),
+            Self::HALF_FLOAT => Display::fmt(stringify!(HALF_FLOAT), f),
+            Self::FLOAT => Display::fmt(stringify!(FLOAT), f),
+            Self::UNORM_INT_24 => Display::fmt(stringify!(UNORM_INT_24), f),
+            Self::UNORM_INT_101010_2 => Display::fmt(stringify!(UNORM_INT_101010_2), f),
+            Self::UNORM_INT_10_X6EXT => Display::fmt(stringify!(UNORM_INT_10_X6EXT), f),
+            Self::UNSIGNED_INT_RAW_10_EXT => Display::fmt(stringify!(UNSIGNED_INT_RAW_10_EXT), f),
+            Self::UNSIGNED_INT_RAW_12_EXT => Display::fmt(stringify!(UNSIGNED_INT_RAW_12_EXT), f),
+            Self::UNORM_INT_2_101010_EXT => Display::fmt(stringify!(UNORM_INT_2_101010_EXT), f),
+            Self::UNSIGNED_INT_10_X6EXT => Display::fmt(stringify!(UNSIGNED_INT_10_X6EXT), f),
+            Self::UNSIGNED_INT_12_X4EXT => Display::fmt(stringify!(UNSIGNED_INT_12_X4EXT), f),
+            Self::UNSIGNED_INT_14_X2EXT => Display::fmt(stringify!(UNSIGNED_INT_14_X2EXT), f),
+            Self::UNORM_INT_12_X4EXT => Display::fmt(stringify!(UNORM_INT_12_X4EXT), f),
+            Self::UNORM_INT_14_X2EXT => Display::fmt(stringify!(UNORM_INT_14_X2EXT), f),
+            x => write!(f, "{}({})", stringify!(ImageChannelDataType), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct FPRoundingMode(pub(crate) u32);
 impl FPRoundingMode {
     pub const RTE: Self = Self(0u32);
@@ -2370,18 +1332,19 @@ impl Word for FPRoundingMode {
         Self(word)
     }
 }
-impl Display for FPRoundingMode {
+impl Debug for FPRoundingMode {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::RTE => write!(f, "RTE"),
-            Self::RTZ => write!(f, "RTZ"),
-            Self::RTP => write!(f, "RTP"),
-            Self::RTN => write!(f, "RTN"),
-            x => write!(f, "{x}"),
+            Self::RTE => Display::fmt(stringify!(RTE), f),
+            Self::RTZ => Display::fmt(stringify!(RTZ), f),
+            Self::RTP => Display::fmt(stringify!(RTP), f),
+            Self::RTN => Display::fmt(stringify!(RTN), f),
+            x => write!(f, "{}({})", stringify!(FPRoundingMode), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct FPDenormMode(pub(crate) u32);
 impl FPDenormMode {
     pub const PRESERVE: Self = Self(0u32);
@@ -2393,16 +1356,17 @@ impl Word for FPDenormMode {
         Self(word)
     }
 }
-impl Display for FPDenormMode {
+impl Debug for FPDenormMode {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::PRESERVE => write!(f, "Preserve"),
-            Self::FLUSH_TO_ZERO => write!(f, "FlushToZero"),
-            x => write!(f, "{x}"),
+            Self::PRESERVE => Display::fmt(stringify!(PRESERVE), f),
+            Self::FLUSH_TO_ZERO => Display::fmt(stringify!(FLUSH_TO_ZERO), f),
+            x => write!(f, "{}({})", stringify!(FPDenormMode), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct QuantizationModes(pub(crate) u32);
 impl QuantizationModes {
     pub const TRN: Self = Self(0u32);
@@ -2420,22 +1384,23 @@ impl Word for QuantizationModes {
         Self(word)
     }
 }
-impl Display for QuantizationModes {
+impl Debug for QuantizationModes {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::TRN => write!(f, "TRN"),
-            Self::TRN_ZERO => write!(f, "TRN_ZERO"),
-            Self::RND => write!(f, "RND"),
-            Self::RND_ZERO => write!(f, "RND_ZERO"),
-            Self::RND_INF => write!(f, "RND_INF"),
-            Self::RND_MIN_INF => write!(f, "RND_MIN_INF"),
-            Self::RND_CONV => write!(f, "RND_CONV"),
-            Self::RND_CONV_ODD => write!(f, "RND_CONV_ODD"),
-            x => write!(f, "{x}"),
+            Self::TRN => Display::fmt(stringify!(TRN), f),
+            Self::TRN_ZERO => Display::fmt(stringify!(TRN_ZERO), f),
+            Self::RND => Display::fmt(stringify!(RND), f),
+            Self::RND_ZERO => Display::fmt(stringify!(RND_ZERO), f),
+            Self::RND_INF => Display::fmt(stringify!(RND_INF), f),
+            Self::RND_MIN_INF => Display::fmt(stringify!(RND_MIN_INF), f),
+            Self::RND_CONV => Display::fmt(stringify!(RND_CONV), f),
+            Self::RND_CONV_ODD => Display::fmt(stringify!(RND_CONV_ODD), f),
+            x => write!(f, "{}({})", stringify!(QuantizationModes), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct FPOperationMode(pub(crate) u32);
 impl FPOperationMode {
     pub const IEEE: Self = Self(0u32);
@@ -2447,16 +1412,17 @@ impl Word for FPOperationMode {
         Self(word)
     }
 }
-impl Display for FPOperationMode {
+impl Debug for FPOperationMode {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::IEEE => write!(f, "IEEE"),
-            Self::ALT => write!(f, "ALT"),
-            x => write!(f, "{x}"),
+            Self::IEEE => Display::fmt(stringify!(IEEE), f),
+            Self::ALT => Display::fmt(stringify!(ALT), f),
+            x => write!(f, "{}({})", stringify!(FPOperationMode), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct OverflowModes(pub(crate) u32);
 impl OverflowModes {
     pub const WRAP: Self = Self(0u32);
@@ -2470,18 +1436,19 @@ impl Word for OverflowModes {
         Self(word)
     }
 }
-impl Display for OverflowModes {
+impl Debug for OverflowModes {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::WRAP => write!(f, "WRAP"),
-            Self::SAT => write!(f, "SAT"),
-            Self::SAT_ZERO => write!(f, "SAT_ZERO"),
-            Self::SAT_SYM => write!(f, "SAT_SYM"),
-            x => write!(f, "{x}"),
+            Self::WRAP => Display::fmt(stringify!(WRAP), f),
+            Self::SAT => Display::fmt(stringify!(SAT), f),
+            Self::SAT_ZERO => Display::fmt(stringify!(SAT_ZERO), f),
+            Self::SAT_SYM => Display::fmt(stringify!(SAT_SYM), f),
+            x => write!(f, "{}({})", stringify!(OverflowModes), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct LinkageType(pub(crate) u32);
 impl LinkageType {
     pub const EXPORT: Self = Self(0u32);
@@ -2494,17 +1461,18 @@ impl Word for LinkageType {
         Self(word)
     }
 }
-impl Display for LinkageType {
+impl Debug for LinkageType {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::EXPORT => write!(f, "Export"),
-            Self::IMPORT => write!(f, "Import"),
-            Self::LINK_ONCE_ODR => write!(f, "LinkOnceODR"),
-            x => write!(f, "{x}"),
+            Self::EXPORT => Display::fmt(stringify!(EXPORT), f),
+            Self::IMPORT => Display::fmt(stringify!(IMPORT), f),
+            Self::LINK_ONCE_ODR => Display::fmt(stringify!(LINK_ONCE_ODR), f),
+            x => write!(f, "{}({})", stringify!(LinkageType), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct AccessQualifier(pub(crate) u32);
 impl AccessQualifier {
     pub const READ_ONLY: Self = Self(0u32);
@@ -2517,17 +1485,18 @@ impl Word for AccessQualifier {
         Self(word)
     }
 }
-impl Display for AccessQualifier {
+impl Debug for AccessQualifier {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::READ_ONLY => write!(f, "ReadOnly"),
-            Self::WRITE_ONLY => write!(f, "WriteOnly"),
-            Self::READ_WRITE => write!(f, "ReadWrite"),
-            x => write!(f, "{x}"),
+            Self::READ_ONLY => Display::fmt(stringify!(READ_ONLY), f),
+            Self::WRITE_ONLY => Display::fmt(stringify!(WRITE_ONLY), f),
+            Self::READ_WRITE => Display::fmt(stringify!(READ_WRITE), f),
+            x => write!(f, "{}({})", stringify!(AccessQualifier), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct HostAccessQualifier(pub(crate) u32);
 impl HostAccessQualifier {
     pub const NONE_INTEL: Self = Self(0u32);
@@ -2541,18 +1510,19 @@ impl Word for HostAccessQualifier {
         Self(word)
     }
 }
-impl Display for HostAccessQualifier {
+impl Debug for HostAccessQualifier {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::NONE_INTEL => write!(f, "NoneINTEL"),
-            Self::READ_INTEL => write!(f, "ReadINTEL"),
-            Self::WRITE_INTEL => write!(f, "WriteINTEL"),
-            Self::READ_WRITE_INTEL => write!(f, "ReadWriteINTEL"),
-            x => write!(f, "{x}"),
+            Self::NONE_INTEL => Display::fmt(stringify!(NONE_INTEL), f),
+            Self::READ_INTEL => Display::fmt(stringify!(READ_INTEL), f),
+            Self::WRITE_INTEL => Display::fmt(stringify!(WRITE_INTEL), f),
+            Self::READ_WRITE_INTEL => Display::fmt(stringify!(READ_WRITE_INTEL), f),
+            x => write!(f, "{}({})", stringify!(HostAccessQualifier), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct FunctionParameterAttribute(pub(crate) u32);
 impl FunctionParameterAttribute {
     pub const ZEXT: Self = Self(0u32);
@@ -2571,19 +1541,20 @@ impl Word for FunctionParameterAttribute {
         Self(word)
     }
 }
-impl Display for FunctionParameterAttribute {
+impl Debug for FunctionParameterAttribute {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::ZEXT => write!(f, "Zext"),
-            Self::SEXT => write!(f, "Sext"),
-            Self::BY_VAL => write!(f, "ByVal"),
-            Self::SRET => write!(f, "Sret"),
-            Self::NO_ALIAS => write!(f, "NoAlias"),
-            Self::NO_CAPTURE => write!(f, "NoCapture"),
-            Self::NO_WRITE => write!(f, "NoWrite"),
-            Self::NO_READ_WRITE => write!(f, "NoReadWrite"),
-            Self::RUNTIME_ALIGNED_ALTERA => write!(f, "RuntimeAlignedALTERA"),
-            x => write!(f, "{x}"),
+            Self::ZEXT => Display::fmt(stringify!(ZEXT), f),
+            Self::SEXT => Display::fmt(stringify!(SEXT), f),
+            Self::BY_VAL => Display::fmt(stringify!(BY_VAL), f),
+            Self::SRET => Display::fmt(stringify!(SRET), f),
+            Self::NO_ALIAS => Display::fmt(stringify!(NO_ALIAS), f),
+            Self::NO_CAPTURE => Display::fmt(stringify!(NO_CAPTURE), f),
+            Self::NO_WRITE => Display::fmt(stringify!(NO_WRITE), f),
+            Self::NO_READ_WRITE => Display::fmt(stringify!(NO_READ_WRITE), f),
+            Self::RUNTIME_ALIGNED_ALTERA => Display::fmt(stringify!(RUNTIME_ALIGNED_ALTERA), f),
+            x => write!(f, "{}({})", stringify!(FunctionParameterAttribute), x.0),
         }
     }
 }
@@ -3236,554 +2207,7 @@ impl<'a> DecorationOperands<'a> {
         }
     }
 }
-impl<'a> Display for DecorationOperands<'a> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Self::RelaxedPrecision => write!(f, "{}", stringify!(RelaxedPrecision)),
-            Self::SpecId {
-                specialization_constant_id,
-            } => {
-                write!(f, "{}", stringify!(SpecId))?;
-                write!(f, " {}", specialization_constant_id)?;
-                Ok(())
-            }
-            Self::Block => write!(f, "{}", stringify!(Block)),
-            Self::BufferBlock => write!(f, "{}", stringify!(BufferBlock)),
-            Self::RowMajor => write!(f, "{}", stringify!(RowMajor)),
-            Self::ColMajor => write!(f, "{}", stringify!(ColMajor)),
-            Self::ArrayStride { array_stride } => {
-                write!(f, "{}", stringify!(ArrayStride))?;
-                write!(f, " {}", array_stride)?;
-                Ok(())
-            }
-            Self::MatrixStride { matrix_stride } => {
-                write!(f, "{}", stringify!(MatrixStride))?;
-                write!(f, " {}", matrix_stride)?;
-                Ok(())
-            }
-            Self::GLSLShared => write!(f, "{}", stringify!(GLSLShared)),
-            Self::GLSLPacked => write!(f, "{}", stringify!(GLSLPacked)),
-            Self::CPacked => write!(f, "{}", stringify!(CPacked)),
-            Self::BuiltIn { built_in } => {
-                write!(f, "{}", stringify!(BuiltIn))?;
-                write!(f, " {}", built_in)?;
-                Ok(())
-            }
-            Self::NoPerspective => write!(f, "{}", stringify!(NoPerspective)),
-            Self::Flat => write!(f, "{}", stringify!(Flat)),
-            Self::Patch => write!(f, "{}", stringify!(Patch)),
-            Self::Centroid => write!(f, "{}", stringify!(Centroid)),
-            Self::Sample => write!(f, "{}", stringify!(Sample)),
-            Self::Invariant => write!(f, "{}", stringify!(Invariant)),
-            Self::Restrict => write!(f, "{}", stringify!(Restrict)),
-            Self::Aliased => write!(f, "{}", stringify!(Aliased)),
-            Self::Volatile => write!(f, "{}", stringify!(Volatile)),
-            Self::Constant => write!(f, "{}", stringify!(Constant)),
-            Self::Coherent => write!(f, "{}", stringify!(Coherent)),
-            Self::NonWritable => write!(f, "{}", stringify!(NonWritable)),
-            Self::NonReadable => write!(f, "{}", stringify!(NonReadable)),
-            Self::Uniform => write!(f, "{}", stringify!(Uniform)),
-            Self::UniformId { execution } => {
-                write!(f, "{}", stringify!(UniformId))?;
-                write!(f, " {}", execution)?;
-                Ok(())
-            }
-            Self::SaturatedConversion => write!(f, "{}", stringify!(SaturatedConversion)),
-            Self::Stream { stream_number } => {
-                write!(f, "{}", stringify!(Stream))?;
-                write!(f, " {}", stream_number)?;
-                Ok(())
-            }
-            Self::Location { location } => {
-                write!(f, "{}", stringify!(Location))?;
-                write!(f, " {}", location)?;
-                Ok(())
-            }
-            Self::Component { component } => {
-                write!(f, "{}", stringify!(Component))?;
-                write!(f, " {}", component)?;
-                Ok(())
-            }
-            Self::Index { index } => {
-                write!(f, "{}", stringify!(Index))?;
-                write!(f, " {}", index)?;
-                Ok(())
-            }
-            Self::Binding { binding_point } => {
-                write!(f, "{}", stringify!(Binding))?;
-                write!(f, " {}", binding_point)?;
-                Ok(())
-            }
-            Self::DescriptorSet { descriptor_set } => {
-                write!(f, "{}", stringify!(DescriptorSet))?;
-                write!(f, " {}", descriptor_set)?;
-                Ok(())
-            }
-            Self::Offset { byte_offset } => {
-                write!(f, "{}", stringify!(Offset))?;
-                write!(f, " {}", byte_offset)?;
-                Ok(())
-            }
-            Self::XfbBuffer { xfb_buffer_number } => {
-                write!(f, "{}", stringify!(XfbBuffer))?;
-                write!(f, " {}", xfb_buffer_number)?;
-                Ok(())
-            }
-            Self::XfbStride { xfb_stride } => {
-                write!(f, "{}", stringify!(XfbStride))?;
-                write!(f, " {}", xfb_stride)?;
-                Ok(())
-            }
-            Self::FuncParamAttr {
-                function_parameter_attribute,
-            } => {
-                write!(f, "{}", stringify!(FuncParamAttr))?;
-                write!(f, " {}", function_parameter_attribute)?;
-                Ok(())
-            }
-            Self::FPRoundingMode {
-                floating_point_rounding_mode,
-            } => {
-                write!(f, "{}", stringify!(FPRoundingMode))?;
-                write!(f, " {}", floating_point_rounding_mode)?;
-                Ok(())
-            }
-            Self::FPFastMathMode { fast_math_mode } => {
-                write!(f, "{}", stringify!(FPFastMathMode))?;
-                write!(f, " {}", fast_math_mode)?;
-                Ok(())
-            }
-            Self::LinkageAttributes { name, linkage_type } => {
-                write!(f, "{}", stringify!(LinkageAttributes))?;
-                write!(f, " {}", name)?;
-                write!(f, " {}", linkage_type)?;
-                Ok(())
-            }
-            Self::NoContraction => write!(f, "{}", stringify!(NoContraction)),
-            Self::InputAttachmentIndex { attachment_index } => {
-                write!(f, "{}", stringify!(InputAttachmentIndex))?;
-                write!(f, " {}", attachment_index)?;
-                Ok(())
-            }
-            Self::Alignment { alignment } => {
-                write!(f, "{}", stringify!(Alignment))?;
-                write!(f, " {}", alignment)?;
-                Ok(())
-            }
-            Self::MaxByteOffset { max_byte_offset } => {
-                write!(f, "{}", stringify!(MaxByteOffset))?;
-                write!(f, " {}", max_byte_offset)?;
-                Ok(())
-            }
-            Self::AlignmentId { alignment } => {
-                write!(f, "{}", stringify!(AlignmentId))?;
-                write!(f, " {}", alignment)?;
-                Ok(())
-            }
-            Self::MaxByteOffsetId { max_byte_offset } => {
-                write!(f, "{}", stringify!(MaxByteOffsetId))?;
-                write!(f, " {}", max_byte_offset)?;
-                Ok(())
-            }
-            Self::SaturatedToLargestFloat8NormalConversionEXT => write!(
-                f,
-                "{}",
-                stringify!(SaturatedToLargestFloat8NormalConversionEXT)
-            ),
-            Self::NoSignedWrap => write!(f, "{}", stringify!(NoSignedWrap)),
-            Self::NoUnsignedWrap => write!(f, "{}", stringify!(NoUnsignedWrap)),
-            Self::WeightTextureQCOM => write!(f, "{}", stringify!(WeightTextureQCOM)),
-            Self::BlockMatchTextureQCOM => write!(f, "{}", stringify!(BlockMatchTextureQCOM)),
-            Self::BlockMatchSamplerQCOM => write!(f, "{}", stringify!(BlockMatchSamplerQCOM)),
-            Self::ExplicitInterpAMD => write!(f, "{}", stringify!(ExplicitInterpAMD)),
-            Self::NodeSharesPayloadLimitsWithAMDX { payload_type } => {
-                write!(f, "{}", stringify!(NodeSharesPayloadLimitsWithAMDX))?;
-                write!(f, " {}", payload_type)?;
-                Ok(())
-            }
-            Self::NodeMaxPayloadsAMDX {
-                max_number_of_payloads,
-            } => {
-                write!(f, "{}", stringify!(NodeMaxPayloadsAMDX))?;
-                write!(f, " {}", max_number_of_payloads)?;
-                Ok(())
-            }
-            Self::TrackFinishWritingAMDX => write!(f, "{}", stringify!(TrackFinishWritingAMDX)),
-            Self::PayloadNodeNameAMDX { node_name } => {
-                write!(f, "{}", stringify!(PayloadNodeNameAMDX))?;
-                write!(f, " {}", node_name)?;
-                Ok(())
-            }
-            Self::PayloadNodeBaseIndexAMDX { base_index } => {
-                write!(f, "{}", stringify!(PayloadNodeBaseIndexAMDX))?;
-                write!(f, " {}", base_index)?;
-                Ok(())
-            }
-            Self::PayloadNodeSparseArrayAMDX => {
-                write!(f, "{}", stringify!(PayloadNodeSparseArrayAMDX))
-            }
-            Self::PayloadNodeArraySizeAMDX { array_size } => {
-                write!(f, "{}", stringify!(PayloadNodeArraySizeAMDX))?;
-                write!(f, " {}", array_size)?;
-                Ok(())
-            }
-            Self::PayloadDispatchIndirectAMDX => {
-                write!(f, "{}", stringify!(PayloadDispatchIndirectAMDX))
-            }
-            Self::ArrayStrideIdEXT { array_stride } => {
-                write!(f, "{}", stringify!(ArrayStrideIdEXT))?;
-                write!(f, " {}", array_stride)?;
-                Ok(())
-            }
-            Self::OffsetIdEXT { byte_offset } => {
-                write!(f, "{}", stringify!(OffsetIdEXT))?;
-                write!(f, " {}", byte_offset)?;
-                Ok(())
-            }
-            Self::UTFEncodedKHR => write!(f, "{}", stringify!(UTFEncodedKHR)),
-            Self::OverrideCoverageNV => write!(f, "{}", stringify!(OverrideCoverageNV)),
-            Self::PassthroughNV => write!(f, "{}", stringify!(PassthroughNV)),
-            Self::ViewportRelativeNV => write!(f, "{}", stringify!(ViewportRelativeNV)),
-            Self::SecondaryViewportRelativeNV { offset } => {
-                write!(f, "{}", stringify!(SecondaryViewportRelativeNV))?;
-                write!(f, " {}", offset)?;
-                Ok(())
-            }
-            Self::PerPrimitiveEXT => write!(f, "{}", stringify!(PerPrimitiveEXT)),
-            Self::PerViewNV => write!(f, "{}", stringify!(PerViewNV)),
-            Self::PerTaskNV => write!(f, "{}", stringify!(PerTaskNV)),
-            Self::PerVertexKHR => write!(f, "{}", stringify!(PerVertexKHR)),
-            Self::NonUniform => write!(f, "{}", stringify!(NonUniform)),
-            Self::RestrictPointer => write!(f, "{}", stringify!(RestrictPointer)),
-            Self::AliasedPointer => write!(f, "{}", stringify!(AliasedPointer)),
-            Self::MemberOffsetNV { member_offset } => {
-                write!(f, "{}", stringify!(MemberOffsetNV))?;
-                write!(f, " {}", member_offset)?;
-                Ok(())
-            }
-            Self::HitObjectShaderRecordBufferNV => {
-                write!(f, "{}", stringify!(HitObjectShaderRecordBufferNV))
-            }
-            Self::HitObjectShaderRecordBufferEXT => {
-                write!(f, "{}", stringify!(HitObjectShaderRecordBufferEXT))
-            }
-            Self::BankNV { bank } => {
-                write!(f, "{}", stringify!(BankNV))?;
-                write!(f, " {}", bank)?;
-                Ok(())
-            }
-            Self::BindlessSamplerNV => write!(f, "{}", stringify!(BindlessSamplerNV)),
-            Self::BindlessImageNV => write!(f, "{}", stringify!(BindlessImageNV)),
-            Self::BoundSamplerNV => write!(f, "{}", stringify!(BoundSamplerNV)),
-            Self::BoundImageNV => write!(f, "{}", stringify!(BoundImageNV)),
-            Self::SIMTCallINTEL { n } => {
-                write!(f, "{}", stringify!(SIMTCallINTEL))?;
-                write!(f, " {}", n)?;
-                Ok(())
-            }
-            Self::ReferencedIndirectlyINTEL => {
-                write!(f, "{}", stringify!(ReferencedIndirectlyINTEL))
-            }
-            Self::ClobberINTEL { register } => {
-                write!(f, "{}", stringify!(ClobberINTEL))?;
-                write!(f, " {}", register)?;
-                Ok(())
-            }
-            Self::SideEffectsINTEL => write!(f, "{}", stringify!(SideEffectsINTEL)),
-            Self::VectorComputeVariableINTEL => {
-                write!(f, "{}", stringify!(VectorComputeVariableINTEL))
-            }
-            Self::FuncParamIOKindINTEL { kind } => {
-                write!(f, "{}", stringify!(FuncParamIOKindINTEL))?;
-                write!(f, " {}", kind)?;
-                Ok(())
-            }
-            Self::VectorComputeFunctionINTEL => {
-                write!(f, "{}", stringify!(VectorComputeFunctionINTEL))
-            }
-            Self::StackCallINTEL => write!(f, "{}", stringify!(StackCallINTEL)),
-            Self::GlobalVariableOffsetINTEL { offset } => {
-                write!(f, "{}", stringify!(GlobalVariableOffsetINTEL))?;
-                write!(f, " {}", offset)?;
-                Ok(())
-            }
-            Self::CounterBuffer { counter_buffer } => {
-                write!(f, "{}", stringify!(CounterBuffer))?;
-                write!(f, " {}", counter_buffer)?;
-                Ok(())
-            }
-            Self::UserSemantic { semantic } => {
-                write!(f, "{}", stringify!(UserSemantic))?;
-                write!(f, " {}", semantic)?;
-                Ok(())
-            }
-            Self::UserTypeGOOGLE { user_type } => {
-                write!(f, "{}", stringify!(UserTypeGOOGLE))?;
-                write!(f, " {}", user_type)?;
-                Ok(())
-            }
-            Self::FunctionRoundingModeINTEL {
-                target_width,
-                fp_rounding_mode,
-            } => {
-                write!(f, "{}", stringify!(FunctionRoundingModeINTEL))?;
-                write!(f, " {}", target_width)?;
-                write!(f, " {}", fp_rounding_mode)?;
-                Ok(())
-            }
-            Self::FunctionDenormModeINTEL {
-                target_width,
-                fp_denorm_mode,
-            } => {
-                write!(f, "{}", stringify!(FunctionDenormModeINTEL))?;
-                write!(f, " {}", target_width)?;
-                write!(f, " {}", fp_denorm_mode)?;
-                Ok(())
-            }
-            Self::RegisterALTERA => write!(f, "{}", stringify!(RegisterALTERA)),
-            Self::MemoryALTERA { memory_type } => {
-                write!(f, "{}", stringify!(MemoryALTERA))?;
-                write!(f, " {}", memory_type)?;
-                Ok(())
-            }
-            Self::NumbanksALTERA { banks } => {
-                write!(f, "{}", stringify!(NumbanksALTERA))?;
-                write!(f, " {}", banks)?;
-                Ok(())
-            }
-            Self::BankwidthALTERA { bank_width } => {
-                write!(f, "{}", stringify!(BankwidthALTERA))?;
-                write!(f, " {}", bank_width)?;
-                Ok(())
-            }
-            Self::MaxPrivateCopiesALTERA { maximum_copies } => {
-                write!(f, "{}", stringify!(MaxPrivateCopiesALTERA))?;
-                write!(f, " {}", maximum_copies)?;
-                Ok(())
-            }
-            Self::SinglepumpALTERA => write!(f, "{}", stringify!(SinglepumpALTERA)),
-            Self::DoublepumpALTERA => write!(f, "{}", stringify!(DoublepumpALTERA)),
-            Self::MaxReplicatesALTERA { maximum_replicates } => {
-                write!(f, "{}", stringify!(MaxReplicatesALTERA))?;
-                write!(f, " {}", maximum_replicates)?;
-                Ok(())
-            }
-            Self::SimpleDualPortALTERA => write!(f, "{}", stringify!(SimpleDualPortALTERA)),
-            Self::MergeALTERA {
-                merge_key,
-                merge_type,
-            } => {
-                write!(f, "{}", stringify!(MergeALTERA))?;
-                write!(f, " {}", merge_key)?;
-                write!(f, " {}", merge_type)?;
-                Ok(())
-            }
-            Self::BankBitsALTERA { bank_bits } => {
-                write!(f, "{}", stringify!(BankBitsALTERA))?;
-                write!(f, " {}", bank_bits)?;
-                Ok(())
-            }
-            Self::ForcePow2DepthALTERA { force_key } => {
-                write!(f, "{}", stringify!(ForcePow2DepthALTERA))?;
-                write!(f, " {}", force_key)?;
-                Ok(())
-            }
-            Self::StridesizeALTERA { stride_size } => {
-                write!(f, "{}", stringify!(StridesizeALTERA))?;
-                write!(f, " {}", stride_size)?;
-                Ok(())
-            }
-            Self::WordsizeALTERA { word_size } => {
-                write!(f, "{}", stringify!(WordsizeALTERA))?;
-                write!(f, " {}", word_size)?;
-                Ok(())
-            }
-            Self::TrueDualPortALTERA => write!(f, "{}", stringify!(TrueDualPortALTERA)),
-            Self::BurstCoalesceALTERA => write!(f, "{}", stringify!(BurstCoalesceALTERA)),
-            Self::CacheSizeALTERA {
-                cache_size_in_bytes,
-            } => {
-                write!(f, "{}", stringify!(CacheSizeALTERA))?;
-                write!(f, " {}", cache_size_in_bytes)?;
-                Ok(())
-            }
-            Self::DontStaticallyCoalesceALTERA => {
-                write!(f, "{}", stringify!(DontStaticallyCoalesceALTERA))
-            }
-            Self::PrefetchALTERA {
-                prefetcher_size_in_bytes,
-            } => {
-                write!(f, "{}", stringify!(PrefetchALTERA))?;
-                write!(f, " {}", prefetcher_size_in_bytes)?;
-                Ok(())
-            }
-            Self::StallEnableALTERA => write!(f, "{}", stringify!(StallEnableALTERA)),
-            Self::FuseLoopsInFunctionALTERA => {
-                write!(f, "{}", stringify!(FuseLoopsInFunctionALTERA))
-            }
-            Self::MathOpDSPModeALTERA { mode, propagate } => {
-                write!(f, "{}", stringify!(MathOpDSPModeALTERA))?;
-                write!(f, " {}", mode)?;
-                write!(f, " {}", propagate)?;
-                Ok(())
-            }
-            Self::AliasScopeINTEL {
-                aliasing_scopes_list,
-            } => {
-                write!(f, "{}", stringify!(AliasScopeINTEL))?;
-                write!(f, " {}", aliasing_scopes_list)?;
-                Ok(())
-            }
-            Self::NoAliasINTEL {
-                aliasing_scopes_list,
-            } => {
-                write!(f, "{}", stringify!(NoAliasINTEL))?;
-                write!(f, " {}", aliasing_scopes_list)?;
-                Ok(())
-            }
-            Self::InitiationIntervalALTERA { cycles } => {
-                write!(f, "{}", stringify!(InitiationIntervalALTERA))?;
-                write!(f, " {}", cycles)?;
-                Ok(())
-            }
-            Self::MaxConcurrencyALTERA { invocations } => {
-                write!(f, "{}", stringify!(MaxConcurrencyALTERA))?;
-                write!(f, " {}", invocations)?;
-                Ok(())
-            }
-            Self::PipelineEnableALTERA { enable } => {
-                write!(f, "{}", stringify!(PipelineEnableALTERA))?;
-                write!(f, " {}", enable)?;
-                Ok(())
-            }
-            Self::BufferLocationALTERA { buffer_location_id } => {
-                write!(f, "{}", stringify!(BufferLocationALTERA))?;
-                write!(f, " {}", buffer_location_id)?;
-                Ok(())
-            }
-            Self::IOPipeStorageALTERA { io_pipe_id } => {
-                write!(f, "{}", stringify!(IOPipeStorageALTERA))?;
-                write!(f, " {}", io_pipe_id)?;
-                Ok(())
-            }
-            Self::FunctionFloatingPointModeINTEL {
-                target_width,
-                fp_operation_mode,
-            } => {
-                write!(f, "{}", stringify!(FunctionFloatingPointModeINTEL))?;
-                write!(f, " {}", target_width)?;
-                write!(f, " {}", fp_operation_mode)?;
-                Ok(())
-            }
-            Self::SingleElementVectorINTEL => write!(f, "{}", stringify!(SingleElementVectorINTEL)),
-            Self::VectorComputeCallableFunctionINTEL => {
-                write!(f, "{}", stringify!(VectorComputeCallableFunctionINTEL))
-            }
-            Self::MediaBlockIOINTEL => write!(f, "{}", stringify!(MediaBlockIOINTEL)),
-            Self::StallFreeALTERA => write!(f, "{}", stringify!(StallFreeALTERA)),
-            Self::FPMaxErrorDecorationINTEL { max_error } => {
-                write!(f, "{}", stringify!(FPMaxErrorDecorationINTEL))?;
-                write!(f, " {}", max_error)?;
-                Ok(())
-            }
-            Self::LatencyControlLabelALTERA { latency_label } => {
-                write!(f, "{}", stringify!(LatencyControlLabelALTERA))?;
-                write!(f, " {}", latency_label)?;
-                Ok(())
-            }
-            Self::LatencyControlConstraintALTERA {
-                relative_to,
-                control_type,
-                relative_cycle,
-            } => {
-                write!(f, "{}", stringify!(LatencyControlConstraintALTERA))?;
-                write!(f, " {}", relative_to)?;
-                write!(f, " {}", control_type)?;
-                write!(f, " {}", relative_cycle)?;
-                Ok(())
-            }
-            Self::ConduitKernelArgumentALTERA => {
-                write!(f, "{}", stringify!(ConduitKernelArgumentALTERA))
-            }
-            Self::RegisterMapKernelArgumentALTERA => {
-                write!(f, "{}", stringify!(RegisterMapKernelArgumentALTERA))
-            }
-            Self::MMHostInterfaceAddressWidthALTERA { address_width } => {
-                write!(f, "{}", stringify!(MMHostInterfaceAddressWidthALTERA))?;
-                write!(f, " {}", address_width)?;
-                Ok(())
-            }
-            Self::MMHostInterfaceDataWidthALTERA { data_width } => {
-                write!(f, "{}", stringify!(MMHostInterfaceDataWidthALTERA))?;
-                write!(f, " {}", data_width)?;
-                Ok(())
-            }
-            Self::MMHostInterfaceLatencyALTERA { latency } => {
-                write!(f, "{}", stringify!(MMHostInterfaceLatencyALTERA))?;
-                write!(f, " {}", latency)?;
-                Ok(())
-            }
-            Self::MMHostInterfaceReadWriteModeALTERA { read_write_mode } => {
-                write!(f, "{}", stringify!(MMHostInterfaceReadWriteModeALTERA))?;
-                write!(f, " {}", read_write_mode)?;
-                Ok(())
-            }
-            Self::MMHostInterfaceMaxBurstALTERA { max_burst_count } => {
-                write!(f, "{}", stringify!(MMHostInterfaceMaxBurstALTERA))?;
-                write!(f, " {}", max_burst_count)?;
-                Ok(())
-            }
-            Self::MMHostInterfaceWaitRequestALTERA { waitrequest } => {
-                write!(f, "{}", stringify!(MMHostInterfaceWaitRequestALTERA))?;
-                write!(f, " {}", waitrequest)?;
-                Ok(())
-            }
-            Self::StableKernelArgumentALTERA => {
-                write!(f, "{}", stringify!(StableKernelArgumentALTERA))
-            }
-            Self::HostAccessINTEL { access, name } => {
-                write!(f, "{}", stringify!(HostAccessINTEL))?;
-                write!(f, " {}", access)?;
-                write!(f, " {}", name)?;
-                Ok(())
-            }
-            Self::InitModeALTERA { trigger } => {
-                write!(f, "{}", stringify!(InitModeALTERA))?;
-                write!(f, " {}", trigger)?;
-                Ok(())
-            }
-            Self::ImplementInRegisterMapALTERA { value } => {
-                write!(f, "{}", stringify!(ImplementInRegisterMapALTERA))?;
-                write!(f, " {}", value)?;
-                Ok(())
-            }
-            Self::ConditionalINTEL { condition } => {
-                write!(f, "{}", stringify!(ConditionalINTEL))?;
-                write!(f, " {}", condition)?;
-                Ok(())
-            }
-            Self::CacheControlLoadINTEL {
-                cache_level,
-                cache_control,
-            } => {
-                write!(f, "{}", stringify!(CacheControlLoadINTEL))?;
-                write!(f, " {}", cache_level)?;
-                write!(f, " {}", cache_control)?;
-                Ok(())
-            }
-            Self::CacheControlStoreINTEL {
-                cache_level,
-                cache_control,
-            } => {
-                write!(f, "{}", stringify!(CacheControlStoreINTEL))?;
-                write!(f, " {}", cache_level)?;
-                write!(f, " {}", cache_control)?;
-                Ok(())
-            }
-        }
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Decoration(pub(crate) u32);
 impl Decoration {
     pub const RELAXED_PRECISION: Self = Self(0u32);
@@ -3943,180 +2367,240 @@ impl Word for Decoration {
         Self(word)
     }
 }
-impl Display for Decoration {
+impl Debug for Decoration {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::RELAXED_PRECISION => write!(f, "RelaxedPrecision"),
-            Self::SPEC_ID => write!(f, "SpecId"),
-            Self::BLOCK => write!(f, "Block"),
-            Self::BUFFER_BLOCK => write!(f, "BufferBlock"),
-            Self::ROW_MAJOR => write!(f, "RowMajor"),
-            Self::COL_MAJOR => write!(f, "ColMajor"),
-            Self::ARRAY_STRIDE => write!(f, "ArrayStride"),
-            Self::MATRIX_STRIDE => write!(f, "MatrixStride"),
-            Self::GLSLSHARED => write!(f, "GLSLShared"),
-            Self::GLSLPACKED => write!(f, "GLSLPacked"),
-            Self::CPACKED => write!(f, "CPacked"),
-            Self::BUILT_IN => write!(f, "BuiltIn"),
-            Self::NO_PERSPECTIVE => write!(f, "NoPerspective"),
-            Self::FLAT => write!(f, "Flat"),
-            Self::PATCH => write!(f, "Patch"),
-            Self::CENTROID => write!(f, "Centroid"),
-            Self::SAMPLE => write!(f, "Sample"),
-            Self::INVARIANT => write!(f, "Invariant"),
-            Self::RESTRICT => write!(f, "Restrict"),
-            Self::ALIASED => write!(f, "Aliased"),
-            Self::VOLATILE => write!(f, "Volatile"),
-            Self::CONSTANT => write!(f, "Constant"),
-            Self::COHERENT => write!(f, "Coherent"),
-            Self::NON_WRITABLE => write!(f, "NonWritable"),
-            Self::NON_READABLE => write!(f, "NonReadable"),
-            Self::UNIFORM => write!(f, "Uniform"),
-            Self::UNIFORM_ID => write!(f, "UniformId"),
-            Self::SATURATED_CONVERSION => write!(f, "SaturatedConversion"),
-            Self::STREAM => write!(f, "Stream"),
-            Self::LOCATION => write!(f, "Location"),
-            Self::COMPONENT => write!(f, "Component"),
-            Self::INDEX => write!(f, "Index"),
-            Self::BINDING => write!(f, "Binding"),
-            Self::DESCRIPTOR_SET => write!(f, "DescriptorSet"),
-            Self::OFFSET => write!(f, "Offset"),
-            Self::XFB_BUFFER => write!(f, "XfbBuffer"),
-            Self::XFB_STRIDE => write!(f, "XfbStride"),
-            Self::FUNC_PARAM_ATTR => write!(f, "FuncParamAttr"),
-            Self::FPROUNDING_MODE => write!(f, "FPRoundingMode"),
-            Self::FPFAST_MATH_MODE => write!(f, "FPFastMathMode"),
-            Self::LINKAGE_ATTRIBUTES => write!(f, "LinkageAttributes"),
-            Self::NO_CONTRACTION => write!(f, "NoContraction"),
-            Self::INPUT_ATTACHMENT_INDEX => write!(f, "InputAttachmentIndex"),
-            Self::ALIGNMENT => write!(f, "Alignment"),
-            Self::MAX_BYTE_OFFSET => write!(f, "MaxByteOffset"),
-            Self::ALIGNMENT_ID => write!(f, "AlignmentId"),
-            Self::MAX_BYTE_OFFSET_ID => write!(f, "MaxByteOffsetId"),
-            Self::SATURATED_TO_LARGEST_FLOAT_8_NORMAL_CONVERSION_EXT => {
-                write!(f, "SaturatedToLargestFloat8NormalConversionEXT")
-            }
-            Self::NO_SIGNED_WRAP => write!(f, "NoSignedWrap"),
-            Self::NO_UNSIGNED_WRAP => write!(f, "NoUnsignedWrap"),
-            Self::WEIGHT_TEXTURE_QCOM => write!(f, "WeightTextureQCOM"),
-            Self::BLOCK_MATCH_TEXTURE_QCOM => write!(f, "BlockMatchTextureQCOM"),
-            Self::BLOCK_MATCH_SAMPLER_QCOM => write!(f, "BlockMatchSamplerQCOM"),
-            Self::EXPLICIT_INTERP_AMD => write!(f, "ExplicitInterpAMD"),
+            Self::RELAXED_PRECISION => Display::fmt(stringify!(RELAXED_PRECISION), f),
+            Self::SPEC_ID => Display::fmt(stringify!(SPEC_ID), f),
+            Self::BLOCK => Display::fmt(stringify!(BLOCK), f),
+            Self::BUFFER_BLOCK => Display::fmt(stringify!(BUFFER_BLOCK), f),
+            Self::ROW_MAJOR => Display::fmt(stringify!(ROW_MAJOR), f),
+            Self::COL_MAJOR => Display::fmt(stringify!(COL_MAJOR), f),
+            Self::ARRAY_STRIDE => Display::fmt(stringify!(ARRAY_STRIDE), f),
+            Self::MATRIX_STRIDE => Display::fmt(stringify!(MATRIX_STRIDE), f),
+            Self::GLSLSHARED => Display::fmt(stringify!(GLSLSHARED), f),
+            Self::GLSLPACKED => Display::fmt(stringify!(GLSLPACKED), f),
+            Self::CPACKED => Display::fmt(stringify!(CPACKED), f),
+            Self::BUILT_IN => Display::fmt(stringify!(BUILT_IN), f),
+            Self::NO_PERSPECTIVE => Display::fmt(stringify!(NO_PERSPECTIVE), f),
+            Self::FLAT => Display::fmt(stringify!(FLAT), f),
+            Self::PATCH => Display::fmt(stringify!(PATCH), f),
+            Self::CENTROID => Display::fmt(stringify!(CENTROID), f),
+            Self::SAMPLE => Display::fmt(stringify!(SAMPLE), f),
+            Self::INVARIANT => Display::fmt(stringify!(INVARIANT), f),
+            Self::RESTRICT => Display::fmt(stringify!(RESTRICT), f),
+            Self::ALIASED => Display::fmt(stringify!(ALIASED), f),
+            Self::VOLATILE => Display::fmt(stringify!(VOLATILE), f),
+            Self::CONSTANT => Display::fmt(stringify!(CONSTANT), f),
+            Self::COHERENT => Display::fmt(stringify!(COHERENT), f),
+            Self::NON_WRITABLE => Display::fmt(stringify!(NON_WRITABLE), f),
+            Self::NON_READABLE => Display::fmt(stringify!(NON_READABLE), f),
+            Self::UNIFORM => Display::fmt(stringify!(UNIFORM), f),
+            Self::UNIFORM_ID => Display::fmt(stringify!(UNIFORM_ID), f),
+            Self::SATURATED_CONVERSION => Display::fmt(stringify!(SATURATED_CONVERSION), f),
+            Self::STREAM => Display::fmt(stringify!(STREAM), f),
+            Self::LOCATION => Display::fmt(stringify!(LOCATION), f),
+            Self::COMPONENT => Display::fmt(stringify!(COMPONENT), f),
+            Self::INDEX => Display::fmt(stringify!(INDEX), f),
+            Self::BINDING => Display::fmt(stringify!(BINDING), f),
+            Self::DESCRIPTOR_SET => Display::fmt(stringify!(DESCRIPTOR_SET), f),
+            Self::OFFSET => Display::fmt(stringify!(OFFSET), f),
+            Self::XFB_BUFFER => Display::fmt(stringify!(XFB_BUFFER), f),
+            Self::XFB_STRIDE => Display::fmt(stringify!(XFB_STRIDE), f),
+            Self::FUNC_PARAM_ATTR => Display::fmt(stringify!(FUNC_PARAM_ATTR), f),
+            Self::FPROUNDING_MODE => Display::fmt(stringify!(FPROUNDING_MODE), f),
+            Self::FPFAST_MATH_MODE => Display::fmt(stringify!(FPFAST_MATH_MODE), f),
+            Self::LINKAGE_ATTRIBUTES => Display::fmt(stringify!(LINKAGE_ATTRIBUTES), f),
+            Self::NO_CONTRACTION => Display::fmt(stringify!(NO_CONTRACTION), f),
+            Self::INPUT_ATTACHMENT_INDEX => Display::fmt(stringify!(INPUT_ATTACHMENT_INDEX), f),
+            Self::ALIGNMENT => Display::fmt(stringify!(ALIGNMENT), f),
+            Self::MAX_BYTE_OFFSET => Display::fmt(stringify!(MAX_BYTE_OFFSET), f),
+            Self::ALIGNMENT_ID => Display::fmt(stringify!(ALIGNMENT_ID), f),
+            Self::MAX_BYTE_OFFSET_ID => Display::fmt(stringify!(MAX_BYTE_OFFSET_ID), f),
+            Self::SATURATED_TO_LARGEST_FLOAT_8_NORMAL_CONVERSION_EXT => Display::fmt(
+                stringify!(SATURATED_TO_LARGEST_FLOAT_8_NORMAL_CONVERSION_EXT),
+                f,
+            ),
+            Self::NO_SIGNED_WRAP => Display::fmt(stringify!(NO_SIGNED_WRAP), f),
+            Self::NO_UNSIGNED_WRAP => Display::fmt(stringify!(NO_UNSIGNED_WRAP), f),
+            Self::WEIGHT_TEXTURE_QCOM => Display::fmt(stringify!(WEIGHT_TEXTURE_QCOM), f),
+            Self::BLOCK_MATCH_TEXTURE_QCOM => Display::fmt(stringify!(BLOCK_MATCH_TEXTURE_QCOM), f),
+            Self::BLOCK_MATCH_SAMPLER_QCOM => Display::fmt(stringify!(BLOCK_MATCH_SAMPLER_QCOM), f),
+            Self::EXPLICIT_INTERP_AMD => Display::fmt(stringify!(EXPLICIT_INTERP_AMD), f),
             Self::NODE_SHARES_PAYLOAD_LIMITS_WITH_AMDX => {
-                write!(f, "NodeSharesPayloadLimitsWithAMDX")
+                Display::fmt(stringify!(NODE_SHARES_PAYLOAD_LIMITS_WITH_AMDX), f)
             }
-            Self::NODE_MAX_PAYLOADS_AMDX => write!(f, "NodeMaxPayloadsAMDX"),
-            Self::TRACK_FINISH_WRITING_AMDX => write!(f, "TrackFinishWritingAMDX"),
-            Self::PAYLOAD_NODE_NAME_AMDX => write!(f, "PayloadNodeNameAMDX"),
-            Self::PAYLOAD_NODE_BASE_INDEX_AMDX => write!(f, "PayloadNodeBaseIndexAMDX"),
-            Self::PAYLOAD_NODE_SPARSE_ARRAY_AMDX => write!(f, "PayloadNodeSparseArrayAMDX"),
-            Self::PAYLOAD_NODE_ARRAY_SIZE_AMDX => write!(f, "PayloadNodeArraySizeAMDX"),
-            Self::PAYLOAD_DISPATCH_INDIRECT_AMDX => write!(f, "PayloadDispatchIndirectAMDX"),
-            Self::ARRAY_STRIDE_ID_EXT => write!(f, "ArrayStrideIdEXT"),
-            Self::OFFSET_ID_EXT => write!(f, "OffsetIdEXT"),
-            Self::UTFENCODED_KHR => write!(f, "UTFEncodedKHR"),
-            Self::OVERRIDE_COVERAGE_NV => write!(f, "OverrideCoverageNV"),
-            Self::PASSTHROUGH_NV => write!(f, "PassthroughNV"),
-            Self::VIEWPORT_RELATIVE_NV => write!(f, "ViewportRelativeNV"),
-            Self::SECONDARY_VIEWPORT_RELATIVE_NV => write!(f, "SecondaryViewportRelativeNV"),
-            Self::PER_PRIMITIVE_EXT => write!(f, "PerPrimitiveEXT"),
-            Self::PER_VIEW_NV => write!(f, "PerViewNV"),
-            Self::PER_TASK_NV => write!(f, "PerTaskNV"),
-            Self::PER_VERTEX_KHR => write!(f, "PerVertexKHR"),
-            Self::NON_UNIFORM => write!(f, "NonUniform"),
-            Self::RESTRICT_POINTER => write!(f, "RestrictPointer"),
-            Self::ALIASED_POINTER => write!(f, "AliasedPointer"),
-            Self::MEMBER_OFFSET_NV => write!(f, "MemberOffsetNV"),
-            Self::HIT_OBJECT_SHADER_RECORD_BUFFER_NV => write!(f, "HitObjectShaderRecordBufferNV"),
+            Self::NODE_MAX_PAYLOADS_AMDX => Display::fmt(stringify!(NODE_MAX_PAYLOADS_AMDX), f),
+            Self::TRACK_FINISH_WRITING_AMDX => {
+                Display::fmt(stringify!(TRACK_FINISH_WRITING_AMDX), f)
+            }
+            Self::PAYLOAD_NODE_NAME_AMDX => Display::fmt(stringify!(PAYLOAD_NODE_NAME_AMDX), f),
+            Self::PAYLOAD_NODE_BASE_INDEX_AMDX => {
+                Display::fmt(stringify!(PAYLOAD_NODE_BASE_INDEX_AMDX), f)
+            }
+            Self::PAYLOAD_NODE_SPARSE_ARRAY_AMDX => {
+                Display::fmt(stringify!(PAYLOAD_NODE_SPARSE_ARRAY_AMDX), f)
+            }
+            Self::PAYLOAD_NODE_ARRAY_SIZE_AMDX => {
+                Display::fmt(stringify!(PAYLOAD_NODE_ARRAY_SIZE_AMDX), f)
+            }
+            Self::PAYLOAD_DISPATCH_INDIRECT_AMDX => {
+                Display::fmt(stringify!(PAYLOAD_DISPATCH_INDIRECT_AMDX), f)
+            }
+            Self::ARRAY_STRIDE_ID_EXT => Display::fmt(stringify!(ARRAY_STRIDE_ID_EXT), f),
+            Self::OFFSET_ID_EXT => Display::fmt(stringify!(OFFSET_ID_EXT), f),
+            Self::UTFENCODED_KHR => Display::fmt(stringify!(UTFENCODED_KHR), f),
+            Self::OVERRIDE_COVERAGE_NV => Display::fmt(stringify!(OVERRIDE_COVERAGE_NV), f),
+            Self::PASSTHROUGH_NV => Display::fmt(stringify!(PASSTHROUGH_NV), f),
+            Self::VIEWPORT_RELATIVE_NV => Display::fmt(stringify!(VIEWPORT_RELATIVE_NV), f),
+            Self::SECONDARY_VIEWPORT_RELATIVE_NV => {
+                Display::fmt(stringify!(SECONDARY_VIEWPORT_RELATIVE_NV), f)
+            }
+            Self::PER_PRIMITIVE_EXT => Display::fmt(stringify!(PER_PRIMITIVE_EXT), f),
+            Self::PER_VIEW_NV => Display::fmt(stringify!(PER_VIEW_NV), f),
+            Self::PER_TASK_NV => Display::fmt(stringify!(PER_TASK_NV), f),
+            Self::PER_VERTEX_KHR => Display::fmt(stringify!(PER_VERTEX_KHR), f),
+            Self::NON_UNIFORM => Display::fmt(stringify!(NON_UNIFORM), f),
+            Self::RESTRICT_POINTER => Display::fmt(stringify!(RESTRICT_POINTER), f),
+            Self::ALIASED_POINTER => Display::fmt(stringify!(ALIASED_POINTER), f),
+            Self::MEMBER_OFFSET_NV => Display::fmt(stringify!(MEMBER_OFFSET_NV), f),
+            Self::HIT_OBJECT_SHADER_RECORD_BUFFER_NV => {
+                Display::fmt(stringify!(HIT_OBJECT_SHADER_RECORD_BUFFER_NV), f)
+            }
             Self::HIT_OBJECT_SHADER_RECORD_BUFFER_EXT => {
-                write!(f, "HitObjectShaderRecordBufferEXT")
+                Display::fmt(stringify!(HIT_OBJECT_SHADER_RECORD_BUFFER_EXT), f)
             }
-            Self::BANK_NV => write!(f, "BankNV"),
-            Self::BINDLESS_SAMPLER_NV => write!(f, "BindlessSamplerNV"),
-            Self::BINDLESS_IMAGE_NV => write!(f, "BindlessImageNV"),
-            Self::BOUND_SAMPLER_NV => write!(f, "BoundSamplerNV"),
-            Self::BOUND_IMAGE_NV => write!(f, "BoundImageNV"),
-            Self::SIMTCALL_INTEL => write!(f, "SIMTCallINTEL"),
-            Self::REFERENCED_INDIRECTLY_INTEL => write!(f, "ReferencedIndirectlyINTEL"),
-            Self::CLOBBER_INTEL => write!(f, "ClobberINTEL"),
-            Self::SIDE_EFFECTS_INTEL => write!(f, "SideEffectsINTEL"),
-            Self::VECTOR_COMPUTE_VARIABLE_INTEL => write!(f, "VectorComputeVariableINTEL"),
-            Self::FUNC_PARAM_IOKIND_INTEL => write!(f, "FuncParamIOKindINTEL"),
-            Self::VECTOR_COMPUTE_FUNCTION_INTEL => write!(f, "VectorComputeFunctionINTEL"),
-            Self::STACK_CALL_INTEL => write!(f, "StackCallINTEL"),
-            Self::GLOBAL_VARIABLE_OFFSET_INTEL => write!(f, "GlobalVariableOffsetINTEL"),
-            Self::COUNTER_BUFFER => write!(f, "CounterBuffer"),
-            Self::USER_SEMANTIC => write!(f, "UserSemantic"),
-            Self::USER_TYPE_GOOGLE => write!(f, "UserTypeGOOGLE"),
-            Self::FUNCTION_ROUNDING_MODE_INTEL => write!(f, "FunctionRoundingModeINTEL"),
-            Self::FUNCTION_DENORM_MODE_INTEL => write!(f, "FunctionDenormModeINTEL"),
-            Self::REGISTER_ALTERA => write!(f, "RegisterALTERA"),
-            Self::MEMORY_ALTERA => write!(f, "MemoryALTERA"),
-            Self::NUMBANKS_ALTERA => write!(f, "NumbanksALTERA"),
-            Self::BANKWIDTH_ALTERA => write!(f, "BankwidthALTERA"),
-            Self::MAX_PRIVATE_COPIES_ALTERA => write!(f, "MaxPrivateCopiesALTERA"),
-            Self::SINGLEPUMP_ALTERA => write!(f, "SinglepumpALTERA"),
-            Self::DOUBLEPUMP_ALTERA => write!(f, "DoublepumpALTERA"),
-            Self::MAX_REPLICATES_ALTERA => write!(f, "MaxReplicatesALTERA"),
-            Self::SIMPLE_DUAL_PORT_ALTERA => write!(f, "SimpleDualPortALTERA"),
-            Self::MERGE_ALTERA => write!(f, "MergeALTERA"),
-            Self::BANK_BITS_ALTERA => write!(f, "BankBitsALTERA"),
-            Self::FORCE_POW_2DEPTH_ALTERA => write!(f, "ForcePow2DepthALTERA"),
-            Self::STRIDESIZE_ALTERA => write!(f, "StridesizeALTERA"),
-            Self::WORDSIZE_ALTERA => write!(f, "WordsizeALTERA"),
-            Self::TRUE_DUAL_PORT_ALTERA => write!(f, "TrueDualPortALTERA"),
-            Self::BURST_COALESCE_ALTERA => write!(f, "BurstCoalesceALTERA"),
-            Self::CACHE_SIZE_ALTERA => write!(f, "CacheSizeALTERA"),
-            Self::DONT_STATICALLY_COALESCE_ALTERA => write!(f, "DontStaticallyCoalesceALTERA"),
-            Self::PREFETCH_ALTERA => write!(f, "PrefetchALTERA"),
-            Self::STALL_ENABLE_ALTERA => write!(f, "StallEnableALTERA"),
-            Self::FUSE_LOOPS_IN_FUNCTION_ALTERA => write!(f, "FuseLoopsInFunctionALTERA"),
-            Self::MATH_OP_DSPMODE_ALTERA => write!(f, "MathOpDSPModeALTERA"),
-            Self::ALIAS_SCOPE_INTEL => write!(f, "AliasScopeINTEL"),
-            Self::NO_ALIAS_INTEL => write!(f, "NoAliasINTEL"),
-            Self::INITIATION_INTERVAL_ALTERA => write!(f, "InitiationIntervalALTERA"),
-            Self::MAX_CONCURRENCY_ALTERA => write!(f, "MaxConcurrencyALTERA"),
-            Self::PIPELINE_ENABLE_ALTERA => write!(f, "PipelineEnableALTERA"),
-            Self::BUFFER_LOCATION_ALTERA => write!(f, "BufferLocationALTERA"),
-            Self::IOPIPE_STORAGE_ALTERA => write!(f, "IOPipeStorageALTERA"),
-            Self::FUNCTION_FLOATING_POINT_MODE_INTEL => write!(f, "FunctionFloatingPointModeINTEL"),
-            Self::SINGLE_ELEMENT_VECTOR_INTEL => write!(f, "SingleElementVectorINTEL"),
+            Self::BANK_NV => Display::fmt(stringify!(BANK_NV), f),
+            Self::BINDLESS_SAMPLER_NV => Display::fmt(stringify!(BINDLESS_SAMPLER_NV), f),
+            Self::BINDLESS_IMAGE_NV => Display::fmt(stringify!(BINDLESS_IMAGE_NV), f),
+            Self::BOUND_SAMPLER_NV => Display::fmt(stringify!(BOUND_SAMPLER_NV), f),
+            Self::BOUND_IMAGE_NV => Display::fmt(stringify!(BOUND_IMAGE_NV), f),
+            Self::SIMTCALL_INTEL => Display::fmt(stringify!(SIMTCALL_INTEL), f),
+            Self::REFERENCED_INDIRECTLY_INTEL => {
+                Display::fmt(stringify!(REFERENCED_INDIRECTLY_INTEL), f)
+            }
+            Self::CLOBBER_INTEL => Display::fmt(stringify!(CLOBBER_INTEL), f),
+            Self::SIDE_EFFECTS_INTEL => Display::fmt(stringify!(SIDE_EFFECTS_INTEL), f),
+            Self::VECTOR_COMPUTE_VARIABLE_INTEL => {
+                Display::fmt(stringify!(VECTOR_COMPUTE_VARIABLE_INTEL), f)
+            }
+            Self::FUNC_PARAM_IOKIND_INTEL => Display::fmt(stringify!(FUNC_PARAM_IOKIND_INTEL), f),
+            Self::VECTOR_COMPUTE_FUNCTION_INTEL => {
+                Display::fmt(stringify!(VECTOR_COMPUTE_FUNCTION_INTEL), f)
+            }
+            Self::STACK_CALL_INTEL => Display::fmt(stringify!(STACK_CALL_INTEL), f),
+            Self::GLOBAL_VARIABLE_OFFSET_INTEL => {
+                Display::fmt(stringify!(GLOBAL_VARIABLE_OFFSET_INTEL), f)
+            }
+            Self::COUNTER_BUFFER => Display::fmt(stringify!(COUNTER_BUFFER), f),
+            Self::USER_SEMANTIC => Display::fmt(stringify!(USER_SEMANTIC), f),
+            Self::USER_TYPE_GOOGLE => Display::fmt(stringify!(USER_TYPE_GOOGLE), f),
+            Self::FUNCTION_ROUNDING_MODE_INTEL => {
+                Display::fmt(stringify!(FUNCTION_ROUNDING_MODE_INTEL), f)
+            }
+            Self::FUNCTION_DENORM_MODE_INTEL => {
+                Display::fmt(stringify!(FUNCTION_DENORM_MODE_INTEL), f)
+            }
+            Self::REGISTER_ALTERA => Display::fmt(stringify!(REGISTER_ALTERA), f),
+            Self::MEMORY_ALTERA => Display::fmt(stringify!(MEMORY_ALTERA), f),
+            Self::NUMBANKS_ALTERA => Display::fmt(stringify!(NUMBANKS_ALTERA), f),
+            Self::BANKWIDTH_ALTERA => Display::fmt(stringify!(BANKWIDTH_ALTERA), f),
+            Self::MAX_PRIVATE_COPIES_ALTERA => {
+                Display::fmt(stringify!(MAX_PRIVATE_COPIES_ALTERA), f)
+            }
+            Self::SINGLEPUMP_ALTERA => Display::fmt(stringify!(SINGLEPUMP_ALTERA), f),
+            Self::DOUBLEPUMP_ALTERA => Display::fmt(stringify!(DOUBLEPUMP_ALTERA), f),
+            Self::MAX_REPLICATES_ALTERA => Display::fmt(stringify!(MAX_REPLICATES_ALTERA), f),
+            Self::SIMPLE_DUAL_PORT_ALTERA => Display::fmt(stringify!(SIMPLE_DUAL_PORT_ALTERA), f),
+            Self::MERGE_ALTERA => Display::fmt(stringify!(MERGE_ALTERA), f),
+            Self::BANK_BITS_ALTERA => Display::fmt(stringify!(BANK_BITS_ALTERA), f),
+            Self::FORCE_POW_2DEPTH_ALTERA => Display::fmt(stringify!(FORCE_POW_2DEPTH_ALTERA), f),
+            Self::STRIDESIZE_ALTERA => Display::fmt(stringify!(STRIDESIZE_ALTERA), f),
+            Self::WORDSIZE_ALTERA => Display::fmt(stringify!(WORDSIZE_ALTERA), f),
+            Self::TRUE_DUAL_PORT_ALTERA => Display::fmt(stringify!(TRUE_DUAL_PORT_ALTERA), f),
+            Self::BURST_COALESCE_ALTERA => Display::fmt(stringify!(BURST_COALESCE_ALTERA), f),
+            Self::CACHE_SIZE_ALTERA => Display::fmt(stringify!(CACHE_SIZE_ALTERA), f),
+            Self::DONT_STATICALLY_COALESCE_ALTERA => {
+                Display::fmt(stringify!(DONT_STATICALLY_COALESCE_ALTERA), f)
+            }
+            Self::PREFETCH_ALTERA => Display::fmt(stringify!(PREFETCH_ALTERA), f),
+            Self::STALL_ENABLE_ALTERA => Display::fmt(stringify!(STALL_ENABLE_ALTERA), f),
+            Self::FUSE_LOOPS_IN_FUNCTION_ALTERA => {
+                Display::fmt(stringify!(FUSE_LOOPS_IN_FUNCTION_ALTERA), f)
+            }
+            Self::MATH_OP_DSPMODE_ALTERA => Display::fmt(stringify!(MATH_OP_DSPMODE_ALTERA), f),
+            Self::ALIAS_SCOPE_INTEL => Display::fmt(stringify!(ALIAS_SCOPE_INTEL), f),
+            Self::NO_ALIAS_INTEL => Display::fmt(stringify!(NO_ALIAS_INTEL), f),
+            Self::INITIATION_INTERVAL_ALTERA => {
+                Display::fmt(stringify!(INITIATION_INTERVAL_ALTERA), f)
+            }
+            Self::MAX_CONCURRENCY_ALTERA => Display::fmt(stringify!(MAX_CONCURRENCY_ALTERA), f),
+            Self::PIPELINE_ENABLE_ALTERA => Display::fmt(stringify!(PIPELINE_ENABLE_ALTERA), f),
+            Self::BUFFER_LOCATION_ALTERA => Display::fmt(stringify!(BUFFER_LOCATION_ALTERA), f),
+            Self::IOPIPE_STORAGE_ALTERA => Display::fmt(stringify!(IOPIPE_STORAGE_ALTERA), f),
+            Self::FUNCTION_FLOATING_POINT_MODE_INTEL => {
+                Display::fmt(stringify!(FUNCTION_FLOATING_POINT_MODE_INTEL), f)
+            }
+            Self::SINGLE_ELEMENT_VECTOR_INTEL => {
+                Display::fmt(stringify!(SINGLE_ELEMENT_VECTOR_INTEL), f)
+            }
             Self::VECTOR_COMPUTE_CALLABLE_FUNCTION_INTEL => {
-                write!(f, "VectorComputeCallableFunctionINTEL")
+                Display::fmt(stringify!(VECTOR_COMPUTE_CALLABLE_FUNCTION_INTEL), f)
             }
-            Self::MEDIA_BLOCK_IOINTEL => write!(f, "MediaBlockIOINTEL"),
-            Self::STALL_FREE_ALTERA => write!(f, "StallFreeALTERA"),
-            Self::FPMAX_ERROR_DECORATION_INTEL => write!(f, "FPMaxErrorDecorationINTEL"),
-            Self::LATENCY_CONTROL_LABEL_ALTERA => write!(f, "LatencyControlLabelALTERA"),
-            Self::LATENCY_CONTROL_CONSTRAINT_ALTERA => write!(f, "LatencyControlConstraintALTERA"),
-            Self::CONDUIT_KERNEL_ARGUMENT_ALTERA => write!(f, "ConduitKernelArgumentALTERA"),
+            Self::MEDIA_BLOCK_IOINTEL => Display::fmt(stringify!(MEDIA_BLOCK_IOINTEL), f),
+            Self::STALL_FREE_ALTERA => Display::fmt(stringify!(STALL_FREE_ALTERA), f),
+            Self::FPMAX_ERROR_DECORATION_INTEL => {
+                Display::fmt(stringify!(FPMAX_ERROR_DECORATION_INTEL), f)
+            }
+            Self::LATENCY_CONTROL_LABEL_ALTERA => {
+                Display::fmt(stringify!(LATENCY_CONTROL_LABEL_ALTERA), f)
+            }
+            Self::LATENCY_CONTROL_CONSTRAINT_ALTERA => {
+                Display::fmt(stringify!(LATENCY_CONTROL_CONSTRAINT_ALTERA), f)
+            }
+            Self::CONDUIT_KERNEL_ARGUMENT_ALTERA => {
+                Display::fmt(stringify!(CONDUIT_KERNEL_ARGUMENT_ALTERA), f)
+            }
             Self::REGISTER_MAP_KERNEL_ARGUMENT_ALTERA => {
-                write!(f, "RegisterMapKernelArgumentALTERA")
+                Display::fmt(stringify!(REGISTER_MAP_KERNEL_ARGUMENT_ALTERA), f)
             }
             Self::MMHOST_INTERFACE_ADDRESS_WIDTH_ALTERA => {
-                write!(f, "MMHostInterfaceAddressWidthALTERA")
+                Display::fmt(stringify!(MMHOST_INTERFACE_ADDRESS_WIDTH_ALTERA), f)
             }
-            Self::MMHOST_INTERFACE_DATA_WIDTH_ALTERA => write!(f, "MMHostInterfaceDataWidthALTERA"),
-            Self::MMHOST_INTERFACE_LATENCY_ALTERA => write!(f, "MMHostInterfaceLatencyALTERA"),
+            Self::MMHOST_INTERFACE_DATA_WIDTH_ALTERA => {
+                Display::fmt(stringify!(MMHOST_INTERFACE_DATA_WIDTH_ALTERA), f)
+            }
+            Self::MMHOST_INTERFACE_LATENCY_ALTERA => {
+                Display::fmt(stringify!(MMHOST_INTERFACE_LATENCY_ALTERA), f)
+            }
             Self::MMHOST_INTERFACE_READ_WRITE_MODE_ALTERA => {
-                write!(f, "MMHostInterfaceReadWriteModeALTERA")
+                Display::fmt(stringify!(MMHOST_INTERFACE_READ_WRITE_MODE_ALTERA), f)
             }
-            Self::MMHOST_INTERFACE_MAX_BURST_ALTERA => write!(f, "MMHostInterfaceMaxBurstALTERA"),
+            Self::MMHOST_INTERFACE_MAX_BURST_ALTERA => {
+                Display::fmt(stringify!(MMHOST_INTERFACE_MAX_BURST_ALTERA), f)
+            }
             Self::MMHOST_INTERFACE_WAIT_REQUEST_ALTERA => {
-                write!(f, "MMHostInterfaceWaitRequestALTERA")
+                Display::fmt(stringify!(MMHOST_INTERFACE_WAIT_REQUEST_ALTERA), f)
             }
-            Self::STABLE_KERNEL_ARGUMENT_ALTERA => write!(f, "StableKernelArgumentALTERA"),
-            Self::HOST_ACCESS_INTEL => write!(f, "HostAccessINTEL"),
-            Self::INIT_MODE_ALTERA => write!(f, "InitModeALTERA"),
-            Self::IMPLEMENT_IN_REGISTER_MAP_ALTERA => write!(f, "ImplementInRegisterMapALTERA"),
-            Self::CONDITIONAL_INTEL => write!(f, "ConditionalINTEL"),
-            Self::CACHE_CONTROL_LOAD_INTEL => write!(f, "CacheControlLoadINTEL"),
-            Self::CACHE_CONTROL_STORE_INTEL => write!(f, "CacheControlStoreINTEL"),
-            x => write!(f, "{x}"),
+            Self::STABLE_KERNEL_ARGUMENT_ALTERA => {
+                Display::fmt(stringify!(STABLE_KERNEL_ARGUMENT_ALTERA), f)
+            }
+            Self::HOST_ACCESS_INTEL => Display::fmt(stringify!(HOST_ACCESS_INTEL), f),
+            Self::INIT_MODE_ALTERA => Display::fmt(stringify!(INIT_MODE_ALTERA), f),
+            Self::IMPLEMENT_IN_REGISTER_MAP_ALTERA => {
+                Display::fmt(stringify!(IMPLEMENT_IN_REGISTER_MAP_ALTERA), f)
+            }
+            Self::CONDITIONAL_INTEL => Display::fmt(stringify!(CONDITIONAL_INTEL), f),
+            Self::CACHE_CONTROL_LOAD_INTEL => Display::fmt(stringify!(CACHE_CONTROL_LOAD_INTEL), f),
+            Self::CACHE_CONTROL_STORE_INTEL => {
+                Display::fmt(stringify!(CACHE_CONTROL_STORE_INTEL), f)
+            }
+            x => write!(f, "{}({})", stringify!(Decoration), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct BuiltIn(pub(crate) u32);
 impl BuiltIn {
     pub const POSITION: Self = Self(0u32);
@@ -4254,150 +2738,187 @@ impl Word for BuiltIn {
         Self(word)
     }
 }
-impl Display for BuiltIn {
+impl Debug for BuiltIn {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::POSITION => write!(f, "Position"),
-            Self::POINT_SIZE => write!(f, "PointSize"),
-            Self::CLIP_DISTANCE => write!(f, "ClipDistance"),
-            Self::CULL_DISTANCE => write!(f, "CullDistance"),
-            Self::VERTEX_ID => write!(f, "VertexId"),
-            Self::INSTANCE_ID => write!(f, "InstanceId"),
-            Self::PRIMITIVE_ID => write!(f, "PrimitiveId"),
-            Self::INVOCATION_ID => write!(f, "InvocationId"),
-            Self::LAYER => write!(f, "Layer"),
-            Self::VIEWPORT_INDEX => write!(f, "ViewportIndex"),
-            Self::TESS_LEVEL_OUTER => write!(f, "TessLevelOuter"),
-            Self::TESS_LEVEL_INNER => write!(f, "TessLevelInner"),
-            Self::TESS_COORD => write!(f, "TessCoord"),
-            Self::PATCH_VERTICES => write!(f, "PatchVertices"),
-            Self::FRAG_COORD => write!(f, "FragCoord"),
-            Self::POINT_COORD => write!(f, "PointCoord"),
-            Self::FRONT_FACING => write!(f, "FrontFacing"),
-            Self::SAMPLE_ID => write!(f, "SampleId"),
-            Self::SAMPLE_POSITION => write!(f, "SamplePosition"),
-            Self::SAMPLE_MASK => write!(f, "SampleMask"),
-            Self::FRAG_DEPTH => write!(f, "FragDepth"),
-            Self::HELPER_INVOCATION => write!(f, "HelperInvocation"),
-            Self::NUM_WORKGROUPS => write!(f, "NumWorkgroups"),
-            Self::WORKGROUP_SIZE => write!(f, "WorkgroupSize"),
-            Self::WORKGROUP_ID => write!(f, "WorkgroupId"),
-            Self::LOCAL_INVOCATION_ID => write!(f, "LocalInvocationId"),
-            Self::GLOBAL_INVOCATION_ID => write!(f, "GlobalInvocationId"),
-            Self::LOCAL_INVOCATION_INDEX => write!(f, "LocalInvocationIndex"),
-            Self::WORK_DIM => write!(f, "WorkDim"),
-            Self::GLOBAL_SIZE => write!(f, "GlobalSize"),
-            Self::ENQUEUED_WORKGROUP_SIZE => write!(f, "EnqueuedWorkgroupSize"),
-            Self::GLOBAL_OFFSET => write!(f, "GlobalOffset"),
-            Self::GLOBAL_LINEAR_ID => write!(f, "GlobalLinearId"),
-            Self::SUBGROUP_SIZE => write!(f, "SubgroupSize"),
-            Self::SUBGROUP_MAX_SIZE => write!(f, "SubgroupMaxSize"),
-            Self::NUM_SUBGROUPS => write!(f, "NumSubgroups"),
-            Self::NUM_ENQUEUED_SUBGROUPS => write!(f, "NumEnqueuedSubgroups"),
-            Self::SUBGROUP_ID => write!(f, "SubgroupId"),
-            Self::SUBGROUP_LOCAL_INVOCATION_ID => write!(f, "SubgroupLocalInvocationId"),
-            Self::VERTEX_INDEX => write!(f, "VertexIndex"),
-            Self::INSTANCE_INDEX => write!(f, "InstanceIndex"),
-            Self::CORE_IDARM => write!(f, "CoreIDARM"),
-            Self::CORE_COUNT_ARM => write!(f, "CoreCountARM"),
-            Self::CORE_MAX_IDARM => write!(f, "CoreMaxIDARM"),
-            Self::WARP_IDARM => write!(f, "WarpIDARM"),
-            Self::WARP_MAX_IDARM => write!(f, "WarpMaxIDARM"),
-            Self::SUBGROUP_EQ_MASK => write!(f, "SubgroupEqMask"),
-            Self::SUBGROUP_GE_MASK => write!(f, "SubgroupGeMask"),
-            Self::SUBGROUP_GT_MASK => write!(f, "SubgroupGtMask"),
-            Self::SUBGROUP_LE_MASK => write!(f, "SubgroupLeMask"),
-            Self::SUBGROUP_LT_MASK => write!(f, "SubgroupLtMask"),
-            Self::BASE_VERTEX => write!(f, "BaseVertex"),
-            Self::BASE_INSTANCE => write!(f, "BaseInstance"),
-            Self::DRAW_INDEX => write!(f, "DrawIndex"),
-            Self::PRIMITIVE_SHADING_RATE_KHR => write!(f, "PrimitiveShadingRateKHR"),
-            Self::DEVICE_INDEX => write!(f, "DeviceIndex"),
-            Self::VIEW_INDEX => write!(f, "ViewIndex"),
-            Self::SHADING_RATE_KHR => write!(f, "ShadingRateKHR"),
-            Self::TILE_OFFSET_QCOM => write!(f, "TileOffsetQCOM"),
-            Self::TILE_DIMENSION_QCOM => write!(f, "TileDimensionQCOM"),
-            Self::TILE_APRON_SIZE_QCOM => write!(f, "TileApronSizeQCOM"),
-            Self::BARY_COORD_NO_PERSP_AMD => write!(f, "BaryCoordNoPerspAMD"),
-            Self::BARY_COORD_NO_PERSP_CENTROID_AMD => write!(f, "BaryCoordNoPerspCentroidAMD"),
-            Self::BARY_COORD_NO_PERSP_SAMPLE_AMD => write!(f, "BaryCoordNoPerspSampleAMD"),
-            Self::BARY_COORD_SMOOTH_AMD => write!(f, "BaryCoordSmoothAMD"),
-            Self::BARY_COORD_SMOOTH_CENTROID_AMD => write!(f, "BaryCoordSmoothCentroidAMD"),
-            Self::BARY_COORD_SMOOTH_SAMPLE_AMD => write!(f, "BaryCoordSmoothSampleAMD"),
-            Self::BARY_COORD_PULL_MODEL_AMD => write!(f, "BaryCoordPullModelAMD"),
-            Self::FRAG_STENCIL_REF_EXT => write!(f, "FragStencilRefEXT"),
-            Self::REMAINING_RECURSION_LEVELS_AMDX => write!(f, "RemainingRecursionLevelsAMDX"),
-            Self::SHADER_INDEX_AMDX => write!(f, "ShaderIndexAMDX"),
-            Self::SAMPLER_HEAP_EXT => write!(f, "SamplerHeapEXT"),
-            Self::RESOURCE_HEAP_EXT => write!(f, "ResourceHeapEXT"),
-            Self::VIEWPORT_MASK_NV => write!(f, "ViewportMaskNV"),
-            Self::SECONDARY_POSITION_NV => write!(f, "SecondaryPositionNV"),
-            Self::SECONDARY_VIEWPORT_MASK_NV => write!(f, "SecondaryViewportMaskNV"),
-            Self::POSITION_PER_VIEW_NV => write!(f, "PositionPerViewNV"),
-            Self::VIEWPORT_MASK_PER_VIEW_NV => write!(f, "ViewportMaskPerViewNV"),
-            Self::FULLY_COVERED_EXT => write!(f, "FullyCoveredEXT"),
-            Self::TASK_COUNT_NV => write!(f, "TaskCountNV"),
-            Self::PRIMITIVE_COUNT_NV => write!(f, "PrimitiveCountNV"),
-            Self::PRIMITIVE_INDICES_NV => write!(f, "PrimitiveIndicesNV"),
-            Self::CLIP_DISTANCE_PER_VIEW_NV => write!(f, "ClipDistancePerViewNV"),
-            Self::CULL_DISTANCE_PER_VIEW_NV => write!(f, "CullDistancePerViewNV"),
-            Self::LAYER_PER_VIEW_NV => write!(f, "LayerPerViewNV"),
-            Self::MESH_VIEW_COUNT_NV => write!(f, "MeshViewCountNV"),
-            Self::MESH_VIEW_INDICES_NV => write!(f, "MeshViewIndicesNV"),
-            Self::BARY_COORD_KHR => write!(f, "BaryCoordKHR"),
-            Self::BARY_COORD_NO_PERSP_KHR => write!(f, "BaryCoordNoPerspKHR"),
-            Self::FRAG_SIZE_EXT => write!(f, "FragSizeEXT"),
-            Self::FRAG_INVOCATION_COUNT_EXT => write!(f, "FragInvocationCountEXT"),
-            Self::PRIMITIVE_POINT_INDICES_EXT => write!(f, "PrimitivePointIndicesEXT"),
-            Self::PRIMITIVE_LINE_INDICES_EXT => write!(f, "PrimitiveLineIndicesEXT"),
-            Self::PRIMITIVE_TRIANGLE_INDICES_EXT => write!(f, "PrimitiveTriangleIndicesEXT"),
-            Self::CULL_PRIMITIVE_EXT => write!(f, "CullPrimitiveEXT"),
-            Self::LAUNCH_ID_KHR => write!(f, "LaunchIdKHR"),
-            Self::LAUNCH_SIZE_KHR => write!(f, "LaunchSizeKHR"),
-            Self::WORLD_RAY_ORIGIN_KHR => write!(f, "WorldRayOriginKHR"),
-            Self::WORLD_RAY_DIRECTION_KHR => write!(f, "WorldRayDirectionKHR"),
-            Self::OBJECT_RAY_ORIGIN_KHR => write!(f, "ObjectRayOriginKHR"),
-            Self::OBJECT_RAY_DIRECTION_KHR => write!(f, "ObjectRayDirectionKHR"),
-            Self::RAY_TMIN_KHR => write!(f, "RayTminKHR"),
-            Self::RAY_TMAX_KHR => write!(f, "RayTmaxKHR"),
-            Self::INSTANCE_CUSTOM_INDEX_KHR => write!(f, "InstanceCustomIndexKHR"),
-            Self::OBJECT_TO_WORLD_KHR => write!(f, "ObjectToWorldKHR"),
-            Self::WORLD_TO_OBJECT_KHR => write!(f, "WorldToObjectKHR"),
-            Self::HIT_TNV => write!(f, "HitTNV"),
-            Self::HIT_KIND_KHR => write!(f, "HitKindKHR"),
-            Self::CURRENT_RAY_TIME_NV => write!(f, "CurrentRayTimeNV"),
-            Self::HIT_TRIANGLE_VERTEX_POSITIONS_KHR => write!(f, "HitTriangleVertexPositionsKHR"),
+            Self::POSITION => Display::fmt(stringify!(POSITION), f),
+            Self::POINT_SIZE => Display::fmt(stringify!(POINT_SIZE), f),
+            Self::CLIP_DISTANCE => Display::fmt(stringify!(CLIP_DISTANCE), f),
+            Self::CULL_DISTANCE => Display::fmt(stringify!(CULL_DISTANCE), f),
+            Self::VERTEX_ID => Display::fmt(stringify!(VERTEX_ID), f),
+            Self::INSTANCE_ID => Display::fmt(stringify!(INSTANCE_ID), f),
+            Self::PRIMITIVE_ID => Display::fmt(stringify!(PRIMITIVE_ID), f),
+            Self::INVOCATION_ID => Display::fmt(stringify!(INVOCATION_ID), f),
+            Self::LAYER => Display::fmt(stringify!(LAYER), f),
+            Self::VIEWPORT_INDEX => Display::fmt(stringify!(VIEWPORT_INDEX), f),
+            Self::TESS_LEVEL_OUTER => Display::fmt(stringify!(TESS_LEVEL_OUTER), f),
+            Self::TESS_LEVEL_INNER => Display::fmt(stringify!(TESS_LEVEL_INNER), f),
+            Self::TESS_COORD => Display::fmt(stringify!(TESS_COORD), f),
+            Self::PATCH_VERTICES => Display::fmt(stringify!(PATCH_VERTICES), f),
+            Self::FRAG_COORD => Display::fmt(stringify!(FRAG_COORD), f),
+            Self::POINT_COORD => Display::fmt(stringify!(POINT_COORD), f),
+            Self::FRONT_FACING => Display::fmt(stringify!(FRONT_FACING), f),
+            Self::SAMPLE_ID => Display::fmt(stringify!(SAMPLE_ID), f),
+            Self::SAMPLE_POSITION => Display::fmt(stringify!(SAMPLE_POSITION), f),
+            Self::SAMPLE_MASK => Display::fmt(stringify!(SAMPLE_MASK), f),
+            Self::FRAG_DEPTH => Display::fmt(stringify!(FRAG_DEPTH), f),
+            Self::HELPER_INVOCATION => Display::fmt(stringify!(HELPER_INVOCATION), f),
+            Self::NUM_WORKGROUPS => Display::fmt(stringify!(NUM_WORKGROUPS), f),
+            Self::WORKGROUP_SIZE => Display::fmt(stringify!(WORKGROUP_SIZE), f),
+            Self::WORKGROUP_ID => Display::fmt(stringify!(WORKGROUP_ID), f),
+            Self::LOCAL_INVOCATION_ID => Display::fmt(stringify!(LOCAL_INVOCATION_ID), f),
+            Self::GLOBAL_INVOCATION_ID => Display::fmt(stringify!(GLOBAL_INVOCATION_ID), f),
+            Self::LOCAL_INVOCATION_INDEX => Display::fmt(stringify!(LOCAL_INVOCATION_INDEX), f),
+            Self::WORK_DIM => Display::fmt(stringify!(WORK_DIM), f),
+            Self::GLOBAL_SIZE => Display::fmt(stringify!(GLOBAL_SIZE), f),
+            Self::ENQUEUED_WORKGROUP_SIZE => Display::fmt(stringify!(ENQUEUED_WORKGROUP_SIZE), f),
+            Self::GLOBAL_OFFSET => Display::fmt(stringify!(GLOBAL_OFFSET), f),
+            Self::GLOBAL_LINEAR_ID => Display::fmt(stringify!(GLOBAL_LINEAR_ID), f),
+            Self::SUBGROUP_SIZE => Display::fmt(stringify!(SUBGROUP_SIZE), f),
+            Self::SUBGROUP_MAX_SIZE => Display::fmt(stringify!(SUBGROUP_MAX_SIZE), f),
+            Self::NUM_SUBGROUPS => Display::fmt(stringify!(NUM_SUBGROUPS), f),
+            Self::NUM_ENQUEUED_SUBGROUPS => Display::fmt(stringify!(NUM_ENQUEUED_SUBGROUPS), f),
+            Self::SUBGROUP_ID => Display::fmt(stringify!(SUBGROUP_ID), f),
+            Self::SUBGROUP_LOCAL_INVOCATION_ID => {
+                Display::fmt(stringify!(SUBGROUP_LOCAL_INVOCATION_ID), f)
+            }
+            Self::VERTEX_INDEX => Display::fmt(stringify!(VERTEX_INDEX), f),
+            Self::INSTANCE_INDEX => Display::fmt(stringify!(INSTANCE_INDEX), f),
+            Self::CORE_IDARM => Display::fmt(stringify!(CORE_IDARM), f),
+            Self::CORE_COUNT_ARM => Display::fmt(stringify!(CORE_COUNT_ARM), f),
+            Self::CORE_MAX_IDARM => Display::fmt(stringify!(CORE_MAX_IDARM), f),
+            Self::WARP_IDARM => Display::fmt(stringify!(WARP_IDARM), f),
+            Self::WARP_MAX_IDARM => Display::fmt(stringify!(WARP_MAX_IDARM), f),
+            Self::SUBGROUP_EQ_MASK => Display::fmt(stringify!(SUBGROUP_EQ_MASK), f),
+            Self::SUBGROUP_GE_MASK => Display::fmt(stringify!(SUBGROUP_GE_MASK), f),
+            Self::SUBGROUP_GT_MASK => Display::fmt(stringify!(SUBGROUP_GT_MASK), f),
+            Self::SUBGROUP_LE_MASK => Display::fmt(stringify!(SUBGROUP_LE_MASK), f),
+            Self::SUBGROUP_LT_MASK => Display::fmt(stringify!(SUBGROUP_LT_MASK), f),
+            Self::BASE_VERTEX => Display::fmt(stringify!(BASE_VERTEX), f),
+            Self::BASE_INSTANCE => Display::fmt(stringify!(BASE_INSTANCE), f),
+            Self::DRAW_INDEX => Display::fmt(stringify!(DRAW_INDEX), f),
+            Self::PRIMITIVE_SHADING_RATE_KHR => {
+                Display::fmt(stringify!(PRIMITIVE_SHADING_RATE_KHR), f)
+            }
+            Self::DEVICE_INDEX => Display::fmt(stringify!(DEVICE_INDEX), f),
+            Self::VIEW_INDEX => Display::fmt(stringify!(VIEW_INDEX), f),
+            Self::SHADING_RATE_KHR => Display::fmt(stringify!(SHADING_RATE_KHR), f),
+            Self::TILE_OFFSET_QCOM => Display::fmt(stringify!(TILE_OFFSET_QCOM), f),
+            Self::TILE_DIMENSION_QCOM => Display::fmt(stringify!(TILE_DIMENSION_QCOM), f),
+            Self::TILE_APRON_SIZE_QCOM => Display::fmt(stringify!(TILE_APRON_SIZE_QCOM), f),
+            Self::BARY_COORD_NO_PERSP_AMD => Display::fmt(stringify!(BARY_COORD_NO_PERSP_AMD), f),
+            Self::BARY_COORD_NO_PERSP_CENTROID_AMD => {
+                Display::fmt(stringify!(BARY_COORD_NO_PERSP_CENTROID_AMD), f)
+            }
+            Self::BARY_COORD_NO_PERSP_SAMPLE_AMD => {
+                Display::fmt(stringify!(BARY_COORD_NO_PERSP_SAMPLE_AMD), f)
+            }
+            Self::BARY_COORD_SMOOTH_AMD => Display::fmt(stringify!(BARY_COORD_SMOOTH_AMD), f),
+            Self::BARY_COORD_SMOOTH_CENTROID_AMD => {
+                Display::fmt(stringify!(BARY_COORD_SMOOTH_CENTROID_AMD), f)
+            }
+            Self::BARY_COORD_SMOOTH_SAMPLE_AMD => {
+                Display::fmt(stringify!(BARY_COORD_SMOOTH_SAMPLE_AMD), f)
+            }
+            Self::BARY_COORD_PULL_MODEL_AMD => {
+                Display::fmt(stringify!(BARY_COORD_PULL_MODEL_AMD), f)
+            }
+            Self::FRAG_STENCIL_REF_EXT => Display::fmt(stringify!(FRAG_STENCIL_REF_EXT), f),
+            Self::REMAINING_RECURSION_LEVELS_AMDX => {
+                Display::fmt(stringify!(REMAINING_RECURSION_LEVELS_AMDX), f)
+            }
+            Self::SHADER_INDEX_AMDX => Display::fmt(stringify!(SHADER_INDEX_AMDX), f),
+            Self::SAMPLER_HEAP_EXT => Display::fmt(stringify!(SAMPLER_HEAP_EXT), f),
+            Self::RESOURCE_HEAP_EXT => Display::fmt(stringify!(RESOURCE_HEAP_EXT), f),
+            Self::VIEWPORT_MASK_NV => Display::fmt(stringify!(VIEWPORT_MASK_NV), f),
+            Self::SECONDARY_POSITION_NV => Display::fmt(stringify!(SECONDARY_POSITION_NV), f),
+            Self::SECONDARY_VIEWPORT_MASK_NV => {
+                Display::fmt(stringify!(SECONDARY_VIEWPORT_MASK_NV), f)
+            }
+            Self::POSITION_PER_VIEW_NV => Display::fmt(stringify!(POSITION_PER_VIEW_NV), f),
+            Self::VIEWPORT_MASK_PER_VIEW_NV => {
+                Display::fmt(stringify!(VIEWPORT_MASK_PER_VIEW_NV), f)
+            }
+            Self::FULLY_COVERED_EXT => Display::fmt(stringify!(FULLY_COVERED_EXT), f),
+            Self::TASK_COUNT_NV => Display::fmt(stringify!(TASK_COUNT_NV), f),
+            Self::PRIMITIVE_COUNT_NV => Display::fmt(stringify!(PRIMITIVE_COUNT_NV), f),
+            Self::PRIMITIVE_INDICES_NV => Display::fmt(stringify!(PRIMITIVE_INDICES_NV), f),
+            Self::CLIP_DISTANCE_PER_VIEW_NV => {
+                Display::fmt(stringify!(CLIP_DISTANCE_PER_VIEW_NV), f)
+            }
+            Self::CULL_DISTANCE_PER_VIEW_NV => {
+                Display::fmt(stringify!(CULL_DISTANCE_PER_VIEW_NV), f)
+            }
+            Self::LAYER_PER_VIEW_NV => Display::fmt(stringify!(LAYER_PER_VIEW_NV), f),
+            Self::MESH_VIEW_COUNT_NV => Display::fmt(stringify!(MESH_VIEW_COUNT_NV), f),
+            Self::MESH_VIEW_INDICES_NV => Display::fmt(stringify!(MESH_VIEW_INDICES_NV), f),
+            Self::BARY_COORD_KHR => Display::fmt(stringify!(BARY_COORD_KHR), f),
+            Self::BARY_COORD_NO_PERSP_KHR => Display::fmt(stringify!(BARY_COORD_NO_PERSP_KHR), f),
+            Self::FRAG_SIZE_EXT => Display::fmt(stringify!(FRAG_SIZE_EXT), f),
+            Self::FRAG_INVOCATION_COUNT_EXT => {
+                Display::fmt(stringify!(FRAG_INVOCATION_COUNT_EXT), f)
+            }
+            Self::PRIMITIVE_POINT_INDICES_EXT => {
+                Display::fmt(stringify!(PRIMITIVE_POINT_INDICES_EXT), f)
+            }
+            Self::PRIMITIVE_LINE_INDICES_EXT => {
+                Display::fmt(stringify!(PRIMITIVE_LINE_INDICES_EXT), f)
+            }
+            Self::PRIMITIVE_TRIANGLE_INDICES_EXT => {
+                Display::fmt(stringify!(PRIMITIVE_TRIANGLE_INDICES_EXT), f)
+            }
+            Self::CULL_PRIMITIVE_EXT => Display::fmt(stringify!(CULL_PRIMITIVE_EXT), f),
+            Self::LAUNCH_ID_KHR => Display::fmt(stringify!(LAUNCH_ID_KHR), f),
+            Self::LAUNCH_SIZE_KHR => Display::fmt(stringify!(LAUNCH_SIZE_KHR), f),
+            Self::WORLD_RAY_ORIGIN_KHR => Display::fmt(stringify!(WORLD_RAY_ORIGIN_KHR), f),
+            Self::WORLD_RAY_DIRECTION_KHR => Display::fmt(stringify!(WORLD_RAY_DIRECTION_KHR), f),
+            Self::OBJECT_RAY_ORIGIN_KHR => Display::fmt(stringify!(OBJECT_RAY_ORIGIN_KHR), f),
+            Self::OBJECT_RAY_DIRECTION_KHR => Display::fmt(stringify!(OBJECT_RAY_DIRECTION_KHR), f),
+            Self::RAY_TMIN_KHR => Display::fmt(stringify!(RAY_TMIN_KHR), f),
+            Self::RAY_TMAX_KHR => Display::fmt(stringify!(RAY_TMAX_KHR), f),
+            Self::INSTANCE_CUSTOM_INDEX_KHR => {
+                Display::fmt(stringify!(INSTANCE_CUSTOM_INDEX_KHR), f)
+            }
+            Self::OBJECT_TO_WORLD_KHR => Display::fmt(stringify!(OBJECT_TO_WORLD_KHR), f),
+            Self::WORLD_TO_OBJECT_KHR => Display::fmt(stringify!(WORLD_TO_OBJECT_KHR), f),
+            Self::HIT_TNV => Display::fmt(stringify!(HIT_TNV), f),
+            Self::HIT_KIND_KHR => Display::fmt(stringify!(HIT_KIND_KHR), f),
+            Self::CURRENT_RAY_TIME_NV => Display::fmt(stringify!(CURRENT_RAY_TIME_NV), f),
+            Self::HIT_TRIANGLE_VERTEX_POSITIONS_KHR => {
+                Display::fmt(stringify!(HIT_TRIANGLE_VERTEX_POSITIONS_KHR), f)
+            }
             Self::HIT_MICRO_TRIANGLE_VERTEX_POSITIONS_NV => {
-                write!(f, "HitMicroTriangleVertexPositionsNV")
+                Display::fmt(stringify!(HIT_MICRO_TRIANGLE_VERTEX_POSITIONS_NV), f)
             }
             Self::HIT_MICRO_TRIANGLE_VERTEX_BARYCENTRICS_NV => {
-                write!(f, "HitMicroTriangleVertexBarycentricsNV")
+                Display::fmt(stringify!(HIT_MICRO_TRIANGLE_VERTEX_BARYCENTRICS_NV), f)
             }
-            Self::INCOMING_RAY_FLAGS_KHR => write!(f, "IncomingRayFlagsKHR"),
-            Self::RAY_GEOMETRY_INDEX_KHR => write!(f, "RayGeometryIndexKHR"),
-            Self::HIT_IS_SPHERE_NV => write!(f, "HitIsSphereNV"),
-            Self::HIT_IS_LSSNV => write!(f, "HitIsLSSNV"),
-            Self::HIT_SPHERE_POSITION_NV => write!(f, "HitSpherePositionNV"),
-            Self::WARPS_PER_SMNV => write!(f, "WarpsPerSMNV"),
-            Self::SMCOUNT_NV => write!(f, "SMCountNV"),
-            Self::WARP_IDNV => write!(f, "WarpIDNV"),
-            Self::SMIDNV => write!(f, "SMIDNV"),
-            Self::HIT_LSSPOSITIONS_NV => write!(f, "HitLSSPositionsNV"),
+            Self::INCOMING_RAY_FLAGS_KHR => Display::fmt(stringify!(INCOMING_RAY_FLAGS_KHR), f),
+            Self::RAY_GEOMETRY_INDEX_KHR => Display::fmt(stringify!(RAY_GEOMETRY_INDEX_KHR), f),
+            Self::HIT_IS_SPHERE_NV => Display::fmt(stringify!(HIT_IS_SPHERE_NV), f),
+            Self::HIT_IS_LSSNV => Display::fmt(stringify!(HIT_IS_LSSNV), f),
+            Self::HIT_SPHERE_POSITION_NV => Display::fmt(stringify!(HIT_SPHERE_POSITION_NV), f),
+            Self::WARPS_PER_SMNV => Display::fmt(stringify!(WARPS_PER_SMNV), f),
+            Self::SMCOUNT_NV => Display::fmt(stringify!(SMCOUNT_NV), f),
+            Self::WARP_IDNV => Display::fmt(stringify!(WARP_IDNV), f),
+            Self::SMIDNV => Display::fmt(stringify!(SMIDNV), f),
+            Self::HIT_LSSPOSITIONS_NV => Display::fmt(stringify!(HIT_LSSPOSITIONS_NV), f),
             Self::HIT_KIND_FRONT_FACING_MICRO_TRIANGLE_NV => {
-                write!(f, "HitKindFrontFacingMicroTriangleNV")
+                Display::fmt(stringify!(HIT_KIND_FRONT_FACING_MICRO_TRIANGLE_NV), f)
             }
             Self::HIT_KIND_BACK_FACING_MICRO_TRIANGLE_NV => {
-                write!(f, "HitKindBackFacingMicroTriangleNV")
+                Display::fmt(stringify!(HIT_KIND_BACK_FACING_MICRO_TRIANGLE_NV), f)
             }
-            Self::HIT_SPHERE_RADIUS_NV => write!(f, "HitSphereRadiusNV"),
-            Self::HIT_LSSRADII_NV => write!(f, "HitLSSRadiiNV"),
-            Self::CLUSTER_IDNV => write!(f, "ClusterIDNV"),
-            Self::CULL_MASK_KHR => write!(f, "CullMaskKHR"),
-            x => write!(f, "{x}"),
+            Self::HIT_SPHERE_RADIUS_NV => Display::fmt(stringify!(HIT_SPHERE_RADIUS_NV), f),
+            Self::HIT_LSSRADII_NV => Display::fmt(stringify!(HIT_LSSRADII_NV), f),
+            Self::CLUSTER_IDNV => Display::fmt(stringify!(CLUSTER_IDNV), f),
+            Self::CULL_MASK_KHR => Display::fmt(stringify!(CULL_MASK_KHR), f),
+            x => write!(f, "{}({})", stringify!(BuiltIn), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Scope(pub(crate) u32);
 impl Scope {
     pub const CROSS_DEVICE: Self = Self(0u32);
@@ -4414,21 +2935,22 @@ impl Word for Scope {
         Self(word)
     }
 }
-impl Display for Scope {
+impl Debug for Scope {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::CROSS_DEVICE => write!(f, "CrossDevice"),
-            Self::DEVICE => write!(f, "Device"),
-            Self::WORKGROUP => write!(f, "Workgroup"),
-            Self::SUBGROUP => write!(f, "Subgroup"),
-            Self::INVOCATION => write!(f, "Invocation"),
-            Self::QUEUE_FAMILY => write!(f, "QueueFamily"),
-            Self::SHADER_CALL_KHR => write!(f, "ShaderCallKHR"),
-            x => write!(f, "{x}"),
+            Self::CROSS_DEVICE => Display::fmt(stringify!(CROSS_DEVICE), f),
+            Self::DEVICE => Display::fmt(stringify!(DEVICE), f),
+            Self::WORKGROUP => Display::fmt(stringify!(WORKGROUP), f),
+            Self::SUBGROUP => Display::fmt(stringify!(SUBGROUP), f),
+            Self::INVOCATION => Display::fmt(stringify!(INVOCATION), f),
+            Self::QUEUE_FAMILY => Display::fmt(stringify!(QUEUE_FAMILY), f),
+            Self::SHADER_CALL_KHR => Display::fmt(stringify!(SHADER_CALL_KHR), f),
+            x => write!(f, "{}({})", stringify!(Scope), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct GroupOperation(pub(crate) u32);
 impl GroupOperation {
     pub const REDUCE: Self = Self(0u32);
@@ -4445,21 +2967,26 @@ impl Word for GroupOperation {
         Self(word)
     }
 }
-impl Display for GroupOperation {
+impl Debug for GroupOperation {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::REDUCE => write!(f, "Reduce"),
-            Self::INCLUSIVE_SCAN => write!(f, "InclusiveScan"),
-            Self::EXCLUSIVE_SCAN => write!(f, "ExclusiveScan"),
-            Self::CLUSTERED_REDUCE => write!(f, "ClusteredReduce"),
-            Self::PARTITIONED_REDUCE_EXT => write!(f, "PartitionedReduceEXT"),
-            Self::PARTITIONED_INCLUSIVE_SCAN_EXT => write!(f, "PartitionedInclusiveScanEXT"),
-            Self::PARTITIONED_EXCLUSIVE_SCAN_EXT => write!(f, "PartitionedExclusiveScanEXT"),
-            x => write!(f, "{x}"),
+            Self::REDUCE => Display::fmt(stringify!(REDUCE), f),
+            Self::INCLUSIVE_SCAN => Display::fmt(stringify!(INCLUSIVE_SCAN), f),
+            Self::EXCLUSIVE_SCAN => Display::fmt(stringify!(EXCLUSIVE_SCAN), f),
+            Self::CLUSTERED_REDUCE => Display::fmt(stringify!(CLUSTERED_REDUCE), f),
+            Self::PARTITIONED_REDUCE_EXT => Display::fmt(stringify!(PARTITIONED_REDUCE_EXT), f),
+            Self::PARTITIONED_INCLUSIVE_SCAN_EXT => {
+                Display::fmt(stringify!(PARTITIONED_INCLUSIVE_SCAN_EXT), f)
+            }
+            Self::PARTITIONED_EXCLUSIVE_SCAN_EXT => {
+                Display::fmt(stringify!(PARTITIONED_EXCLUSIVE_SCAN_EXT), f)
+            }
+            x => write!(f, "{}({})", stringify!(GroupOperation), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct KernelEnqueueFlags(pub(crate) u32);
 impl KernelEnqueueFlags {
     pub const NO_WAIT: Self = Self(0u32);
@@ -4472,17 +2999,18 @@ impl Word for KernelEnqueueFlags {
         Self(word)
     }
 }
-impl Display for KernelEnqueueFlags {
+impl Debug for KernelEnqueueFlags {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::NO_WAIT => write!(f, "NoWait"),
-            Self::WAIT_KERNEL => write!(f, "WaitKernel"),
-            Self::WAIT_WORK_GROUP => write!(f, "WaitWorkGroup"),
-            x => write!(f, "{x}"),
+            Self::NO_WAIT => Display::fmt(stringify!(NO_WAIT), f),
+            Self::WAIT_KERNEL => Display::fmt(stringify!(WAIT_KERNEL), f),
+            Self::WAIT_WORK_GROUP => Display::fmt(stringify!(WAIT_WORK_GROUP), f),
+            x => write!(f, "{}({})", stringify!(KernelEnqueueFlags), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Capability(pub(crate) u32);
 impl Capability {
     pub const MATRIX: Self = Self(0u32);
@@ -4779,391 +3307,570 @@ impl Word for Capability {
         Self(word)
     }
 }
-impl Display for Capability {
+impl Debug for Capability {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::MATRIX => write!(f, "Matrix"),
-            Self::SHADER => write!(f, "Shader"),
-            Self::GEOMETRY => write!(f, "Geometry"),
-            Self::TESSELLATION => write!(f, "Tessellation"),
-            Self::ADDRESSES => write!(f, "Addresses"),
-            Self::LINKAGE => write!(f, "Linkage"),
-            Self::KERNEL => write!(f, "Kernel"),
-            Self::VECTOR_16 => write!(f, "Vector16"),
-            Self::FLOAT_16_BUFFER => write!(f, "Float16Buffer"),
-            Self::FLOAT_16 => write!(f, "Float16"),
-            Self::FLOAT_64 => write!(f, "Float64"),
-            Self::INT_64 => write!(f, "Int64"),
-            Self::INT_64_ATOMICS => write!(f, "Int64Atomics"),
-            Self::IMAGE_BASIC => write!(f, "ImageBasic"),
-            Self::IMAGE_READ_WRITE => write!(f, "ImageReadWrite"),
-            Self::IMAGE_MIPMAP => write!(f, "ImageMipmap"),
-            Self::PIPES => write!(f, "Pipes"),
-            Self::GROUPS => write!(f, "Groups"),
-            Self::DEVICE_ENQUEUE => write!(f, "DeviceEnqueue"),
-            Self::LITERAL_SAMPLER => write!(f, "LiteralSampler"),
-            Self::ATOMIC_STORAGE => write!(f, "AtomicStorage"),
-            Self::INT_16 => write!(f, "Int16"),
-            Self::TESSELLATION_POINT_SIZE => write!(f, "TessellationPointSize"),
-            Self::GEOMETRY_POINT_SIZE => write!(f, "GeometryPointSize"),
-            Self::IMAGE_GATHER_EXTENDED => write!(f, "ImageGatherExtended"),
-            Self::STORAGE_IMAGE_MULTISAMPLE => write!(f, "StorageImageMultisample"),
+            Self::MATRIX => Display::fmt(stringify!(MATRIX), f),
+            Self::SHADER => Display::fmt(stringify!(SHADER), f),
+            Self::GEOMETRY => Display::fmt(stringify!(GEOMETRY), f),
+            Self::TESSELLATION => Display::fmt(stringify!(TESSELLATION), f),
+            Self::ADDRESSES => Display::fmt(stringify!(ADDRESSES), f),
+            Self::LINKAGE => Display::fmt(stringify!(LINKAGE), f),
+            Self::KERNEL => Display::fmt(stringify!(KERNEL), f),
+            Self::VECTOR_16 => Display::fmt(stringify!(VECTOR_16), f),
+            Self::FLOAT_16_BUFFER => Display::fmt(stringify!(FLOAT_16_BUFFER), f),
+            Self::FLOAT_16 => Display::fmt(stringify!(FLOAT_16), f),
+            Self::FLOAT_64 => Display::fmt(stringify!(FLOAT_64), f),
+            Self::INT_64 => Display::fmt(stringify!(INT_64), f),
+            Self::INT_64_ATOMICS => Display::fmt(stringify!(INT_64_ATOMICS), f),
+            Self::IMAGE_BASIC => Display::fmt(stringify!(IMAGE_BASIC), f),
+            Self::IMAGE_READ_WRITE => Display::fmt(stringify!(IMAGE_READ_WRITE), f),
+            Self::IMAGE_MIPMAP => Display::fmt(stringify!(IMAGE_MIPMAP), f),
+            Self::PIPES => Display::fmt(stringify!(PIPES), f),
+            Self::GROUPS => Display::fmt(stringify!(GROUPS), f),
+            Self::DEVICE_ENQUEUE => Display::fmt(stringify!(DEVICE_ENQUEUE), f),
+            Self::LITERAL_SAMPLER => Display::fmt(stringify!(LITERAL_SAMPLER), f),
+            Self::ATOMIC_STORAGE => Display::fmt(stringify!(ATOMIC_STORAGE), f),
+            Self::INT_16 => Display::fmt(stringify!(INT_16), f),
+            Self::TESSELLATION_POINT_SIZE => Display::fmt(stringify!(TESSELLATION_POINT_SIZE), f),
+            Self::GEOMETRY_POINT_SIZE => Display::fmt(stringify!(GEOMETRY_POINT_SIZE), f),
+            Self::IMAGE_GATHER_EXTENDED => Display::fmt(stringify!(IMAGE_GATHER_EXTENDED), f),
+            Self::STORAGE_IMAGE_MULTISAMPLE => {
+                Display::fmt(stringify!(STORAGE_IMAGE_MULTISAMPLE), f)
+            }
             Self::UNIFORM_BUFFER_ARRAY_DYNAMIC_INDEXING => {
-                write!(f, "UniformBufferArrayDynamicIndexing")
+                Display::fmt(stringify!(UNIFORM_BUFFER_ARRAY_DYNAMIC_INDEXING), f)
             }
             Self::SAMPLED_IMAGE_ARRAY_DYNAMIC_INDEXING => {
-                write!(f, "SampledImageArrayDynamicIndexing")
+                Display::fmt(stringify!(SAMPLED_IMAGE_ARRAY_DYNAMIC_INDEXING), f)
             }
             Self::STORAGE_BUFFER_ARRAY_DYNAMIC_INDEXING => {
-                write!(f, "StorageBufferArrayDynamicIndexing")
+                Display::fmt(stringify!(STORAGE_BUFFER_ARRAY_DYNAMIC_INDEXING), f)
             }
             Self::STORAGE_IMAGE_ARRAY_DYNAMIC_INDEXING => {
-                write!(f, "StorageImageArrayDynamicIndexing")
+                Display::fmt(stringify!(STORAGE_IMAGE_ARRAY_DYNAMIC_INDEXING), f)
             }
-            Self::CLIP_DISTANCE => write!(f, "ClipDistance"),
-            Self::CULL_DISTANCE => write!(f, "CullDistance"),
-            Self::IMAGE_CUBE_ARRAY => write!(f, "ImageCubeArray"),
-            Self::SAMPLE_RATE_SHADING => write!(f, "SampleRateShading"),
-            Self::IMAGE_RECT => write!(f, "ImageRect"),
-            Self::SAMPLED_RECT => write!(f, "SampledRect"),
-            Self::GENERIC_POINTER => write!(f, "GenericPointer"),
-            Self::INT_8 => write!(f, "Int8"),
-            Self::INPUT_ATTACHMENT => write!(f, "InputAttachment"),
-            Self::SPARSE_RESIDENCY => write!(f, "SparseResidency"),
-            Self::MIN_LOD => write!(f, "MinLod"),
-            Self::SAMPLED_1D => write!(f, "Sampled1D"),
-            Self::IMAGE_1D => write!(f, "Image1D"),
-            Self::SAMPLED_CUBE_ARRAY => write!(f, "SampledCubeArray"),
-            Self::SAMPLED_BUFFER => write!(f, "SampledBuffer"),
-            Self::IMAGE_BUFFER => write!(f, "ImageBuffer"),
-            Self::IMAGE_MSARRAY => write!(f, "ImageMSArray"),
-            Self::STORAGE_IMAGE_EXTENDED_FORMATS => write!(f, "StorageImageExtendedFormats"),
-            Self::IMAGE_QUERY => write!(f, "ImageQuery"),
-            Self::DERIVATIVE_CONTROL => write!(f, "DerivativeControl"),
-            Self::INTERPOLATION_FUNCTION => write!(f, "InterpolationFunction"),
-            Self::TRANSFORM_FEEDBACK => write!(f, "TransformFeedback"),
-            Self::GEOMETRY_STREAMS => write!(f, "GeometryStreams"),
-            Self::STORAGE_IMAGE_READ_WITHOUT_FORMAT => write!(f, "StorageImageReadWithoutFormat"),
-            Self::STORAGE_IMAGE_WRITE_WITHOUT_FORMAT => write!(f, "StorageImageWriteWithoutFormat"),
-            Self::MULTI_VIEWPORT => write!(f, "MultiViewport"),
-            Self::SUBGROUP_DISPATCH => write!(f, "SubgroupDispatch"),
-            Self::NAMED_BARRIER => write!(f, "NamedBarrier"),
-            Self::PIPE_STORAGE => write!(f, "PipeStorage"),
-            Self::GROUP_NON_UNIFORM => write!(f, "GroupNonUniform"),
-            Self::GROUP_NON_UNIFORM_VOTE => write!(f, "GroupNonUniformVote"),
-            Self::GROUP_NON_UNIFORM_ARITHMETIC => write!(f, "GroupNonUniformArithmetic"),
-            Self::GROUP_NON_UNIFORM_BALLOT => write!(f, "GroupNonUniformBallot"),
-            Self::GROUP_NON_UNIFORM_SHUFFLE => write!(f, "GroupNonUniformShuffle"),
-            Self::GROUP_NON_UNIFORM_SHUFFLE_RELATIVE => write!(f, "GroupNonUniformShuffleRelative"),
-            Self::GROUP_NON_UNIFORM_CLUSTERED => write!(f, "GroupNonUniformClustered"),
-            Self::GROUP_NON_UNIFORM_QUAD => write!(f, "GroupNonUniformQuad"),
-            Self::SHADER_LAYER => write!(f, "ShaderLayer"),
-            Self::SHADER_VIEWPORT_INDEX => write!(f, "ShaderViewportIndex"),
-            Self::UNIFORM_DECORATION => write!(f, "UniformDecoration"),
-            Self::CORE_BUILTINS_ARM => write!(f, "CoreBuiltinsARM"),
-            Self::TILE_IMAGE_COLOR_READ_ACCESS_EXT => write!(f, "TileImageColorReadAccessEXT"),
-            Self::TILE_IMAGE_DEPTH_READ_ACCESS_EXT => write!(f, "TileImageDepthReadAccessEXT"),
-            Self::TILE_IMAGE_STENCIL_READ_ACCESS_EXT => write!(f, "TileImageStencilReadAccessEXT"),
-            Self::TENSORS_ARM => write!(f, "TensorsARM"),
+            Self::CLIP_DISTANCE => Display::fmt(stringify!(CLIP_DISTANCE), f),
+            Self::CULL_DISTANCE => Display::fmt(stringify!(CULL_DISTANCE), f),
+            Self::IMAGE_CUBE_ARRAY => Display::fmt(stringify!(IMAGE_CUBE_ARRAY), f),
+            Self::SAMPLE_RATE_SHADING => Display::fmt(stringify!(SAMPLE_RATE_SHADING), f),
+            Self::IMAGE_RECT => Display::fmt(stringify!(IMAGE_RECT), f),
+            Self::SAMPLED_RECT => Display::fmt(stringify!(SAMPLED_RECT), f),
+            Self::GENERIC_POINTER => Display::fmt(stringify!(GENERIC_POINTER), f),
+            Self::INT_8 => Display::fmt(stringify!(INT_8), f),
+            Self::INPUT_ATTACHMENT => Display::fmt(stringify!(INPUT_ATTACHMENT), f),
+            Self::SPARSE_RESIDENCY => Display::fmt(stringify!(SPARSE_RESIDENCY), f),
+            Self::MIN_LOD => Display::fmt(stringify!(MIN_LOD), f),
+            Self::SAMPLED_1D => Display::fmt(stringify!(SAMPLED_1D), f),
+            Self::IMAGE_1D => Display::fmt(stringify!(IMAGE_1D), f),
+            Self::SAMPLED_CUBE_ARRAY => Display::fmt(stringify!(SAMPLED_CUBE_ARRAY), f),
+            Self::SAMPLED_BUFFER => Display::fmt(stringify!(SAMPLED_BUFFER), f),
+            Self::IMAGE_BUFFER => Display::fmt(stringify!(IMAGE_BUFFER), f),
+            Self::IMAGE_MSARRAY => Display::fmt(stringify!(IMAGE_MSARRAY), f),
+            Self::STORAGE_IMAGE_EXTENDED_FORMATS => {
+                Display::fmt(stringify!(STORAGE_IMAGE_EXTENDED_FORMATS), f)
+            }
+            Self::IMAGE_QUERY => Display::fmt(stringify!(IMAGE_QUERY), f),
+            Self::DERIVATIVE_CONTROL => Display::fmt(stringify!(DERIVATIVE_CONTROL), f),
+            Self::INTERPOLATION_FUNCTION => Display::fmt(stringify!(INTERPOLATION_FUNCTION), f),
+            Self::TRANSFORM_FEEDBACK => Display::fmt(stringify!(TRANSFORM_FEEDBACK), f),
+            Self::GEOMETRY_STREAMS => Display::fmt(stringify!(GEOMETRY_STREAMS), f),
+            Self::STORAGE_IMAGE_READ_WITHOUT_FORMAT => {
+                Display::fmt(stringify!(STORAGE_IMAGE_READ_WITHOUT_FORMAT), f)
+            }
+            Self::STORAGE_IMAGE_WRITE_WITHOUT_FORMAT => {
+                Display::fmt(stringify!(STORAGE_IMAGE_WRITE_WITHOUT_FORMAT), f)
+            }
+            Self::MULTI_VIEWPORT => Display::fmt(stringify!(MULTI_VIEWPORT), f),
+            Self::SUBGROUP_DISPATCH => Display::fmt(stringify!(SUBGROUP_DISPATCH), f),
+            Self::NAMED_BARRIER => Display::fmt(stringify!(NAMED_BARRIER), f),
+            Self::PIPE_STORAGE => Display::fmt(stringify!(PIPE_STORAGE), f),
+            Self::GROUP_NON_UNIFORM => Display::fmt(stringify!(GROUP_NON_UNIFORM), f),
+            Self::GROUP_NON_UNIFORM_VOTE => Display::fmt(stringify!(GROUP_NON_UNIFORM_VOTE), f),
+            Self::GROUP_NON_UNIFORM_ARITHMETIC => {
+                Display::fmt(stringify!(GROUP_NON_UNIFORM_ARITHMETIC), f)
+            }
+            Self::GROUP_NON_UNIFORM_BALLOT => Display::fmt(stringify!(GROUP_NON_UNIFORM_BALLOT), f),
+            Self::GROUP_NON_UNIFORM_SHUFFLE => {
+                Display::fmt(stringify!(GROUP_NON_UNIFORM_SHUFFLE), f)
+            }
+            Self::GROUP_NON_UNIFORM_SHUFFLE_RELATIVE => {
+                Display::fmt(stringify!(GROUP_NON_UNIFORM_SHUFFLE_RELATIVE), f)
+            }
+            Self::GROUP_NON_UNIFORM_CLUSTERED => {
+                Display::fmt(stringify!(GROUP_NON_UNIFORM_CLUSTERED), f)
+            }
+            Self::GROUP_NON_UNIFORM_QUAD => Display::fmt(stringify!(GROUP_NON_UNIFORM_QUAD), f),
+            Self::SHADER_LAYER => Display::fmt(stringify!(SHADER_LAYER), f),
+            Self::SHADER_VIEWPORT_INDEX => Display::fmt(stringify!(SHADER_VIEWPORT_INDEX), f),
+            Self::UNIFORM_DECORATION => Display::fmt(stringify!(UNIFORM_DECORATION), f),
+            Self::CORE_BUILTINS_ARM => Display::fmt(stringify!(CORE_BUILTINS_ARM), f),
+            Self::TILE_IMAGE_COLOR_READ_ACCESS_EXT => {
+                Display::fmt(stringify!(TILE_IMAGE_COLOR_READ_ACCESS_EXT), f)
+            }
+            Self::TILE_IMAGE_DEPTH_READ_ACCESS_EXT => {
+                Display::fmt(stringify!(TILE_IMAGE_DEPTH_READ_ACCESS_EXT), f)
+            }
+            Self::TILE_IMAGE_STENCIL_READ_ACCESS_EXT => {
+                Display::fmt(stringify!(TILE_IMAGE_STENCIL_READ_ACCESS_EXT), f)
+            }
+            Self::TENSORS_ARM => Display::fmt(stringify!(TENSORS_ARM), f),
             Self::STORAGE_TENSOR_ARRAY_DYNAMIC_INDEXING_ARM => {
-                write!(f, "StorageTensorArrayDynamicIndexingARM")
+                Display::fmt(stringify!(STORAGE_TENSOR_ARRAY_DYNAMIC_INDEXING_ARM), f)
             }
             Self::STORAGE_TENSOR_ARRAY_NON_UNIFORM_INDEXING_ARM => {
-                write!(f, "StorageTensorArrayNonUniformIndexingARM")
+                Display::fmt(stringify!(STORAGE_TENSOR_ARRAY_NON_UNIFORM_INDEXING_ARM), f)
             }
-            Self::GRAPH_ARM => write!(f, "GraphARM"),
-            Self::COOPERATIVE_MATRIX_LAYOUTS_ARM => write!(f, "CooperativeMatrixLayoutsARM"),
-            Self::FLOAT_8_EXT => write!(f, "Float8EXT"),
-            Self::FLOAT_8_COOPERATIVE_MATRIX_EXT => write!(f, "Float8CooperativeMatrixEXT"),
-            Self::FRAGMENT_SHADING_RATE_KHR => write!(f, "FragmentShadingRateKHR"),
-            Self::SUBGROUP_BALLOT_KHR => write!(f, "SubgroupBallotKHR"),
-            Self::DRAW_PARAMETERS => write!(f, "DrawParameters"),
+            Self::GRAPH_ARM => Display::fmt(stringify!(GRAPH_ARM), f),
+            Self::COOPERATIVE_MATRIX_LAYOUTS_ARM => {
+                Display::fmt(stringify!(COOPERATIVE_MATRIX_LAYOUTS_ARM), f)
+            }
+            Self::FLOAT_8_EXT => Display::fmt(stringify!(FLOAT_8_EXT), f),
+            Self::FLOAT_8_COOPERATIVE_MATRIX_EXT => {
+                Display::fmt(stringify!(FLOAT_8_COOPERATIVE_MATRIX_EXT), f)
+            }
+            Self::FRAGMENT_SHADING_RATE_KHR => {
+                Display::fmt(stringify!(FRAGMENT_SHADING_RATE_KHR), f)
+            }
+            Self::SUBGROUP_BALLOT_KHR => Display::fmt(stringify!(SUBGROUP_BALLOT_KHR), f),
+            Self::DRAW_PARAMETERS => Display::fmt(stringify!(DRAW_PARAMETERS), f),
             Self::WORKGROUP_MEMORY_EXPLICIT_LAYOUT_KHR => {
-                write!(f, "WorkgroupMemoryExplicitLayoutKHR")
+                Display::fmt(stringify!(WORKGROUP_MEMORY_EXPLICIT_LAYOUT_KHR), f)
             }
-            Self::WORKGROUP_MEMORY_EXPLICIT_LAYOUT_8_BIT_ACCESS_KHR => {
-                write!(f, "WorkgroupMemoryExplicitLayout8BitAccessKHR")
+            Self::WORKGROUP_MEMORY_EXPLICIT_LAYOUT_8_BIT_ACCESS_KHR => Display::fmt(
+                stringify!(WORKGROUP_MEMORY_EXPLICIT_LAYOUT_8_BIT_ACCESS_KHR),
+                f,
+            ),
+            Self::WORKGROUP_MEMORY_EXPLICIT_LAYOUT_16_BIT_ACCESS_KHR => Display::fmt(
+                stringify!(WORKGROUP_MEMORY_EXPLICIT_LAYOUT_16_BIT_ACCESS_KHR),
+                f,
+            ),
+            Self::SUBGROUP_VOTE_KHR => Display::fmt(stringify!(SUBGROUP_VOTE_KHR), f),
+            Self::STORAGE_BUFFER_16_BIT_ACCESS => {
+                Display::fmt(stringify!(STORAGE_BUFFER_16_BIT_ACCESS), f)
             }
-            Self::WORKGROUP_MEMORY_EXPLICIT_LAYOUT_16_BIT_ACCESS_KHR => {
-                write!(f, "WorkgroupMemoryExplicitLayout16BitAccessKHR")
-            }
-            Self::SUBGROUP_VOTE_KHR => write!(f, "SubgroupVoteKHR"),
-            Self::STORAGE_BUFFER_16_BIT_ACCESS => write!(f, "StorageBuffer16BitAccess"),
             Self::UNIFORM_AND_STORAGE_BUFFER_16_BIT_ACCESS => {
-                write!(f, "UniformAndStorageBuffer16BitAccess")
+                Display::fmt(stringify!(UNIFORM_AND_STORAGE_BUFFER_16_BIT_ACCESS), f)
             }
-            Self::STORAGE_PUSH_CONSTANT_16 => write!(f, "StoragePushConstant16"),
-            Self::STORAGE_INPUT_OUTPUT_16 => write!(f, "StorageInputOutput16"),
-            Self::DEVICE_GROUP => write!(f, "DeviceGroup"),
-            Self::MULTI_VIEW => write!(f, "MultiView"),
-            Self::VARIABLE_POINTERS_STORAGE_BUFFER => write!(f, "VariablePointersStorageBuffer"),
-            Self::VARIABLE_POINTERS => write!(f, "VariablePointers"),
-            Self::ATOMIC_STORAGE_OPS => write!(f, "AtomicStorageOps"),
-            Self::SAMPLE_MASK_POST_DEPTH_COVERAGE => write!(f, "SampleMaskPostDepthCoverage"),
-            Self::STORAGE_BUFFER_8_BIT_ACCESS => write!(f, "StorageBuffer8BitAccess"),
+            Self::STORAGE_PUSH_CONSTANT_16 => Display::fmt(stringify!(STORAGE_PUSH_CONSTANT_16), f),
+            Self::STORAGE_INPUT_OUTPUT_16 => Display::fmt(stringify!(STORAGE_INPUT_OUTPUT_16), f),
+            Self::DEVICE_GROUP => Display::fmt(stringify!(DEVICE_GROUP), f),
+            Self::MULTI_VIEW => Display::fmt(stringify!(MULTI_VIEW), f),
+            Self::VARIABLE_POINTERS_STORAGE_BUFFER => {
+                Display::fmt(stringify!(VARIABLE_POINTERS_STORAGE_BUFFER), f)
+            }
+            Self::VARIABLE_POINTERS => Display::fmt(stringify!(VARIABLE_POINTERS), f),
+            Self::ATOMIC_STORAGE_OPS => Display::fmt(stringify!(ATOMIC_STORAGE_OPS), f),
+            Self::SAMPLE_MASK_POST_DEPTH_COVERAGE => {
+                Display::fmt(stringify!(SAMPLE_MASK_POST_DEPTH_COVERAGE), f)
+            }
+            Self::STORAGE_BUFFER_8_BIT_ACCESS => {
+                Display::fmt(stringify!(STORAGE_BUFFER_8_BIT_ACCESS), f)
+            }
             Self::UNIFORM_AND_STORAGE_BUFFER_8_BIT_ACCESS => {
-                write!(f, "UniformAndStorageBuffer8BitAccess")
+                Display::fmt(stringify!(UNIFORM_AND_STORAGE_BUFFER_8_BIT_ACCESS), f)
             }
-            Self::STORAGE_PUSH_CONSTANT_8 => write!(f, "StoragePushConstant8"),
-            Self::DENORM_PRESERVE => write!(f, "DenormPreserve"),
-            Self::DENORM_FLUSH_TO_ZERO => write!(f, "DenormFlushToZero"),
-            Self::SIGNED_ZERO_INF_NAN_PRESERVE => write!(f, "SignedZeroInfNanPreserve"),
-            Self::ROUNDING_MODE_RTE => write!(f, "RoundingModeRTE"),
-            Self::ROUNDING_MODE_RTZ => write!(f, "RoundingModeRTZ"),
-            Self::RAY_QUERY_PROVISIONAL_KHR => write!(f, "RayQueryProvisionalKHR"),
-            Self::RAY_QUERY_KHR => write!(f, "RayQueryKHR"),
-            Self::UNTYPED_POINTERS_KHR => write!(f, "UntypedPointersKHR"),
+            Self::STORAGE_PUSH_CONSTANT_8 => Display::fmt(stringify!(STORAGE_PUSH_CONSTANT_8), f),
+            Self::DENORM_PRESERVE => Display::fmt(stringify!(DENORM_PRESERVE), f),
+            Self::DENORM_FLUSH_TO_ZERO => Display::fmt(stringify!(DENORM_FLUSH_TO_ZERO), f),
+            Self::SIGNED_ZERO_INF_NAN_PRESERVE => {
+                Display::fmt(stringify!(SIGNED_ZERO_INF_NAN_PRESERVE), f)
+            }
+            Self::ROUNDING_MODE_RTE => Display::fmt(stringify!(ROUNDING_MODE_RTE), f),
+            Self::ROUNDING_MODE_RTZ => Display::fmt(stringify!(ROUNDING_MODE_RTZ), f),
+            Self::RAY_QUERY_PROVISIONAL_KHR => {
+                Display::fmt(stringify!(RAY_QUERY_PROVISIONAL_KHR), f)
+            }
+            Self::RAY_QUERY_KHR => Display::fmt(stringify!(RAY_QUERY_KHR), f),
+            Self::UNTYPED_POINTERS_KHR => Display::fmt(stringify!(UNTYPED_POINTERS_KHR), f),
             Self::RAY_TRAVERSAL_PRIMITIVE_CULLING_KHR => {
-                write!(f, "RayTraversalPrimitiveCullingKHR")
+                Display::fmt(stringify!(RAY_TRAVERSAL_PRIMITIVE_CULLING_KHR), f)
             }
-            Self::RAY_TRACING_KHR => write!(f, "RayTracingKHR"),
-            Self::TEXTURE_SAMPLE_WEIGHTED_QCOM => write!(f, "TextureSampleWeightedQCOM"),
-            Self::TEXTURE_BOX_FILTER_QCOM => write!(f, "TextureBoxFilterQCOM"),
-            Self::TEXTURE_BLOCK_MATCH_QCOM => write!(f, "TextureBlockMatchQCOM"),
-            Self::TILE_SHADING_QCOM => write!(f, "TileShadingQCOM"),
+            Self::RAY_TRACING_KHR => Display::fmt(stringify!(RAY_TRACING_KHR), f),
+            Self::TEXTURE_SAMPLE_WEIGHTED_QCOM => {
+                Display::fmt(stringify!(TEXTURE_SAMPLE_WEIGHTED_QCOM), f)
+            }
+            Self::TEXTURE_BOX_FILTER_QCOM => Display::fmt(stringify!(TEXTURE_BOX_FILTER_QCOM), f),
+            Self::TEXTURE_BLOCK_MATCH_QCOM => Display::fmt(stringify!(TEXTURE_BLOCK_MATCH_QCOM), f),
+            Self::TILE_SHADING_QCOM => Display::fmt(stringify!(TILE_SHADING_QCOM), f),
             Self::COOPERATIVE_MATRIX_CONVERSION_QCOM => {
-                write!(f, "CooperativeMatrixConversionQCOM")
+                Display::fmt(stringify!(COOPERATIVE_MATRIX_CONVERSION_QCOM), f)
             }
-            Self::TEXTURE_BLOCK_MATCH_2_QCOM => write!(f, "TextureBlockMatch2QCOM"),
-            Self::FLOAT_16_IMAGE_AMD => write!(f, "Float16ImageAMD"),
-            Self::IMAGE_GATHER_BIAS_LOD_AMD => write!(f, "ImageGatherBiasLodAMD"),
-            Self::FRAGMENT_MASK_AMD => write!(f, "FragmentMaskAMD"),
-            Self::STENCIL_EXPORT_EXT => write!(f, "StencilExportEXT"),
-            Self::IMAGE_READ_WRITE_LOD_AMD => write!(f, "ImageReadWriteLodAMD"),
-            Self::INT_64_IMAGE_EXT => write!(f, "Int64ImageEXT"),
-            Self::SHADER_CLOCK_KHR => write!(f, "ShaderClockKHR"),
-            Self::SHADER_ENQUEUE_AMDX => write!(f, "ShaderEnqueueAMDX"),
-            Self::QUAD_CONTROL_KHR => write!(f, "QuadControlKHR"),
-            Self::INT_4_TYPE_INTEL => write!(f, "Int4TypeINTEL"),
-            Self::INT_4_COOPERATIVE_MATRIX_INTEL => write!(f, "Int4CooperativeMatrixINTEL"),
-            Self::BFLOAT_16_TYPE_KHR => write!(f, "BFloat16TypeKHR"),
-            Self::BFLOAT_16DOT_PRODUCT_KHR => write!(f, "BFloat16DotProductKHR"),
-            Self::BFLOAT_16_COOPERATIVE_MATRIX_KHR => write!(f, "BFloat16CooperativeMatrixKHR"),
-            Self::ABORT_KHR => write!(f, "AbortKHR"),
-            Self::DESCRIPTOR_HEAP_EXT => write!(f, "DescriptorHeapEXT"),
-            Self::CONSTANT_DATA_KHR => write!(f, "ConstantDataKHR"),
-            Self::POISON_FREEZE_KHR => write!(f, "PoisonFreezeKHR"),
-            Self::SAMPLE_MASK_OVERRIDE_COVERAGE_NV => write!(f, "SampleMaskOverrideCoverageNV"),
-            Self::GEOMETRY_SHADER_PASSTHROUGH_NV => write!(f, "GeometryShaderPassthroughNV"),
-            Self::SHADER_VIEWPORT_INDEX_LAYER_EXT => write!(f, "ShaderViewportIndexLayerEXT"),
-            Self::SHADER_VIEWPORT_MASK_NV => write!(f, "ShaderViewportMaskNV"),
-            Self::SHADER_STEREO_VIEW_NV => write!(f, "ShaderStereoViewNV"),
-            Self::PER_VIEW_ATTRIBUTES_NV => write!(f, "PerViewAttributesNV"),
-            Self::FRAGMENT_FULLY_COVERED_EXT => write!(f, "FragmentFullyCoveredEXT"),
-            Self::MESH_SHADING_NV => write!(f, "MeshShadingNV"),
-            Self::IMAGE_FOOTPRINT_NV => write!(f, "ImageFootprintNV"),
-            Self::MESH_SHADING_EXT => write!(f, "MeshShadingEXT"),
-            Self::FRAGMENT_BARYCENTRIC_KHR => write!(f, "FragmentBarycentricKHR"),
-            Self::COMPUTE_DERIVATIVE_GROUP_QUADS_KHR => write!(f, "ComputeDerivativeGroupQuadsKHR"),
-            Self::FRAGMENT_DENSITY_EXT => write!(f, "FragmentDensityEXT"),
-            Self::GROUP_NON_UNIFORM_PARTITIONED_EXT => write!(f, "GroupNonUniformPartitionedEXT"),
-            Self::SHADER_NON_UNIFORM => write!(f, "ShaderNonUniform"),
-            Self::RUNTIME_DESCRIPTOR_ARRAY => write!(f, "RuntimeDescriptorArray"),
+            Self::TEXTURE_BLOCK_MATCH_2_QCOM => {
+                Display::fmt(stringify!(TEXTURE_BLOCK_MATCH_2_QCOM), f)
+            }
+            Self::FLOAT_16_IMAGE_AMD => Display::fmt(stringify!(FLOAT_16_IMAGE_AMD), f),
+            Self::IMAGE_GATHER_BIAS_LOD_AMD => {
+                Display::fmt(stringify!(IMAGE_GATHER_BIAS_LOD_AMD), f)
+            }
+            Self::FRAGMENT_MASK_AMD => Display::fmt(stringify!(FRAGMENT_MASK_AMD), f),
+            Self::STENCIL_EXPORT_EXT => Display::fmt(stringify!(STENCIL_EXPORT_EXT), f),
+            Self::IMAGE_READ_WRITE_LOD_AMD => Display::fmt(stringify!(IMAGE_READ_WRITE_LOD_AMD), f),
+            Self::INT_64_IMAGE_EXT => Display::fmt(stringify!(INT_64_IMAGE_EXT), f),
+            Self::SHADER_CLOCK_KHR => Display::fmt(stringify!(SHADER_CLOCK_KHR), f),
+            Self::SHADER_ENQUEUE_AMDX => Display::fmt(stringify!(SHADER_ENQUEUE_AMDX), f),
+            Self::QUAD_CONTROL_KHR => Display::fmt(stringify!(QUAD_CONTROL_KHR), f),
+            Self::INT_4_TYPE_INTEL => Display::fmt(stringify!(INT_4_TYPE_INTEL), f),
+            Self::INT_4_COOPERATIVE_MATRIX_INTEL => {
+                Display::fmt(stringify!(INT_4_COOPERATIVE_MATRIX_INTEL), f)
+            }
+            Self::BFLOAT_16_TYPE_KHR => Display::fmt(stringify!(BFLOAT_16_TYPE_KHR), f),
+            Self::BFLOAT_16DOT_PRODUCT_KHR => Display::fmt(stringify!(BFLOAT_16DOT_PRODUCT_KHR), f),
+            Self::BFLOAT_16_COOPERATIVE_MATRIX_KHR => {
+                Display::fmt(stringify!(BFLOAT_16_COOPERATIVE_MATRIX_KHR), f)
+            }
+            Self::ABORT_KHR => Display::fmt(stringify!(ABORT_KHR), f),
+            Self::DESCRIPTOR_HEAP_EXT => Display::fmt(stringify!(DESCRIPTOR_HEAP_EXT), f),
+            Self::CONSTANT_DATA_KHR => Display::fmt(stringify!(CONSTANT_DATA_KHR), f),
+            Self::POISON_FREEZE_KHR => Display::fmt(stringify!(POISON_FREEZE_KHR), f),
+            Self::SAMPLE_MASK_OVERRIDE_COVERAGE_NV => {
+                Display::fmt(stringify!(SAMPLE_MASK_OVERRIDE_COVERAGE_NV), f)
+            }
+            Self::GEOMETRY_SHADER_PASSTHROUGH_NV => {
+                Display::fmt(stringify!(GEOMETRY_SHADER_PASSTHROUGH_NV), f)
+            }
+            Self::SHADER_VIEWPORT_INDEX_LAYER_EXT => {
+                Display::fmt(stringify!(SHADER_VIEWPORT_INDEX_LAYER_EXT), f)
+            }
+            Self::SHADER_VIEWPORT_MASK_NV => Display::fmt(stringify!(SHADER_VIEWPORT_MASK_NV), f),
+            Self::SHADER_STEREO_VIEW_NV => Display::fmt(stringify!(SHADER_STEREO_VIEW_NV), f),
+            Self::PER_VIEW_ATTRIBUTES_NV => Display::fmt(stringify!(PER_VIEW_ATTRIBUTES_NV), f),
+            Self::FRAGMENT_FULLY_COVERED_EXT => {
+                Display::fmt(stringify!(FRAGMENT_FULLY_COVERED_EXT), f)
+            }
+            Self::MESH_SHADING_NV => Display::fmt(stringify!(MESH_SHADING_NV), f),
+            Self::IMAGE_FOOTPRINT_NV => Display::fmt(stringify!(IMAGE_FOOTPRINT_NV), f),
+            Self::MESH_SHADING_EXT => Display::fmt(stringify!(MESH_SHADING_EXT), f),
+            Self::FRAGMENT_BARYCENTRIC_KHR => Display::fmt(stringify!(FRAGMENT_BARYCENTRIC_KHR), f),
+            Self::COMPUTE_DERIVATIVE_GROUP_QUADS_KHR => {
+                Display::fmt(stringify!(COMPUTE_DERIVATIVE_GROUP_QUADS_KHR), f)
+            }
+            Self::FRAGMENT_DENSITY_EXT => Display::fmt(stringify!(FRAGMENT_DENSITY_EXT), f),
+            Self::GROUP_NON_UNIFORM_PARTITIONED_EXT => {
+                Display::fmt(stringify!(GROUP_NON_UNIFORM_PARTITIONED_EXT), f)
+            }
+            Self::SHADER_NON_UNIFORM => Display::fmt(stringify!(SHADER_NON_UNIFORM), f),
+            Self::RUNTIME_DESCRIPTOR_ARRAY => Display::fmt(stringify!(RUNTIME_DESCRIPTOR_ARRAY), f),
             Self::INPUT_ATTACHMENT_ARRAY_DYNAMIC_INDEXING => {
-                write!(f, "InputAttachmentArrayDynamicIndexing")
+                Display::fmt(stringify!(INPUT_ATTACHMENT_ARRAY_DYNAMIC_INDEXING), f)
             }
             Self::UNIFORM_TEXEL_BUFFER_ARRAY_DYNAMIC_INDEXING => {
-                write!(f, "UniformTexelBufferArrayDynamicIndexing")
+                Display::fmt(stringify!(UNIFORM_TEXEL_BUFFER_ARRAY_DYNAMIC_INDEXING), f)
             }
             Self::STORAGE_TEXEL_BUFFER_ARRAY_DYNAMIC_INDEXING => {
-                write!(f, "StorageTexelBufferArrayDynamicIndexing")
+                Display::fmt(stringify!(STORAGE_TEXEL_BUFFER_ARRAY_DYNAMIC_INDEXING), f)
             }
             Self::UNIFORM_BUFFER_ARRAY_NON_UNIFORM_INDEXING => {
-                write!(f, "UniformBufferArrayNonUniformIndexing")
+                Display::fmt(stringify!(UNIFORM_BUFFER_ARRAY_NON_UNIFORM_INDEXING), f)
             }
             Self::SAMPLED_IMAGE_ARRAY_NON_UNIFORM_INDEXING => {
-                write!(f, "SampledImageArrayNonUniformIndexing")
+                Display::fmt(stringify!(SAMPLED_IMAGE_ARRAY_NON_UNIFORM_INDEXING), f)
             }
             Self::STORAGE_BUFFER_ARRAY_NON_UNIFORM_INDEXING => {
-                write!(f, "StorageBufferArrayNonUniformIndexing")
+                Display::fmt(stringify!(STORAGE_BUFFER_ARRAY_NON_UNIFORM_INDEXING), f)
             }
             Self::STORAGE_IMAGE_ARRAY_NON_UNIFORM_INDEXING => {
-                write!(f, "StorageImageArrayNonUniformIndexing")
+                Display::fmt(stringify!(STORAGE_IMAGE_ARRAY_NON_UNIFORM_INDEXING), f)
             }
             Self::INPUT_ATTACHMENT_ARRAY_NON_UNIFORM_INDEXING => {
-                write!(f, "InputAttachmentArrayNonUniformIndexing")
+                Display::fmt(stringify!(INPUT_ATTACHMENT_ARRAY_NON_UNIFORM_INDEXING), f)
             }
-            Self::UNIFORM_TEXEL_BUFFER_ARRAY_NON_UNIFORM_INDEXING => {
-                write!(f, "UniformTexelBufferArrayNonUniformIndexing")
+            Self::UNIFORM_TEXEL_BUFFER_ARRAY_NON_UNIFORM_INDEXING => Display::fmt(
+                stringify!(UNIFORM_TEXEL_BUFFER_ARRAY_NON_UNIFORM_INDEXING),
+                f,
+            ),
+            Self::STORAGE_TEXEL_BUFFER_ARRAY_NON_UNIFORM_INDEXING => Display::fmt(
+                stringify!(STORAGE_TEXEL_BUFFER_ARRAY_NON_UNIFORM_INDEXING),
+                f,
+            ),
+            Self::RAY_TRACING_POSITION_FETCH_KHR => {
+                Display::fmt(stringify!(RAY_TRACING_POSITION_FETCH_KHR), f)
             }
-            Self::STORAGE_TEXEL_BUFFER_ARRAY_NON_UNIFORM_INDEXING => {
-                write!(f, "StorageTexelBufferArrayNonUniformIndexing")
+            Self::RAY_TRACING_NV => Display::fmt(stringify!(RAY_TRACING_NV), f),
+            Self::RAY_TRACING_MOTION_BLUR_NV => {
+                Display::fmt(stringify!(RAY_TRACING_MOTION_BLUR_NV), f)
             }
-            Self::RAY_TRACING_POSITION_FETCH_KHR => write!(f, "RayTracingPositionFetchKHR"),
-            Self::RAY_TRACING_NV => write!(f, "RayTracingNV"),
-            Self::RAY_TRACING_MOTION_BLUR_NV => write!(f, "RayTracingMotionBlurNV"),
-            Self::VULKAN_MEMORY_MODEL => write!(f, "VulkanMemoryModel"),
-            Self::VULKAN_MEMORY_MODEL_DEVICE_SCOPE => write!(f, "VulkanMemoryModelDeviceScope"),
-            Self::PHYSICAL_STORAGE_BUFFER_ADDRESSES => write!(f, "PhysicalStorageBufferAddresses"),
+            Self::VULKAN_MEMORY_MODEL => Display::fmt(stringify!(VULKAN_MEMORY_MODEL), f),
+            Self::VULKAN_MEMORY_MODEL_DEVICE_SCOPE => {
+                Display::fmt(stringify!(VULKAN_MEMORY_MODEL_DEVICE_SCOPE), f)
+            }
+            Self::PHYSICAL_STORAGE_BUFFER_ADDRESSES => {
+                Display::fmt(stringify!(PHYSICAL_STORAGE_BUFFER_ADDRESSES), f)
+            }
             Self::COMPUTE_DERIVATIVE_GROUP_LINEAR_KHR => {
-                write!(f, "ComputeDerivativeGroupLinearKHR")
+                Display::fmt(stringify!(COMPUTE_DERIVATIVE_GROUP_LINEAR_KHR), f)
             }
-            Self::RAY_TRACING_PROVISIONAL_KHR => write!(f, "RayTracingProvisionalKHR"),
-            Self::COOPERATIVE_MATRIX_NV => write!(f, "CooperativeMatrixNV"),
+            Self::RAY_TRACING_PROVISIONAL_KHR => {
+                Display::fmt(stringify!(RAY_TRACING_PROVISIONAL_KHR), f)
+            }
+            Self::COOPERATIVE_MATRIX_NV => Display::fmt(stringify!(COOPERATIVE_MATRIX_NV), f),
             Self::FRAGMENT_SHADER_SAMPLE_INTERLOCK_EXT => {
-                write!(f, "FragmentShaderSampleInterlockEXT")
+                Display::fmt(stringify!(FRAGMENT_SHADER_SAMPLE_INTERLOCK_EXT), f)
             }
             Self::FRAGMENT_SHADER_SHADING_RATE_INTERLOCK_EXT => {
-                write!(f, "FragmentShaderShadingRateInterlockEXT")
+                Display::fmt(stringify!(FRAGMENT_SHADER_SHADING_RATE_INTERLOCK_EXT), f)
             }
-            Self::SHADER_SMBUILTINS_NV => write!(f, "ShaderSMBuiltinsNV"),
+            Self::SHADER_SMBUILTINS_NV => Display::fmt(stringify!(SHADER_SMBUILTINS_NV), f),
             Self::FRAGMENT_SHADER_PIXEL_INTERLOCK_EXT => {
-                write!(f, "FragmentShaderPixelInterlockEXT")
+                Display::fmt(stringify!(FRAGMENT_SHADER_PIXEL_INTERLOCK_EXT), f)
             }
-            Self::DEMOTE_TO_HELPER_INVOCATION => write!(f, "DemoteToHelperInvocation"),
-            Self::DISPLACEMENT_MICROMAP_NV => write!(f, "DisplacementMicromapNV"),
-            Self::RAY_TRACING_OPACITY_MICROMAP_EXT => write!(f, "RayTracingOpacityMicromapEXT"),
-            Self::SHADER_INVOCATION_REORDER_NV => write!(f, "ShaderInvocationReorderNV"),
-            Self::SHADER_INVOCATION_REORDER_EXT => write!(f, "ShaderInvocationReorderEXT"),
-            Self::BINDLESS_TEXTURE_NV => write!(f, "BindlessTextureNV"),
-            Self::RAY_QUERY_POSITION_FETCH_KHR => write!(f, "RayQueryPositionFetchKHR"),
-            Self::COOPERATIVE_VECTOR_NV => write!(f, "CooperativeVectorNV"),
-            Self::ATOMIC_FLOAT_16_VECTOR_NV => write!(f, "AtomicFloat16VectorNV"),
+            Self::DEMOTE_TO_HELPER_INVOCATION => {
+                Display::fmt(stringify!(DEMOTE_TO_HELPER_INVOCATION), f)
+            }
+            Self::DISPLACEMENT_MICROMAP_NV => Display::fmt(stringify!(DISPLACEMENT_MICROMAP_NV), f),
+            Self::RAY_TRACING_OPACITY_MICROMAP_EXT => {
+                Display::fmt(stringify!(RAY_TRACING_OPACITY_MICROMAP_EXT), f)
+            }
+            Self::SHADER_INVOCATION_REORDER_NV => {
+                Display::fmt(stringify!(SHADER_INVOCATION_REORDER_NV), f)
+            }
+            Self::SHADER_INVOCATION_REORDER_EXT => {
+                Display::fmt(stringify!(SHADER_INVOCATION_REORDER_EXT), f)
+            }
+            Self::BINDLESS_TEXTURE_NV => Display::fmt(stringify!(BINDLESS_TEXTURE_NV), f),
+            Self::RAY_QUERY_POSITION_FETCH_KHR => {
+                Display::fmt(stringify!(RAY_QUERY_POSITION_FETCH_KHR), f)
+            }
+            Self::COOPERATIVE_VECTOR_NV => Display::fmt(stringify!(COOPERATIVE_VECTOR_NV), f),
+            Self::ATOMIC_FLOAT_16_VECTOR_NV => {
+                Display::fmt(stringify!(ATOMIC_FLOAT_16_VECTOR_NV), f)
+            }
             Self::RAY_TRACING_DISPLACEMENT_MICROMAP_NV => {
-                write!(f, "RayTracingDisplacementMicromapNV")
+                Display::fmt(stringify!(RAY_TRACING_DISPLACEMENT_MICROMAP_NV), f)
             }
-            Self::RAW_ACCESS_CHAINS_NV => write!(f, "RawAccessChainsNV"),
-            Self::RAY_TRACING_SPHERES_GEOMETRY_NV => write!(f, "RayTracingSpheresGeometryNV"),
+            Self::RAW_ACCESS_CHAINS_NV => Display::fmt(stringify!(RAW_ACCESS_CHAINS_NV), f),
+            Self::RAY_TRACING_SPHERES_GEOMETRY_NV => {
+                Display::fmt(stringify!(RAY_TRACING_SPHERES_GEOMETRY_NV), f)
+            }
             Self::RAY_TRACING_LINEAR_SWEPT_SPHERES_GEOMETRY_NV => {
-                write!(f, "RayTracingLinearSweptSpheresGeometryNV")
+                Display::fmt(stringify!(RAY_TRACING_LINEAR_SWEPT_SPHERES_GEOMETRY_NV), f)
             }
-            Self::PUSH_CONSTANT_BANKS_NV => write!(f, "PushConstantBanksNV"),
-            Self::LONG_VECTOR_EXT => write!(f, "LongVectorEXT"),
-            Self::SHADER_64_BIT_INDEXING_EXT => write!(f, "Shader64BitIndexingEXT"),
-            Self::COOPERATIVE_MATRIX_REDUCTIONS_NV => write!(f, "CooperativeMatrixReductionsNV"),
-            Self::COOPERATIVE_MATRIX_CONVERSIONS_NV => write!(f, "CooperativeMatrixConversionsNV"),
+            Self::PUSH_CONSTANT_BANKS_NV => Display::fmt(stringify!(PUSH_CONSTANT_BANKS_NV), f),
+            Self::LONG_VECTOR_EXT => Display::fmt(stringify!(LONG_VECTOR_EXT), f),
+            Self::SHADER_64_BIT_INDEXING_EXT => {
+                Display::fmt(stringify!(SHADER_64_BIT_INDEXING_EXT), f)
+            }
+            Self::COOPERATIVE_MATRIX_REDUCTIONS_NV => {
+                Display::fmt(stringify!(COOPERATIVE_MATRIX_REDUCTIONS_NV), f)
+            }
+            Self::COOPERATIVE_MATRIX_CONVERSIONS_NV => {
+                Display::fmt(stringify!(COOPERATIVE_MATRIX_CONVERSIONS_NV), f)
+            }
             Self::COOPERATIVE_MATRIX_PER_ELEMENT_OPERATIONS_NV => {
-                write!(f, "CooperativeMatrixPerElementOperationsNV")
+                Display::fmt(stringify!(COOPERATIVE_MATRIX_PER_ELEMENT_OPERATIONS_NV), f)
             }
             Self::COOPERATIVE_MATRIX_TENSOR_ADDRESSING_NV => {
-                write!(f, "CooperativeMatrixTensorAddressingNV")
+                Display::fmt(stringify!(COOPERATIVE_MATRIX_TENSOR_ADDRESSING_NV), f)
             }
-            Self::COOPERATIVE_MATRIX_BLOCK_LOADS_NV => write!(f, "CooperativeMatrixBlockLoadsNV"),
-            Self::COOPERATIVE_VECTOR_TRAINING_NV => write!(f, "CooperativeVectorTrainingNV"),
+            Self::COOPERATIVE_MATRIX_BLOCK_LOADS_NV => {
+                Display::fmt(stringify!(COOPERATIVE_MATRIX_BLOCK_LOADS_NV), f)
+            }
+            Self::COOPERATIVE_VECTOR_TRAINING_NV => {
+                Display::fmt(stringify!(COOPERATIVE_VECTOR_TRAINING_NV), f)
+            }
             Self::RAY_TRACING_CLUSTER_ACCELERATION_STRUCTURE_NV => {
-                write!(f, "RayTracingClusterAccelerationStructureNV")
+                Display::fmt(stringify!(RAY_TRACING_CLUSTER_ACCELERATION_STRUCTURE_NV), f)
             }
-            Self::TENSOR_ADDRESSING_NV => write!(f, "TensorAddressingNV"),
-            Self::SUBGROUP_SHUFFLE_INTEL => write!(f, "SubgroupShuffleINTEL"),
-            Self::SUBGROUP_BUFFER_BLOCK_IOINTEL => write!(f, "SubgroupBufferBlockIOINTEL"),
-            Self::SUBGROUP_IMAGE_BLOCK_IOINTEL => write!(f, "SubgroupImageBlockIOINTEL"),
-            Self::SUBGROUP_IMAGE_MEDIA_BLOCK_IOINTEL => write!(f, "SubgroupImageMediaBlockIOINTEL"),
-            Self::ROUND_TO_INFINITY_INTEL => write!(f, "RoundToInfinityINTEL"),
-            Self::FLOATING_POINT_MODE_INTEL => write!(f, "FloatingPointModeINTEL"),
-            Self::INTEGER_FUNCTIONS_2_INTEL => write!(f, "IntegerFunctions2INTEL"),
-            Self::FUNCTION_POINTERS_INTEL => write!(f, "FunctionPointersINTEL"),
-            Self::INDIRECT_REFERENCES_INTEL => write!(f, "IndirectReferencesINTEL"),
-            Self::ASM_INTEL => write!(f, "AsmINTEL"),
-            Self::ATOMIC_FLOAT_32_MIN_MAX_EXT => write!(f, "AtomicFloat32MinMaxEXT"),
-            Self::ATOMIC_FLOAT_64_MIN_MAX_EXT => write!(f, "AtomicFloat64MinMaxEXT"),
-            Self::ATOMIC_FLOAT_16_MIN_MAX_EXT => write!(f, "AtomicFloat16MinMaxEXT"),
-            Self::VECTOR_COMPUTE_INTEL => write!(f, "VectorComputeINTEL"),
-            Self::VECTOR_ANY_INTEL => write!(f, "VectorAnyINTEL"),
-            Self::EXPECT_ASSUME_KHR => write!(f, "ExpectAssumeKHR"),
+            Self::TENSOR_ADDRESSING_NV => Display::fmt(stringify!(TENSOR_ADDRESSING_NV), f),
+            Self::SUBGROUP_SHUFFLE_INTEL => Display::fmt(stringify!(SUBGROUP_SHUFFLE_INTEL), f),
+            Self::SUBGROUP_BUFFER_BLOCK_IOINTEL => {
+                Display::fmt(stringify!(SUBGROUP_BUFFER_BLOCK_IOINTEL), f)
+            }
+            Self::SUBGROUP_IMAGE_BLOCK_IOINTEL => {
+                Display::fmt(stringify!(SUBGROUP_IMAGE_BLOCK_IOINTEL), f)
+            }
+            Self::SUBGROUP_IMAGE_MEDIA_BLOCK_IOINTEL => {
+                Display::fmt(stringify!(SUBGROUP_IMAGE_MEDIA_BLOCK_IOINTEL), f)
+            }
+            Self::ROUND_TO_INFINITY_INTEL => Display::fmt(stringify!(ROUND_TO_INFINITY_INTEL), f),
+            Self::FLOATING_POINT_MODE_INTEL => {
+                Display::fmt(stringify!(FLOATING_POINT_MODE_INTEL), f)
+            }
+            Self::INTEGER_FUNCTIONS_2_INTEL => {
+                Display::fmt(stringify!(INTEGER_FUNCTIONS_2_INTEL), f)
+            }
+            Self::FUNCTION_POINTERS_INTEL => Display::fmt(stringify!(FUNCTION_POINTERS_INTEL), f),
+            Self::INDIRECT_REFERENCES_INTEL => {
+                Display::fmt(stringify!(INDIRECT_REFERENCES_INTEL), f)
+            }
+            Self::ASM_INTEL => Display::fmt(stringify!(ASM_INTEL), f),
+            Self::ATOMIC_FLOAT_32_MIN_MAX_EXT => {
+                Display::fmt(stringify!(ATOMIC_FLOAT_32_MIN_MAX_EXT), f)
+            }
+            Self::ATOMIC_FLOAT_64_MIN_MAX_EXT => {
+                Display::fmt(stringify!(ATOMIC_FLOAT_64_MIN_MAX_EXT), f)
+            }
+            Self::ATOMIC_FLOAT_16_MIN_MAX_EXT => {
+                Display::fmt(stringify!(ATOMIC_FLOAT_16_MIN_MAX_EXT), f)
+            }
+            Self::VECTOR_COMPUTE_INTEL => Display::fmt(stringify!(VECTOR_COMPUTE_INTEL), f),
+            Self::VECTOR_ANY_INTEL => Display::fmt(stringify!(VECTOR_ANY_INTEL), f),
+            Self::EXPECT_ASSUME_KHR => Display::fmt(stringify!(EXPECT_ASSUME_KHR), f),
             Self::SUBGROUP_AVC_MOTION_ESTIMATION_INTEL => {
-                write!(f, "SubgroupAvcMotionEstimationINTEL")
+                Display::fmt(stringify!(SUBGROUP_AVC_MOTION_ESTIMATION_INTEL), f)
             }
             Self::SUBGROUP_AVC_MOTION_ESTIMATION_INTRA_INTEL => {
-                write!(f, "SubgroupAvcMotionEstimationIntraINTEL")
+                Display::fmt(stringify!(SUBGROUP_AVC_MOTION_ESTIMATION_INTRA_INTEL), f)
             }
             Self::SUBGROUP_AVC_MOTION_ESTIMATION_CHROMA_INTEL => {
-                write!(f, "SubgroupAvcMotionEstimationChromaINTEL")
+                Display::fmt(stringify!(SUBGROUP_AVC_MOTION_ESTIMATION_CHROMA_INTEL), f)
             }
-            Self::VARIABLE_LENGTH_ARRAY_INTEL => write!(f, "VariableLengthArrayINTEL"),
-            Self::FUNCTION_FLOAT_CONTROL_INTEL => write!(f, "FunctionFloatControlINTEL"),
-            Self::FPGAMEMORY_ATTRIBUTES_ALTERA => write!(f, "FPGAMemoryAttributesALTERA"),
-            Self::FPFAST_MATH_MODE_INTEL => write!(f, "FPFastMathModeINTEL"),
+            Self::VARIABLE_LENGTH_ARRAY_INTEL => {
+                Display::fmt(stringify!(VARIABLE_LENGTH_ARRAY_INTEL), f)
+            }
+            Self::FUNCTION_FLOAT_CONTROL_INTEL => {
+                Display::fmt(stringify!(FUNCTION_FLOAT_CONTROL_INTEL), f)
+            }
+            Self::FPGAMEMORY_ATTRIBUTES_ALTERA => {
+                Display::fmt(stringify!(FPGAMEMORY_ATTRIBUTES_ALTERA), f)
+            }
+            Self::FPFAST_MATH_MODE_INTEL => Display::fmt(stringify!(FPFAST_MATH_MODE_INTEL), f),
             Self::ARBITRARY_PRECISION_INTEGERS_ALTERA => {
-                write!(f, "ArbitraryPrecisionIntegersALTERA")
+                Display::fmt(stringify!(ARBITRARY_PRECISION_INTEGERS_ALTERA), f)
             }
             Self::ARBITRARY_PRECISION_FLOATING_POINT_ALTERA => {
-                write!(f, "ArbitraryPrecisionFloatingPointALTERA")
+                Display::fmt(stringify!(ARBITRARY_PRECISION_FLOATING_POINT_ALTERA), f)
             }
-            Self::UNSTRUCTURED_LOOP_CONTROLS_INTEL => write!(f, "UnstructuredLoopControlsINTEL"),
-            Self::FPGALOOP_CONTROLS_ALTERA => write!(f, "FPGALoopControlsALTERA"),
-            Self::KERNEL_ATTRIBUTES_INTEL => write!(f, "KernelAttributesINTEL"),
-            Self::FPGAKERNEL_ATTRIBUTES_INTEL => write!(f, "FPGAKernelAttributesINTEL"),
-            Self::FPGAMEMORY_ACCESSES_ALTERA => write!(f, "FPGAMemoryAccessesALTERA"),
-            Self::FPGACLUSTER_ATTRIBUTES_ALTERA => write!(f, "FPGAClusterAttributesALTERA"),
-            Self::LOOP_FUSE_ALTERA => write!(f, "LoopFuseALTERA"),
-            Self::FPGADSPCONTROL_ALTERA => write!(f, "FPGADSPControlALTERA"),
-            Self::MEMORY_ACCESS_ALIASING_INTEL => write!(f, "MemoryAccessAliasingINTEL"),
+            Self::UNSTRUCTURED_LOOP_CONTROLS_INTEL => {
+                Display::fmt(stringify!(UNSTRUCTURED_LOOP_CONTROLS_INTEL), f)
+            }
+            Self::FPGALOOP_CONTROLS_ALTERA => Display::fmt(stringify!(FPGALOOP_CONTROLS_ALTERA), f),
+            Self::KERNEL_ATTRIBUTES_INTEL => Display::fmt(stringify!(KERNEL_ATTRIBUTES_INTEL), f),
+            Self::FPGAKERNEL_ATTRIBUTES_INTEL => {
+                Display::fmt(stringify!(FPGAKERNEL_ATTRIBUTES_INTEL), f)
+            }
+            Self::FPGAMEMORY_ACCESSES_ALTERA => {
+                Display::fmt(stringify!(FPGAMEMORY_ACCESSES_ALTERA), f)
+            }
+            Self::FPGACLUSTER_ATTRIBUTES_ALTERA => {
+                Display::fmt(stringify!(FPGACLUSTER_ATTRIBUTES_ALTERA), f)
+            }
+            Self::LOOP_FUSE_ALTERA => Display::fmt(stringify!(LOOP_FUSE_ALTERA), f),
+            Self::FPGADSPCONTROL_ALTERA => Display::fmt(stringify!(FPGADSPCONTROL_ALTERA), f),
+            Self::MEMORY_ACCESS_ALIASING_INTEL => {
+                Display::fmt(stringify!(MEMORY_ACCESS_ALIASING_INTEL), f)
+            }
             Self::FPGAINVOCATION_PIPELINING_ATTRIBUTES_ALTERA => {
-                write!(f, "FPGAInvocationPipeliningAttributesALTERA")
+                Display::fmt(stringify!(FPGAINVOCATION_PIPELINING_ATTRIBUTES_ALTERA), f)
             }
-            Self::FPGABUFFER_LOCATION_ALTERA => write!(f, "FPGABufferLocationALTERA"),
+            Self::FPGABUFFER_LOCATION_ALTERA => {
+                Display::fmt(stringify!(FPGABUFFER_LOCATION_ALTERA), f)
+            }
             Self::ARBITRARY_PRECISION_FIXED_POINT_ALTERA => {
-                write!(f, "ArbitraryPrecisionFixedPointALTERA")
+                Display::fmt(stringify!(ARBITRARY_PRECISION_FIXED_POINT_ALTERA), f)
             }
-            Self::USMSTORAGE_CLASSES_ALTERA => write!(f, "USMStorageClassesALTERA"),
-            Self::RUNTIME_ALIGNED_ATTRIBUTE_ALTERA => write!(f, "RuntimeAlignedAttributeALTERA"),
-            Self::IOPIPES_ALTERA => write!(f, "IOPipesALTERA"),
-            Self::BLOCKING_PIPES_ALTERA => write!(f, "BlockingPipesALTERA"),
-            Self::FPGAREG_ALTERA => write!(f, "FPGARegALTERA"),
-            Self::DOT_PRODUCT_INPUT_ALL => write!(f, "DotProductInputAll"),
-            Self::DOT_PRODUCT_INPUT_4X_8_BIT => write!(f, "DotProductInput4x8Bit"),
-            Self::DOT_PRODUCT_INPUT_4X_8_BIT_PACKED => write!(f, "DotProductInput4x8BitPacked"),
-            Self::DOT_PRODUCT => write!(f, "DotProduct"),
-            Self::RAY_CULL_MASK_KHR => write!(f, "RayCullMaskKHR"),
-            Self::COOPERATIVE_MATRIX_KHR => write!(f, "CooperativeMatrixKHR"),
-            Self::REPLICATED_COMPOSITES_EXT => write!(f, "ReplicatedCompositesEXT"),
-            Self::BIT_INSTRUCTIONS => write!(f, "BitInstructions"),
-            Self::GROUP_NON_UNIFORM_ROTATE_KHR => write!(f, "GroupNonUniformRotateKHR"),
-            Self::FLOAT_CONTROLS_2 => write!(f, "FloatControls2"),
-            Self::FMAKHR => write!(f, "FMAKHR"),
-            Self::ATOMIC_FLOAT_32_ADD_EXT => write!(f, "AtomicFloat32AddEXT"),
-            Self::ATOMIC_FLOAT_64_ADD_EXT => write!(f, "AtomicFloat64AddEXT"),
-            Self::LONG_COMPOSITES_INTEL => write!(f, "LongCompositesINTEL"),
-            Self::OPT_NONE_EXT => write!(f, "OptNoneEXT"),
-            Self::ATOMIC_FLOAT_16_ADD_EXT => write!(f, "AtomicFloat16AddEXT"),
-            Self::DEBUG_INFO_MODULE_INTEL => write!(f, "DebugInfoModuleINTEL"),
-            Self::BFLOAT_16_CONVERSION_INTEL => write!(f, "BFloat16ConversionINTEL"),
-            Self::SPLIT_BARRIER_INTEL => write!(f, "SplitBarrierINTEL"),
-            Self::ARITHMETIC_FENCE_EXT => write!(f, "ArithmeticFenceEXT"),
-            Self::FPGACLUSTER_ATTRIBUTES_V2ALTERA => write!(f, "FPGAClusterAttributesV2ALTERA"),
-            Self::FPGAKERNEL_ATTRIBUTESV_2_INTEL => write!(f, "FPGAKernelAttributesv2INTEL"),
-            Self::TASK_SEQUENCE_ALTERA => write!(f, "TaskSequenceALTERA"),
-            Self::FPMAX_ERROR_INTEL => write!(f, "FPMaxErrorINTEL"),
-            Self::FPGALATENCY_CONTROL_ALTERA => write!(f, "FPGALatencyControlALTERA"),
-            Self::FPGAARGUMENT_INTERFACES_ALTERA => write!(f, "FPGAArgumentInterfacesALTERA"),
-            Self::GLOBAL_VARIABLE_HOST_ACCESS_INTEL => write!(f, "GlobalVariableHostAccessINTEL"),
+            Self::USMSTORAGE_CLASSES_ALTERA => {
+                Display::fmt(stringify!(USMSTORAGE_CLASSES_ALTERA), f)
+            }
+            Self::RUNTIME_ALIGNED_ATTRIBUTE_ALTERA => {
+                Display::fmt(stringify!(RUNTIME_ALIGNED_ATTRIBUTE_ALTERA), f)
+            }
+            Self::IOPIPES_ALTERA => Display::fmt(stringify!(IOPIPES_ALTERA), f),
+            Self::BLOCKING_PIPES_ALTERA => Display::fmt(stringify!(BLOCKING_PIPES_ALTERA), f),
+            Self::FPGAREG_ALTERA => Display::fmt(stringify!(FPGAREG_ALTERA), f),
+            Self::DOT_PRODUCT_INPUT_ALL => Display::fmt(stringify!(DOT_PRODUCT_INPUT_ALL), f),
+            Self::DOT_PRODUCT_INPUT_4X_8_BIT => {
+                Display::fmt(stringify!(DOT_PRODUCT_INPUT_4X_8_BIT), f)
+            }
+            Self::DOT_PRODUCT_INPUT_4X_8_BIT_PACKED => {
+                Display::fmt(stringify!(DOT_PRODUCT_INPUT_4X_8_BIT_PACKED), f)
+            }
+            Self::DOT_PRODUCT => Display::fmt(stringify!(DOT_PRODUCT), f),
+            Self::RAY_CULL_MASK_KHR => Display::fmt(stringify!(RAY_CULL_MASK_KHR), f),
+            Self::COOPERATIVE_MATRIX_KHR => Display::fmt(stringify!(COOPERATIVE_MATRIX_KHR), f),
+            Self::REPLICATED_COMPOSITES_EXT => {
+                Display::fmt(stringify!(REPLICATED_COMPOSITES_EXT), f)
+            }
+            Self::BIT_INSTRUCTIONS => Display::fmt(stringify!(BIT_INSTRUCTIONS), f),
+            Self::GROUP_NON_UNIFORM_ROTATE_KHR => {
+                Display::fmt(stringify!(GROUP_NON_UNIFORM_ROTATE_KHR), f)
+            }
+            Self::FLOAT_CONTROLS_2 => Display::fmt(stringify!(FLOAT_CONTROLS_2), f),
+            Self::FMAKHR => Display::fmt(stringify!(FMAKHR), f),
+            Self::ATOMIC_FLOAT_32_ADD_EXT => Display::fmt(stringify!(ATOMIC_FLOAT_32_ADD_EXT), f),
+            Self::ATOMIC_FLOAT_64_ADD_EXT => Display::fmt(stringify!(ATOMIC_FLOAT_64_ADD_EXT), f),
+            Self::LONG_COMPOSITES_INTEL => Display::fmt(stringify!(LONG_COMPOSITES_INTEL), f),
+            Self::OPT_NONE_EXT => Display::fmt(stringify!(OPT_NONE_EXT), f),
+            Self::ATOMIC_FLOAT_16_ADD_EXT => Display::fmt(stringify!(ATOMIC_FLOAT_16_ADD_EXT), f),
+            Self::DEBUG_INFO_MODULE_INTEL => Display::fmt(stringify!(DEBUG_INFO_MODULE_INTEL), f),
+            Self::BFLOAT_16_CONVERSION_INTEL => {
+                Display::fmt(stringify!(BFLOAT_16_CONVERSION_INTEL), f)
+            }
+            Self::SPLIT_BARRIER_INTEL => Display::fmt(stringify!(SPLIT_BARRIER_INTEL), f),
+            Self::ARITHMETIC_FENCE_EXT => Display::fmt(stringify!(ARITHMETIC_FENCE_EXT), f),
+            Self::FPGACLUSTER_ATTRIBUTES_V2ALTERA => {
+                Display::fmt(stringify!(FPGACLUSTER_ATTRIBUTES_V2ALTERA), f)
+            }
+            Self::FPGAKERNEL_ATTRIBUTESV_2_INTEL => {
+                Display::fmt(stringify!(FPGAKERNEL_ATTRIBUTESV_2_INTEL), f)
+            }
+            Self::TASK_SEQUENCE_ALTERA => Display::fmt(stringify!(TASK_SEQUENCE_ALTERA), f),
+            Self::FPMAX_ERROR_INTEL => Display::fmt(stringify!(FPMAX_ERROR_INTEL), f),
+            Self::FPGALATENCY_CONTROL_ALTERA => {
+                Display::fmt(stringify!(FPGALATENCY_CONTROL_ALTERA), f)
+            }
+            Self::FPGAARGUMENT_INTERFACES_ALTERA => {
+                Display::fmt(stringify!(FPGAARGUMENT_INTERFACES_ALTERA), f)
+            }
+            Self::GLOBAL_VARIABLE_HOST_ACCESS_INTEL => {
+                Display::fmt(stringify!(GLOBAL_VARIABLE_HOST_ACCESS_INTEL), f)
+            }
             Self::GLOBAL_VARIABLE_FPGADECORATIONS_ALTERA => {
-                write!(f, "GlobalVariableFPGADecorationsALTERA")
+                Display::fmt(stringify!(GLOBAL_VARIABLE_FPGADECORATIONS_ALTERA), f)
             }
-            Self::SUBGROUP_BUFFER_PREFETCH_INTEL => write!(f, "SubgroupBufferPrefetchINTEL"),
-            Self::SUBGROUP_2D_BLOCK_IOINTEL => write!(f, "Subgroup2DBlockIOINTEL"),
-            Self::SUBGROUP_2D_BLOCK_TRANSFORM_INTEL => write!(f, "Subgroup2DBlockTransformINTEL"),
-            Self::SUBGROUP_2D_BLOCK_TRANSPOSE_INTEL => write!(f, "Subgroup2DBlockTransposeINTEL"),
+            Self::SUBGROUP_BUFFER_PREFETCH_INTEL => {
+                Display::fmt(stringify!(SUBGROUP_BUFFER_PREFETCH_INTEL), f)
+            }
+            Self::SUBGROUP_2D_BLOCK_IOINTEL => {
+                Display::fmt(stringify!(SUBGROUP_2D_BLOCK_IOINTEL), f)
+            }
+            Self::SUBGROUP_2D_BLOCK_TRANSFORM_INTEL => {
+                Display::fmt(stringify!(SUBGROUP_2D_BLOCK_TRANSFORM_INTEL), f)
+            }
+            Self::SUBGROUP_2D_BLOCK_TRANSPOSE_INTEL => {
+                Display::fmt(stringify!(SUBGROUP_2D_BLOCK_TRANSPOSE_INTEL), f)
+            }
             Self::SUBGROUP_MATRIX_MULTIPLY_ACCUMULATE_INTEL => {
-                write!(f, "SubgroupMatrixMultiplyAccumulateINTEL")
+                Display::fmt(stringify!(SUBGROUP_MATRIX_MULTIPLY_ACCUMULATE_INTEL), f)
             }
-            Self::TERNARY_BITWISE_FUNCTION_INTEL => write!(f, "TernaryBitwiseFunctionINTEL"),
+            Self::TERNARY_BITWISE_FUNCTION_INTEL => {
+                Display::fmt(stringify!(TERNARY_BITWISE_FUNCTION_INTEL), f)
+            }
             Self::UNTYPED_VARIABLE_LENGTH_ARRAY_INTEL => {
-                write!(f, "UntypedVariableLengthArrayINTEL")
+                Display::fmt(stringify!(UNTYPED_VARIABLE_LENGTH_ARRAY_INTEL), f)
             }
-            Self::SPEC_CONDITIONAL_INTEL => write!(f, "SpecConditionalINTEL"),
-            Self::FUNCTION_VARIANTS_INTEL => write!(f, "FunctionVariantsINTEL"),
-            Self::GROUP_UNIFORM_ARITHMETIC_KHR => write!(f, "GroupUniformArithmeticKHR"),
-            Self::TENSOR_FLOAT_32_ROUNDING_INTEL => write!(f, "TensorFloat32RoundingINTEL"),
-            Self::MASKED_GATHER_SCATTER_INTEL => write!(f, "MaskedGatherScatterINTEL"),
-            Self::CACHE_CONTROLS_INTEL => write!(f, "CacheControlsINTEL"),
-            Self::REGISTER_LIMITS_INTEL => write!(f, "RegisterLimitsINTEL"),
-            Self::BINDLESS_IMAGES_INTEL => write!(f, "BindlessImagesINTEL"),
+            Self::SPEC_CONDITIONAL_INTEL => Display::fmt(stringify!(SPEC_CONDITIONAL_INTEL), f),
+            Self::FUNCTION_VARIANTS_INTEL => Display::fmt(stringify!(FUNCTION_VARIANTS_INTEL), f),
+            Self::GROUP_UNIFORM_ARITHMETIC_KHR => {
+                Display::fmt(stringify!(GROUP_UNIFORM_ARITHMETIC_KHR), f)
+            }
+            Self::TENSOR_FLOAT_32_ROUNDING_INTEL => {
+                Display::fmt(stringify!(TENSOR_FLOAT_32_ROUNDING_INTEL), f)
+            }
+            Self::MASKED_GATHER_SCATTER_INTEL => {
+                Display::fmt(stringify!(MASKED_GATHER_SCATTER_INTEL), f)
+            }
+            Self::CACHE_CONTROLS_INTEL => Display::fmt(stringify!(CACHE_CONTROLS_INTEL), f),
+            Self::REGISTER_LIMITS_INTEL => Display::fmt(stringify!(REGISTER_LIMITS_INTEL), f),
+            Self::BINDLESS_IMAGES_INTEL => Display::fmt(stringify!(BINDLESS_IMAGES_INTEL), f),
             Self::DOT_PRODUCT_FLOAT_16_ACC_FLOAT_32_VALVE => {
-                write!(f, "DotProductFloat16AccFloat32VALVE")
+                Display::fmt(stringify!(DOT_PRODUCT_FLOAT_16_ACC_FLOAT_32_VALVE), f)
             }
             Self::DOT_PRODUCT_FLOAT_16_ACC_FLOAT_16_VALVE => {
-                write!(f, "DotProductFloat16AccFloat16VALVE")
+                Display::fmt(stringify!(DOT_PRODUCT_FLOAT_16_ACC_FLOAT_16_VALVE), f)
             }
-            Self::DOT_PRODUCT_BFLOAT_16_ACC_VALVE => write!(f, "DotProductBFloat16AccVALVE"),
+            Self::DOT_PRODUCT_BFLOAT_16_ACC_VALVE => {
+                Display::fmt(stringify!(DOT_PRODUCT_BFLOAT_16_ACC_VALVE), f)
+            }
             Self::DOT_PRODUCT_FLOAT_8_ACC_FLOAT_32_VALVE => {
-                write!(f, "DotProductFloat8AccFloat32VALVE")
+                Display::fmt(stringify!(DOT_PRODUCT_FLOAT_8_ACC_FLOAT_32_VALVE), f)
             }
-            x => write!(f, "{x}"),
+            x => write!(f, "{}({})", stringify!(Capability), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct RayQueryIntersection(pub(crate) u32);
 impl RayQueryIntersection {
     pub const RAY_QUERY_CANDIDATE_INTERSECTION_KHR: Self = Self(0u32);
@@ -5175,20 +3882,21 @@ impl Word for RayQueryIntersection {
         Self(word)
     }
 }
-impl Display for RayQueryIntersection {
+impl Debug for RayQueryIntersection {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
             Self::RAY_QUERY_CANDIDATE_INTERSECTION_KHR => {
-                write!(f, "RayQueryCandidateIntersectionKHR")
+                Display::fmt(stringify!(RAY_QUERY_CANDIDATE_INTERSECTION_KHR), f)
             }
             Self::RAY_QUERY_COMMITTED_INTERSECTION_KHR => {
-                write!(f, "RayQueryCommittedIntersectionKHR")
+                Display::fmt(stringify!(RAY_QUERY_COMMITTED_INTERSECTION_KHR), f)
             }
-            x => write!(f, "{x}"),
+            x => write!(f, "{}({})", stringify!(RayQueryIntersection), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct RayQueryCommittedIntersectionType(pub(crate) u32);
 impl RayQueryCommittedIntersectionType {
     pub const RAY_QUERY_COMMITTED_INTERSECTION_NONE_KHR: Self = Self(0u32);
@@ -5201,23 +3909,30 @@ impl Word for RayQueryCommittedIntersectionType {
         Self(word)
     }
 }
-impl Display for RayQueryCommittedIntersectionType {
+impl Debug for RayQueryCommittedIntersectionType {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
             Self::RAY_QUERY_COMMITTED_INTERSECTION_NONE_KHR => {
-                write!(f, "RayQueryCommittedIntersectionNoneKHR")
+                Display::fmt(stringify!(RAY_QUERY_COMMITTED_INTERSECTION_NONE_KHR), f)
             }
             Self::RAY_QUERY_COMMITTED_INTERSECTION_TRIANGLE_KHR => {
-                write!(f, "RayQueryCommittedIntersectionTriangleKHR")
+                Display::fmt(stringify!(RAY_QUERY_COMMITTED_INTERSECTION_TRIANGLE_KHR), f)
             }
-            Self::RAY_QUERY_COMMITTED_INTERSECTION_GENERATED_KHR => {
-                write!(f, "RayQueryCommittedIntersectionGeneratedKHR")
-            }
-            x => write!(f, "{x}"),
+            Self::RAY_QUERY_COMMITTED_INTERSECTION_GENERATED_KHR => Display::fmt(
+                stringify!(RAY_QUERY_COMMITTED_INTERSECTION_GENERATED_KHR),
+                f,
+            ),
+            x => write!(
+                f,
+                "{}({})",
+                stringify!(RayQueryCommittedIntersectionType),
+                x.0
+            ),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct RayQueryCandidateIntersectionType(pub(crate) u32);
 impl RayQueryCandidateIntersectionType {
     pub const RAY_QUERY_CANDIDATE_INTERSECTION_TRIANGLE_KHR: Self = Self(0u32);
@@ -5229,20 +3944,26 @@ impl Word for RayQueryCandidateIntersectionType {
         Self(word)
     }
 }
-impl Display for RayQueryCandidateIntersectionType {
+impl Debug for RayQueryCandidateIntersectionType {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
             Self::RAY_QUERY_CANDIDATE_INTERSECTION_TRIANGLE_KHR => {
-                write!(f, "RayQueryCandidateIntersectionTriangleKHR")
+                Display::fmt(stringify!(RAY_QUERY_CANDIDATE_INTERSECTION_TRIANGLE_KHR), f)
             }
             Self::RAY_QUERY_CANDIDATE_INTERSECTION_AABBKHR => {
-                write!(f, "RayQueryCandidateIntersectionAABBKHR")
+                Display::fmt(stringify!(RAY_QUERY_CANDIDATE_INTERSECTION_AABBKHR), f)
             }
-            x => write!(f, "{x}"),
+            x => write!(
+                f,
+                "{}({})",
+                stringify!(RayQueryCandidateIntersectionType),
+                x.0
+            ),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct PackedVectorFormat(pub(crate) u32);
 impl PackedVectorFormat {
     pub const PACKED_VECTOR_FORMAT_4X_8_BIT: Self = Self(0u32);
@@ -5253,76 +3974,25 @@ impl Word for PackedVectorFormat {
         Self(word)
     }
 }
-impl Display for PackedVectorFormat {
+impl Debug for PackedVectorFormat {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::PACKED_VECTOR_FORMAT_4X_8_BIT => write!(f, "PackedVectorFormat4x8Bit"),
-            x => write!(f, "{x}"),
+            Self::PACKED_VECTOR_FORMAT_4X_8_BIT => {
+                Display::fmt(stringify!(PACKED_VECTOR_FORMAT_4X_8_BIT), f)
+            }
+            x => write!(f, "{}({})", stringify!(PackedVectorFormat), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct CooperativeMatrixOperands(pub(crate) u32);
-impl CooperativeMatrixOperands {
-    pub const NONE_KHR: Self = Self(0x0000);
-    pub const MATRIX_ASIGNED_COMPONENTS_KHR: Self = Self(0x0001);
-    pub const MATRIX_BSIGNED_COMPONENTS_KHR: Self = Self(0x0002);
-    pub const MATRIX_CSIGNED_COMPONENTS_KHR: Self = Self(0x0004);
-    pub const MATRIX_RESULT_SIGNED_COMPONENTS_KHR: Self = Self(0x0008);
-    pub const SATURATING_ACCUMULATION_KHR: Self = Self(0x0010);
-}
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct CooperativeMatrixOperands : u32 { const NONE_KHR = 0x0000 ; const MATRIX_ASIGNED_COMPONENTS_KHR = 0x0001 ; const MATRIX_BSIGNED_COMPONENTS_KHR = 0x0002 ; const MATRIX_CSIGNED_COMPONENTS_KHR = 0x0004 ; const MATRIX_RESULT_SIGNED_COMPONENTS_KHR = 0x0008 ; const SATURATING_ACCUMULATION_KHR = 0x0010 ; } }
 impl Word for CooperativeMatrixOperands {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
+        Self::from_bits_retain(word)
     }
 }
-impl BitAnd for CooperativeMatrixOperands {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for CooperativeMatrixOperands {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for CooperativeMatrixOperands {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::MATRIX_ASIGNED_COMPONENTS_KHR == Self::MATRIX_ASIGNED_COMPONENTS_KHR {
-            bitfmt.fmt(Self::MATRIX_ASIGNED_COMPONENTS_KHR.0, f)?;
-            write!(f, "MatrixASignedComponentsKHR")?;
-        }
-        if *self & Self::MATRIX_BSIGNED_COMPONENTS_KHR == Self::MATRIX_BSIGNED_COMPONENTS_KHR {
-            bitfmt.fmt(Self::MATRIX_BSIGNED_COMPONENTS_KHR.0, f)?;
-            write!(f, "MatrixBSignedComponentsKHR")?;
-        }
-        if *self & Self::MATRIX_CSIGNED_COMPONENTS_KHR == Self::MATRIX_CSIGNED_COMPONENTS_KHR {
-            bitfmt.fmt(Self::MATRIX_CSIGNED_COMPONENTS_KHR.0, f)?;
-            write!(f, "MatrixCSignedComponentsKHR")?;
-        }
-        if *self & Self::MATRIX_RESULT_SIGNED_COMPONENTS_KHR
-            == Self::MATRIX_RESULT_SIGNED_COMPONENTS_KHR
-        {
-            bitfmt.fmt(Self::MATRIX_RESULT_SIGNED_COMPONENTS_KHR.0, f)?;
-            write!(f, "MatrixResultSignedComponentsKHR")?;
-        }
-        if *self & Self::SATURATING_ACCUMULATION_KHR == Self::SATURATING_ACCUMULATION_KHR {
-            bitfmt.fmt(Self::SATURATING_ACCUMULATION_KHR.0, f)?;
-            write!(f, "SaturatingAccumulationKHR")?;
-        }
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct CooperativeMatrixLayout(pub(crate) u32);
 impl CooperativeMatrixLayout {
     pub const ROW_MAJOR_KHR: Self = Self(0u32);
@@ -5336,18 +4006,23 @@ impl Word for CooperativeMatrixLayout {
         Self(word)
     }
 }
-impl Display for CooperativeMatrixLayout {
+impl Debug for CooperativeMatrixLayout {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::ROW_MAJOR_KHR => write!(f, "RowMajorKHR"),
-            Self::COLUMN_MAJOR_KHR => write!(f, "ColumnMajorKHR"),
-            Self::ROW_BLOCKED_INTERLEAVED_ARM => write!(f, "RowBlockedInterleavedARM"),
-            Self::COLUMN_BLOCKED_INTERLEAVED_ARM => write!(f, "ColumnBlockedInterleavedARM"),
-            x => write!(f, "{x}"),
+            Self::ROW_MAJOR_KHR => Display::fmt(stringify!(ROW_MAJOR_KHR), f),
+            Self::COLUMN_MAJOR_KHR => Display::fmt(stringify!(COLUMN_MAJOR_KHR), f),
+            Self::ROW_BLOCKED_INTERLEAVED_ARM => {
+                Display::fmt(stringify!(ROW_BLOCKED_INTERLEAVED_ARM), f)
+            }
+            Self::COLUMN_BLOCKED_INTERLEAVED_ARM => {
+                Display::fmt(stringify!(COLUMN_BLOCKED_INTERLEAVED_ARM), f)
+            }
+            x => write!(f, "{}({})", stringify!(CooperativeMatrixLayout), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct CooperativeMatrixUse(pub(crate) u32);
 impl CooperativeMatrixUse {
     pub const MATRIX_AKHR: Self = Self(0u32);
@@ -5360,65 +4035,25 @@ impl Word for CooperativeMatrixUse {
         Self(word)
     }
 }
-impl Display for CooperativeMatrixUse {
+impl Debug for CooperativeMatrixUse {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::MATRIX_AKHR => write!(f, "MatrixAKHR"),
-            Self::MATRIX_BKHR => write!(f, "MatrixBKHR"),
-            Self::MATRIX_ACCUMULATOR_KHR => write!(f, "MatrixAccumulatorKHR"),
-            x => write!(f, "{x}"),
+            Self::MATRIX_AKHR => Display::fmt(stringify!(MATRIX_AKHR), f),
+            Self::MATRIX_BKHR => Display::fmt(stringify!(MATRIX_BKHR), f),
+            Self::MATRIX_ACCUMULATOR_KHR => Display::fmt(stringify!(MATRIX_ACCUMULATOR_KHR), f),
+            x => write!(f, "{}({})", stringify!(CooperativeMatrixUse), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct CooperativeMatrixReduce(pub(crate) u32);
-impl CooperativeMatrixReduce {
-    pub const ROW: Self = Self(0x0001);
-    pub const COLUMN: Self = Self(0x0002);
-    pub const TYPE_2X_2: Self = Self(0x0004);
-}
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct CooperativeMatrixReduce : u32 { const ROW = 0x0001 ; const COLUMN = 0x0002 ; const TYPE_2X_2 = 0x0004 ; } }
 impl Word for CooperativeMatrixReduce {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
+        Self::from_bits_retain(word)
     }
 }
-impl BitAnd for CooperativeMatrixReduce {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for CooperativeMatrixReduce {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for CooperativeMatrixReduce {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::ROW == Self::ROW {
-            bitfmt.fmt(Self::ROW.0, f)?;
-            write!(f, "Row")?;
-        }
-        if *self & Self::COLUMN == Self::COLUMN {
-            bitfmt.fmt(Self::COLUMN.0, f)?;
-            write!(f, "Column")?;
-        }
-        if *self & Self::TYPE_2X_2 == Self::TYPE_2X_2 {
-            bitfmt.fmt(Self::TYPE_2X_2.0, f)?;
-            write!(f, "2x2")?;
-        }
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct TensorClampMode(pub(crate) u32);
 impl TensorClampMode {
     pub const UNDEFINED: Self = Self(0u32);
@@ -5433,63 +4068,27 @@ impl Word for TensorClampMode {
         Self(word)
     }
 }
-impl Display for TensorClampMode {
+impl Debug for TensorClampMode {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::UNDEFINED => write!(f, "Undefined"),
-            Self::CONSTANT => write!(f, "Constant"),
-            Self::CLAMP_TO_EDGE => write!(f, "ClampToEdge"),
-            Self::REPEAT => write!(f, "Repeat"),
-            Self::REPEAT_MIRRORED => write!(f, "RepeatMirrored"),
-            x => write!(f, "{x}"),
+            Self::UNDEFINED => Display::fmt(stringify!(UNDEFINED), f),
+            Self::CONSTANT => Display::fmt(stringify!(CONSTANT), f),
+            Self::CLAMP_TO_EDGE => Display::fmt(stringify!(CLAMP_TO_EDGE), f),
+            Self::REPEAT => Display::fmt(stringify!(REPEAT), f),
+            Self::REPEAT_MIRRORED => Display::fmt(stringify!(REPEAT_MIRRORED), f),
+            x => write!(f, "{}({})", stringify!(TensorClampMode), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct TensorAddressingOperands(pub(crate) u32);
-impl TensorAddressingOperands {
-    pub const NONE: Self = Self(0x0000);
-    pub const TENSOR_VIEW: Self = Self(0x0001);
-    pub const DECODE_FUNC: Self = Self(0x0002);
-}
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct TensorAddressingOperands : u32 { const NONE = 0x0000 ; const TENSOR_VIEW = 0x0001 ; const DECODE_FUNC = 0x0002 ; } }
 impl Word for TensorAddressingOperands {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
+        Self::from_bits_retain(word)
     }
 }
-impl BitAnd for TensorAddressingOperands {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for TensorAddressingOperands {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for TensorAddressingOperands {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::TENSOR_VIEW == Self::TENSOR_VIEW {
-            bitfmt.fmt(Self::TENSOR_VIEW.0, f)?;
-            write!(f, "TensorView")?;
-        }
-        if *self & Self::DECODE_FUNC == Self::DECODE_FUNC {
-            bitfmt.fmt(Self::DECODE_FUNC.0, f)?;
-            write!(f, "DecodeFunc")?;
-        }
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct InitializationModeQualifier(pub(crate) u32);
 impl InitializationModeQualifier {
     pub const INIT_ON_DEVICE_REPROGRAM_ALTERA: Self = Self(0u32);
@@ -5501,16 +4100,21 @@ impl Word for InitializationModeQualifier {
         Self(word)
     }
 }
-impl Display for InitializationModeQualifier {
+impl Debug for InitializationModeQualifier {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::INIT_ON_DEVICE_REPROGRAM_ALTERA => write!(f, "InitOnDeviceReprogramALTERA"),
-            Self::INIT_ON_DEVICE_RESET_ALTERA => write!(f, "InitOnDeviceResetALTERA"),
-            x => write!(f, "{x}"),
+            Self::INIT_ON_DEVICE_REPROGRAM_ALTERA => {
+                Display::fmt(stringify!(INIT_ON_DEVICE_REPROGRAM_ALTERA), f)
+            }
+            Self::INIT_ON_DEVICE_RESET_ALTERA => {
+                Display::fmt(stringify!(INIT_ON_DEVICE_RESET_ALTERA), f)
+            }
+            x => write!(f, "{}({})", stringify!(InitializationModeQualifier), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct LoadCacheControl(pub(crate) u32);
 impl LoadCacheControl {
     pub const UNCACHED_INTEL: Self = Self(0u32);
@@ -5525,19 +4129,22 @@ impl Word for LoadCacheControl {
         Self(word)
     }
 }
-impl Display for LoadCacheControl {
+impl Debug for LoadCacheControl {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::UNCACHED_INTEL => write!(f, "UncachedINTEL"),
-            Self::CACHED_INTEL => write!(f, "CachedINTEL"),
-            Self::STREAMING_INTEL => write!(f, "StreamingINTEL"),
-            Self::INVALIDATE_AFTER_READ_INTEL => write!(f, "InvalidateAfterReadINTEL"),
-            Self::CONST_CACHED_INTEL => write!(f, "ConstCachedINTEL"),
-            x => write!(f, "{x}"),
+            Self::UNCACHED_INTEL => Display::fmt(stringify!(UNCACHED_INTEL), f),
+            Self::CACHED_INTEL => Display::fmt(stringify!(CACHED_INTEL), f),
+            Self::STREAMING_INTEL => Display::fmt(stringify!(STREAMING_INTEL), f),
+            Self::INVALIDATE_AFTER_READ_INTEL => {
+                Display::fmt(stringify!(INVALIDATE_AFTER_READ_INTEL), f)
+            }
+            Self::CONST_CACHED_INTEL => Display::fmt(stringify!(CONST_CACHED_INTEL), f),
+            x => write!(f, "{}({})", stringify!(LoadCacheControl), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct StoreCacheControl(pub(crate) u32);
 impl StoreCacheControl {
     pub const UNCACHED_INTEL: Self = Self(0u32);
@@ -5551,18 +4158,19 @@ impl Word for StoreCacheControl {
         Self(word)
     }
 }
-impl Display for StoreCacheControl {
+impl Debug for StoreCacheControl {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::UNCACHED_INTEL => write!(f, "UncachedINTEL"),
-            Self::WRITE_THROUGH_INTEL => write!(f, "WriteThroughINTEL"),
-            Self::WRITE_BACK_INTEL => write!(f, "WriteBackINTEL"),
-            Self::STREAMING_INTEL => write!(f, "StreamingINTEL"),
-            x => write!(f, "{x}"),
+            Self::UNCACHED_INTEL => Display::fmt(stringify!(UNCACHED_INTEL), f),
+            Self::WRITE_THROUGH_INTEL => Display::fmt(stringify!(WRITE_THROUGH_INTEL), f),
+            Self::WRITE_BACK_INTEL => Display::fmt(stringify!(WRITE_BACK_INTEL), f),
+            Self::STREAMING_INTEL => Display::fmt(stringify!(STREAMING_INTEL), f),
+            x => write!(f, "{}({})", stringify!(StoreCacheControl), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct NamedMaximumNumberOfRegisters(pub(crate) u32);
 impl NamedMaximumNumberOfRegisters {
     pub const AUTO_INTEL: Self = Self(0u32);
@@ -5573,119 +4181,23 @@ impl Word for NamedMaximumNumberOfRegisters {
         Self(word)
     }
 }
-impl Display for NamedMaximumNumberOfRegisters {
+impl Debug for NamedMaximumNumberOfRegisters {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::AUTO_INTEL => write!(f, "AutoINTEL"),
-            x => write!(f, "{x}"),
+            Self::AUTO_INTEL => Display::fmt(stringify!(AUTO_INTEL), f),
+            x => write!(f, "{}({})", stringify!(NamedMaximumNumberOfRegisters), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct MatrixMultiplyAccumulateOperands(pub(crate) u32);
-impl MatrixMultiplyAccumulateOperands {
-    pub const NONE: Self = Self(0x0);
-    pub const MATRIX_ASIGNED_COMPONENTS_INTEL: Self = Self(0x1);
-    pub const MATRIX_BSIGNED_COMPONENTS_INTEL: Self = Self(0x2);
-    pub const MATRIX_CBFLOAT_16_INTEL: Self = Self(0x4);
-    pub const MATRIX_RESULT_BFLOAT_16_INTEL: Self = Self(0x8);
-    pub const MATRIX_APACKED_INT_8_INTEL: Self = Self(0x10);
-    pub const MATRIX_BPACKED_INT_8_INTEL: Self = Self(0x20);
-    pub const MATRIX_APACKED_INT_4_INTEL: Self = Self(0x40);
-    pub const MATRIX_BPACKED_INT_4_INTEL: Self = Self(0x80);
-    pub const MATRIX_ATF32INTEL: Self = Self(0x100);
-    pub const MATRIX_BTF32INTEL: Self = Self(0x200);
-    pub const MATRIX_APACKED_FLOAT_16_INTEL: Self = Self(0x400);
-    pub const MATRIX_BPACKED_FLOAT_16_INTEL: Self = Self(0x800);
-    pub const MATRIX_APACKED_BFLOAT_16_INTEL: Self = Self(0x1000);
-    pub const MATRIX_BPACKED_BFLOAT_16_INTEL: Self = Self(0x2000);
-}
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct MatrixMultiplyAccumulateOperands : u32 { const NONE = 0x0 ; const MATRIX_ASIGNED_COMPONENTS_INTEL = 0x1 ; const MATRIX_BSIGNED_COMPONENTS_INTEL = 0x2 ; const MATRIX_CBFLOAT_16_INTEL = 0x4 ; const MATRIX_RESULT_BFLOAT_16_INTEL = 0x8 ; const MATRIX_APACKED_INT_8_INTEL = 0x10 ; const MATRIX_BPACKED_INT_8_INTEL = 0x20 ; const MATRIX_APACKED_INT_4_INTEL = 0x40 ; const MATRIX_BPACKED_INT_4_INTEL = 0x80 ; const MATRIX_ATF32INTEL = 0x100 ; const MATRIX_BTF32INTEL = 0x200 ; const MATRIX_APACKED_FLOAT_16_INTEL = 0x400 ; const MATRIX_BPACKED_FLOAT_16_INTEL = 0x800 ; const MATRIX_APACKED_BFLOAT_16_INTEL = 0x1000 ; const MATRIX_BPACKED_BFLOAT_16_INTEL = 0x2000 ; } }
 impl Word for MatrixMultiplyAccumulateOperands {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
+        Self::from_bits_retain(word)
     }
 }
-impl BitAnd for MatrixMultiplyAccumulateOperands {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for MatrixMultiplyAccumulateOperands {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for MatrixMultiplyAccumulateOperands {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::MATRIX_ASIGNED_COMPONENTS_INTEL == Self::MATRIX_ASIGNED_COMPONENTS_INTEL {
-            bitfmt.fmt(Self::MATRIX_ASIGNED_COMPONENTS_INTEL.0, f)?;
-            write!(f, "MatrixASignedComponentsINTEL")?;
-        }
-        if *self & Self::MATRIX_BSIGNED_COMPONENTS_INTEL == Self::MATRIX_BSIGNED_COMPONENTS_INTEL {
-            bitfmt.fmt(Self::MATRIX_BSIGNED_COMPONENTS_INTEL.0, f)?;
-            write!(f, "MatrixBSignedComponentsINTEL")?;
-        }
-        if *self & Self::MATRIX_CBFLOAT_16_INTEL == Self::MATRIX_CBFLOAT_16_INTEL {
-            bitfmt.fmt(Self::MATRIX_CBFLOAT_16_INTEL.0, f)?;
-            write!(f, "MatrixCBFloat16INTEL")?;
-        }
-        if *self & Self::MATRIX_RESULT_BFLOAT_16_INTEL == Self::MATRIX_RESULT_BFLOAT_16_INTEL {
-            bitfmt.fmt(Self::MATRIX_RESULT_BFLOAT_16_INTEL.0, f)?;
-            write!(f, "MatrixResultBFloat16INTEL")?;
-        }
-        if *self & Self::MATRIX_APACKED_INT_8_INTEL == Self::MATRIX_APACKED_INT_8_INTEL {
-            bitfmt.fmt(Self::MATRIX_APACKED_INT_8_INTEL.0, f)?;
-            write!(f, "MatrixAPackedInt8INTEL")?;
-        }
-        if *self & Self::MATRIX_BPACKED_INT_8_INTEL == Self::MATRIX_BPACKED_INT_8_INTEL {
-            bitfmt.fmt(Self::MATRIX_BPACKED_INT_8_INTEL.0, f)?;
-            write!(f, "MatrixBPackedInt8INTEL")?;
-        }
-        if *self & Self::MATRIX_APACKED_INT_4_INTEL == Self::MATRIX_APACKED_INT_4_INTEL {
-            bitfmt.fmt(Self::MATRIX_APACKED_INT_4_INTEL.0, f)?;
-            write!(f, "MatrixAPackedInt4INTEL")?;
-        }
-        if *self & Self::MATRIX_BPACKED_INT_4_INTEL == Self::MATRIX_BPACKED_INT_4_INTEL {
-            bitfmt.fmt(Self::MATRIX_BPACKED_INT_4_INTEL.0, f)?;
-            write!(f, "MatrixBPackedInt4INTEL")?;
-        }
-        if *self & Self::MATRIX_ATF32INTEL == Self::MATRIX_ATF32INTEL {
-            bitfmt.fmt(Self::MATRIX_ATF32INTEL.0, f)?;
-            write!(f, "MatrixATF32INTEL")?;
-        }
-        if *self & Self::MATRIX_BTF32INTEL == Self::MATRIX_BTF32INTEL {
-            bitfmt.fmt(Self::MATRIX_BTF32INTEL.0, f)?;
-            write!(f, "MatrixBTF32INTEL")?;
-        }
-        if *self & Self::MATRIX_APACKED_FLOAT_16_INTEL == Self::MATRIX_APACKED_FLOAT_16_INTEL {
-            bitfmt.fmt(Self::MATRIX_APACKED_FLOAT_16_INTEL.0, f)?;
-            write!(f, "MatrixAPackedFloat16INTEL")?;
-        }
-        if *self & Self::MATRIX_BPACKED_FLOAT_16_INTEL == Self::MATRIX_BPACKED_FLOAT_16_INTEL {
-            bitfmt.fmt(Self::MATRIX_BPACKED_FLOAT_16_INTEL.0, f)?;
-            write!(f, "MatrixBPackedFloat16INTEL")?;
-        }
-        if *self & Self::MATRIX_APACKED_BFLOAT_16_INTEL == Self::MATRIX_APACKED_BFLOAT_16_INTEL {
-            bitfmt.fmt(Self::MATRIX_APACKED_BFLOAT_16_INTEL.0, f)?;
-            write!(f, "MatrixAPackedBFloat16INTEL")?;
-        }
-        if *self & Self::MATRIX_BPACKED_BFLOAT_16_INTEL == Self::MATRIX_BPACKED_BFLOAT_16_INTEL {
-            bitfmt.fmt(Self::MATRIX_BPACKED_BFLOAT_16_INTEL.0, f)?;
-            write!(f, "MatrixBPackedBFloat16INTEL")?;
-        }
-        Ok(())
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct FPEncoding(pub(crate) u32);
 impl FPEncoding {
     pub const BFLOAT_16_KHR: Self = Self(0u32);
@@ -5698,17 +4210,18 @@ impl Word for FPEncoding {
         Self(word)
     }
 }
-impl Display for FPEncoding {
+impl Debug for FPEncoding {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::BFLOAT_16_KHR => write!(f, "BFloat16KHR"),
-            Self::FLOAT_8_E4M3EXT => write!(f, "Float8E4M3EXT"),
-            Self::FLOAT_8_E5M2EXT => write!(f, "Float8E5M2EXT"),
-            x => write!(f, "{x}"),
+            Self::BFLOAT_16_KHR => Display::fmt(stringify!(BFLOAT_16_KHR), f),
+            Self::FLOAT_8_E4M3EXT => Display::fmt(stringify!(FLOAT_8_E4M3EXT), f),
+            Self::FLOAT_8_E5M2EXT => Display::fmt(stringify!(FLOAT_8_E5M2EXT), f),
+            x => write!(f, "{}({})", stringify!(FPEncoding), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct CooperativeVectorMatrixLayout(pub(crate) u32);
 impl CooperativeVectorMatrixLayout {
     pub const ROW_MAJOR_NV: Self = Self(0u32);
@@ -5722,18 +4235,19 @@ impl Word for CooperativeVectorMatrixLayout {
         Self(word)
     }
 }
-impl Display for CooperativeVectorMatrixLayout {
+impl Debug for CooperativeVectorMatrixLayout {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::ROW_MAJOR_NV => write!(f, "RowMajorNV"),
-            Self::COLUMN_MAJOR_NV => write!(f, "ColumnMajorNV"),
-            Self::INFERENCING_OPTIMAL_NV => write!(f, "InferencingOptimalNV"),
-            Self::TRAINING_OPTIMAL_NV => write!(f, "TrainingOptimalNV"),
-            x => write!(f, "{x}"),
+            Self::ROW_MAJOR_NV => Display::fmt(stringify!(ROW_MAJOR_NV), f),
+            Self::COLUMN_MAJOR_NV => Display::fmt(stringify!(COLUMN_MAJOR_NV), f),
+            Self::INFERENCING_OPTIMAL_NV => Display::fmt(stringify!(INFERENCING_OPTIMAL_NV), f),
+            Self::TRAINING_OPTIMAL_NV => Display::fmt(stringify!(TRAINING_OPTIMAL_NV), f),
+            x => write!(f, "{}({})", stringify!(CooperativeVectorMatrixLayout), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct ComponentType(pub(crate) u32);
 impl ComponentType {
     pub const FLOAT_16_NV: Self = Self(0u32);
@@ -5758,84 +4272,33 @@ impl Word for ComponentType {
         Self(word)
     }
 }
-impl Display for ComponentType {
+impl Debug for ComponentType {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
-            Self::FLOAT_16_NV => write!(f, "Float16NV"),
-            Self::FLOAT_32_NV => write!(f, "Float32NV"),
-            Self::FLOAT_64_NV => write!(f, "Float64NV"),
-            Self::SIGNED_INT_8_NV => write!(f, "SignedInt8NV"),
-            Self::SIGNED_INT_16_NV => write!(f, "SignedInt16NV"),
-            Self::SIGNED_INT_32_NV => write!(f, "SignedInt32NV"),
-            Self::SIGNED_INT_64_NV => write!(f, "SignedInt64NV"),
-            Self::UNSIGNED_INT_8_NV => write!(f, "UnsignedInt8NV"),
-            Self::UNSIGNED_INT_16_NV => write!(f, "UnsignedInt16NV"),
-            Self::UNSIGNED_INT_32_NV => write!(f, "UnsignedInt32NV"),
-            Self::UNSIGNED_INT_64_NV => write!(f, "UnsignedInt64NV"),
-            Self::SIGNED_INT_8_PACKED_NV => write!(f, "SignedInt8PackedNV"),
-            Self::UNSIGNED_INT_8_PACKED_NV => write!(f, "UnsignedInt8PackedNV"),
-            Self::FLOAT_E4M3NV => write!(f, "FloatE4M3NV"),
-            Self::FLOAT_E5M2NV => write!(f, "FloatE5M2NV"),
-            x => write!(f, "{x}"),
+            Self::FLOAT_16_NV => Display::fmt(stringify!(FLOAT_16_NV), f),
+            Self::FLOAT_32_NV => Display::fmt(stringify!(FLOAT_32_NV), f),
+            Self::FLOAT_64_NV => Display::fmt(stringify!(FLOAT_64_NV), f),
+            Self::SIGNED_INT_8_NV => Display::fmt(stringify!(SIGNED_INT_8_NV), f),
+            Self::SIGNED_INT_16_NV => Display::fmt(stringify!(SIGNED_INT_16_NV), f),
+            Self::SIGNED_INT_32_NV => Display::fmt(stringify!(SIGNED_INT_32_NV), f),
+            Self::SIGNED_INT_64_NV => Display::fmt(stringify!(SIGNED_INT_64_NV), f),
+            Self::UNSIGNED_INT_8_NV => Display::fmt(stringify!(UNSIGNED_INT_8_NV), f),
+            Self::UNSIGNED_INT_16_NV => Display::fmt(stringify!(UNSIGNED_INT_16_NV), f),
+            Self::UNSIGNED_INT_32_NV => Display::fmt(stringify!(UNSIGNED_INT_32_NV), f),
+            Self::UNSIGNED_INT_64_NV => Display::fmt(stringify!(UNSIGNED_INT_64_NV), f),
+            Self::SIGNED_INT_8_PACKED_NV => Display::fmt(stringify!(SIGNED_INT_8_PACKED_NV), f),
+            Self::UNSIGNED_INT_8_PACKED_NV => Display::fmt(stringify!(UNSIGNED_INT_8_PACKED_NV), f),
+            Self::FLOAT_E4M3NV => Display::fmt(stringify!(FLOAT_E4M3NV), f),
+            Self::FLOAT_E5M2NV => Display::fmt(stringify!(FLOAT_E5M2NV), f),
+            x => write!(f, "{}({})", stringify!(ComponentType), x.0),
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct TensorOperands(pub(crate) u32);
-impl TensorOperands {
-    pub const NONE_ARM: Self = Self(0x0000);
-    pub const NONTEMPORAL_ARM: Self = Self(0x0001);
-    pub const OUT_OF_BOUNDS_VALUE_ARM: Self = Self(0x0002);
-    pub const MAKE_ELEMENT_AVAILABLE_ARM: Self = Self(0x0004);
-    pub const MAKE_ELEMENT_VISIBLE_ARM: Self = Self(0x0008);
-    pub const NON_PRIVATE_ELEMENT_ARM: Self = Self(0x0010);
-}
+bitflags! { # [derive (Clone , Copy , PartialEq , Eq , Hash , Debug)] pub struct TensorOperands : u32 { const NONE_ARM = 0x0000 ; const NONTEMPORAL_ARM = 0x0001 ; const OUT_OF_BOUNDS_VALUE_ARM = 0x0002 ; const MAKE_ELEMENT_AVAILABLE_ARM = 0x0004 ; const MAKE_ELEMENT_VISIBLE_ARM = 0x0008 ; const NON_PRIVATE_ELEMENT_ARM = 0x0010 ; } }
 impl Word for TensorOperands {
     #[inline]
     fn from_native(word: u32) -> Self {
-        Self(word)
-    }
-}
-impl BitAnd for TensorOperands {
-    type Output = Self;
-    #[inline]
-    fn bitand(self, rhs: Self) -> Self {
-        Self(self.0 & rhs.0)
-    }
-}
-impl BitOr for TensorOperands {
-    type Output = Self;
-    #[inline]
-    fn bitor(self, rhs: Self) -> Self {
-        Self(self.0 | rhs.0)
-    }
-}
-impl Display for TensorOperands {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == 0 {
-            return write!(f, "None");
-        }
-        let mut bitfmt = BitFmt(0);
-        if *self & Self::NONTEMPORAL_ARM == Self::NONTEMPORAL_ARM {
-            bitfmt.fmt(Self::NONTEMPORAL_ARM.0, f)?;
-            write!(f, "NontemporalARM")?;
-        }
-        if *self & Self::OUT_OF_BOUNDS_VALUE_ARM == Self::OUT_OF_BOUNDS_VALUE_ARM {
-            bitfmt.fmt(Self::OUT_OF_BOUNDS_VALUE_ARM.0, f)?;
-            write!(f, "OutOfBoundsValueARM")?;
-        }
-        if *self & Self::MAKE_ELEMENT_AVAILABLE_ARM == Self::MAKE_ELEMENT_AVAILABLE_ARM {
-            bitfmt.fmt(Self::MAKE_ELEMENT_AVAILABLE_ARM.0, f)?;
-            write!(f, "MakeElementAvailableARM")?;
-        }
-        if *self & Self::MAKE_ELEMENT_VISIBLE_ARM == Self::MAKE_ELEMENT_VISIBLE_ARM {
-            bitfmt.fmt(Self::MAKE_ELEMENT_VISIBLE_ARM.0, f)?;
-            write!(f, "MakeElementVisibleARM")?;
-        }
-        if *self & Self::NON_PRIVATE_ELEMENT_ARM == Self::NON_PRIVATE_ELEMENT_ARM {
-            bitfmt.fmt(Self::NON_PRIVATE_ELEMENT_ARM.0, f)?;
-            write!(f, "NonPrivateElementARM")?;
-        }
-        Ok(())
+        Self::from_bits_retain(word)
     }
 }

@@ -1,5 +1,5 @@
 # [leimu-spirv]
-A compact SPIR-V reflection library written in pure-Rust with zero dependencies, minimal allocations and fast compile-times.
+A compact SPIR-V reflection library written in pure-Rust with minimal allocations and fast compile-times.
 
 ## Usage
 

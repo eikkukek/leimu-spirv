@@ -59,7 +59,7 @@ impl Display for ReflectError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::EntryPointNotFound(name, model) =>
-                write!(f, "entry point with name {name:?} and execution model {model} not found"),
+                write!(f, "entry point with name {name:?} and execution model {model:?} not found"),
             Self::EntryPointNotSet => write!(f, "entry point not set"),
             Self::Parse(_) => write!(f, "invalid spirv"),
             Self::InvalidTypeId(id) => write!(f, "invalid type id {id}"),

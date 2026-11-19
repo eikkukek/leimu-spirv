@@ -8,3 +8,8 @@ repository = "https://github.com/eikkukek/leimu-spirv"
 readme = "README.md"
 keywords = ["shader", "spir-v", "reflect"]
 categories = ["parsing", "rendering::data-formats"]
+
+[dependencies]
+bitflags = "2.13.2"
+rustc-hash = { version = "2.1.3", default-features = false }
+indexmap = "2.14.2"

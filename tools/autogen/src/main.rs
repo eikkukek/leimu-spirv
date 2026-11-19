@@ -112,9 +112,6 @@ fn enum_gen(
 {
     let path = op_path.with_file_name("op/enums.rs");
     let mut enums = File::create(&path)?;
-    let struct_derive = quote! {
-        #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-    };
     let enum_derive = quote! {
         #[derive(Clone, Copy, Debug)]
     };
@@ -122,31 +119,14 @@ fn enum_gen(
         //! SPIR-V enums
         //!
         //! This file is auto-generated, do not modify manually.
-        use core::fmt::{self, Display};
-        use core::ops::{BitAnd, BitOr};
+        use core::fmt::{self, Debug, Display};
+        use bitflags::bitflags;
         use crate::{
             op::*,
             stream::*,
             core::*,
             module::*,
         };
-
-        struct BitFmt(u32);
-
-        impl BitFmt {
-
-            pub fn fmt(
-                &mut self,
-                value: u32,
-                f: &mut fmt::Formatter<'_>
-            ) -> fmt::Result {
-                if self.0 != 0 {
-                    write!(f, "|")?;
-                }
-                self.0 |= value;
-                Ok(())
-            }
-        }
     };
     writeln!(enums, "{header}")?;
     for member in parsed["operand_kinds"].members() {
@@ -156,12 +136,8 @@ fn enum_gen(
                 member["kind"].as_str().unwrap(),
                 Span::call_site()
             );
-            let def = quote! {
-                #struct_derive
-                pub struct #kind(pub(crate) u32);
-            };
             let enumerants = &member["enumerants"];
-            let enumerants: Vec<_> = enumerants
+            let bits: Vec<_> = enumerants
                 .members()
                 .map(|enumerant| {
                     let name = enumerant["enumerant"].as_str().unwrap();
@@ -169,80 +145,27 @@ fn enum_gen(
                     let value = enumerant["value"].as_str().unwrap();
                     let lit = syn::LitInt
                         ::new(value, Span::call_site());
-                    (
-                        quote! {
-                            pub const #snake_case: Self = Self(#lit);
-                        },
-                        { 
-                            if u32::from_str_radix(&value.replace("0x", ""), 16)
-                                .unwrap()
-                                .count_ones() == 1
-                            {
-                                quote! {
-                                    if *self & Self::#snake_case == Self::#snake_case
-                                    {
-                                        bitfmt.fmt(Self::#snake_case.0, f)?;
-                                        write!(f, #name)?;
-                                    }
-                                }
-                            } else { quote! {} }
-                        },
-                    )
+                    quote! {
+                        const #snake_case = #lit;
+                    }
                 }).collect();
-            let inherent = enumerants
-                .iter()
-                .map(|(def, _)| def);
-            let inherent = quote! {
-                impl #kind {
-                    #(#inherent)*
+            let bitflags = quote! {
+                bitflags! {
+                    #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+                    pub struct #kind: u32 {
+                        #(#bits)*
+                    }
                 }
             };
             let word = quote! {
                 impl Word for #kind {
                     #[inline]
                     fn from_native(word: u32) -> Self {
-                        Self(word)
+                        Self::from_bits_retain(word)
                     }
                 }
             };
-            let display = enumerants
-                .iter()
-                .map(|(_, display)| display);
-            let display = quote! {
-                impl Display for #kind {
-
-                    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                        if self.0 == 0 {
-                            return write!(f, "None")
-                        }
-                        let mut bitfmt = BitFmt(0);
-                        #(#display)*
-                        Ok(())
-                    }
-                }
-            };
-            let bitop = quote! {
-                impl BitAnd for #kind {
-
-                    type Output = Self;
-
-                    #[inline]
-                    fn bitand(self, rhs: Self) -> Self {
-                        Self(self.0 & rhs.0)
-                    }
-                }
-
-                impl BitOr for #kind {
-
-                    type Output = Self;
-
-                    #[inline]
-                    fn bitor(self, rhs: Self) -> Self {
-                        Self(self.0 | rhs.0)
-                    }
-                }
-            };
-            write!(enums, "{def}\n{inherent}\n{word}\n{bitop}\n{display}\n")?;
+            write!(enums, "{bitflags}\n{word}\n")?;
         }
         else if category == "ValueEnum" {
             let kind = Ident::new(
@@ -259,7 +182,6 @@ fn enum_gen(
                     Span::call_site(),
                 );
                 let mut variants = vec![];
-                let mut display = vec![];
                 let mut parse = vec![];
                 let mut needs_lifetime = false;
                 for enumerant in enumerants.members() {
@@ -297,17 +219,6 @@ fn enum_gen(
                                 #(#fields)*
                             },
                         });
-                        display.push(quote! {
-                            Self::#name {
-                                #(#field_names),*
-                            } => {
-                                write!(f, "{}", stringify!(#name))?;
-                                #(
-                                    write!(f, " {}", #field_names)?;
-                                )*
-                                Ok(())
-                            },
-                        });
                         parse.push(quote! {
                             #value => Ok(Self::#name {#(
                                 #field_names: #field_tys::parse_one(stream)?,
@@ -320,9 +231,6 @@ fn enum_gen(
                         );
                         variants.push(quote! {
                             #name,
-                        });
-                        display.push(quote! {
-                            Self::#name => write!(f, "{}", stringify!(#name)),
                         });
                         parse.push(quote! {
                             #value => Ok(Self::#name),
@@ -355,20 +263,10 @@ fn enum_gen(
                         }
                    }
                 };
-                let display = quote! {
-                    impl #lifetime Display for #kind #lifetime {
-
-                        fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                            match self {
-                                #(#display)*
-                            }
-                        }
-                    }
-                };
-                write!(enums, "{def}\n{parse}\n{display}\n")?;
+                write!(enums, "{def}\n{parse}\n")?;
             }
             let def = quote! {
-                #struct_derive
+                #[derive(Clone, Copy, PartialEq, Eq, Hash)]
                 pub struct #kind(pub(crate) u32);
             };
             let enumerants: Vec<_> = enumerants
@@ -377,21 +275,33 @@ fn enum_gen(
                     let name = enumerant["enumerant"].as_str().unwrap();
                     let snake_case = upper_snake_case(name);
                     let value = enumerant["value"].as_u32().unwrap();
-                    (
-                        quote! {
-                            pub const #snake_case: Self = Self(#value);
-                        },
-                        quote! {
-                            Self::#snake_case => write!(f, #name),
-                        },
-                    )
+                    (quote! {
+                        pub const #snake_case: Self = Self(#value);
+                    }, snake_case.clone())
                 }).collect();
             let inherent = enumerants
                 .iter()
-                .map(|(def, _)| def);
+                .map(|(e, _)| e);
             let inherent = quote! {
                 impl #kind {
                     #(#inherent)*
+                }
+            };
+            let debugs = enumerants
+                .iter()
+                .map(|(_, name)| quote! {
+                    Self::#name => Display::fmt(stringify!(#name), f),
+                });
+            let debug = quote! {
+                impl Debug for #kind {
+    
+                    #[inline]
+                    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                        match *self {
+                            #(#debugs)*
+                            x => write!(f, "{}({})", stringify!(#kind), x.0),
+                        }
+                    }
                 }
             };
             let word = quote! {
@@ -403,21 +313,7 @@ fn enum_gen(
                     }
                 }
             };
-            let display = enumerants
-                .iter()
-                .map(|(_, display)| display);
-            let display = quote! {
-                impl Display for #kind {
-
-                    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                        match *self {
-                            #(#display)*
-                            x => write!(f, "{x}"),
-                        }
-                    }
-                }
-            };
-            write!(enums, "{def}\n{inherent}\n{word}\n{display}\n")?;
+            write!(enums, "{def}\n{inherent}\n{word}\n{debug}\n")?;
         }
     }
     enums.flush()?;
@@ -512,13 +408,12 @@ fn definition_gen(
         }
         operand_dup.retain(|_, dup| *dup > 1);
         for &name in operand_dup.keys() {
-            let mut dup = 1;
-            for operand in operands
+            for (dup, operand) in operands
                 .iter_mut()
                 .filter(|operand| operand.name.unwrap_or(operand.kind) == name)
+                .enumerate()
             {
-                operand.duplicate = Some(dup);
-                dup += 1;
+                operand.duplicate = Some(dup as u32 + 1);
             }
         }
         let upper_sc_name = upper_snake_case(opname.trim_start_matches("Op"));

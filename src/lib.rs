@@ -1,5 +1,4 @@
-//! Compact SPIR-V reflection library written in pure-Rust with zero dependencies and minimal
-//! allocations.
+//! Compact SPIR-V reflection library written in pure-Rust with minimal allocations.
 //!
 //! # Usage 
 //! ``` rust
