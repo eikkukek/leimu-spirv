@@ -1,5 +1,8 @@
 # Cangelog
 All changes to this project will be documented in this file.
+## [0.5.5] - 2026-11-19
+### Added
+- `parse_next_capture_inst` and `parse_full_capture_inst` for `Module`.
 ## [0.5.4] - 2026-11-19
 ### Changed
 - Internal result storage.
