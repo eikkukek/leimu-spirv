@@ -139,12 +139,13 @@ impl<'a> Module<'a> {
 
     /// Tries to parse the next instruction, passing that instruction to the given closure.
     #[inline]
-    pub fn parse_next_capture_inst(&mut self, mut f: impl FnMut(InstructionStream<'a>)) -> ParseResult<bool> {
+    pub fn parse_next_capture_inst(&mut self, mut f: impl FnMut(&mut Module, InstructionStream<'a>)) -> ParseResult<bool> {
         let Some(mut instruction) = self.stream
             .next()
         else {
             return Ok(false)
         };
+        f(self, instruction);
         let inst_info = op::INST_INFOS[instruction.code().0 as usize];
         if inst_info.has_id_result {
             if inst_info.has_id_result_type {
@@ -152,7 +153,6 @@ impl<'a> Module<'a> {
             }
             let id = op::IdResult(instruction.read()?);
             instruction.reset();
-            f(instruction);
             self.results.insert(
                 id,
                 instruction,
@@ -164,7 +164,7 @@ impl<'a> Module<'a> {
     /// Tries to parse the next instruction.
     #[inline]
     pub fn parse_next(&mut self) -> ParseResult<bool> {
-        self.parse_next_capture_inst(|_| {})
+        self.parse_next_capture_inst(|_, _| {})
     }
 
     /// Calls [`Self::parse_next`], until the end of the [`Stream`].
@@ -176,7 +176,7 @@ impl<'a> Module<'a> {
 
     /// Calls [`Self::parse_next_capture_inst`], until the end of the [`Stream`].
     #[inline]
-    pub fn parse_full_capture_inst(&mut self, mut f: impl FnMut(InstructionStream<'a>)) -> ParseResult<()> {
+    pub fn parse_full_capture_inst(&mut self, mut f: impl FnMut(&mut Module, InstructionStream<'a>)) -> ParseResult<()> {
         while self.parse_next_capture_inst(&mut f)? {}
         Ok(())
     } 

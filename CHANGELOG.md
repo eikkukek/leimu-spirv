@@ -1,5 +1,10 @@
 # Cangelog
 All changes to this project will be documented in this file.
+## [0.5.6] - 2026-11-21
+### Fixed
+- `Module::parse_next_capture_inst` returning only instructions with a result id.
+### Changed
+- `Module::parse_next_capture_inst` to take in a mutable reference of the module in the closure.
 ## [0.5.5] - 2026-11-19
 ### Added
 - `parse_next_capture_inst` and `parse_full_capture_inst` for `Module`.
