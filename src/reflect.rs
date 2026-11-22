@@ -308,7 +308,7 @@ pub struct Resource<'a> {
     ///
     /// [1]: Self::base_type_id
     pub count: ResourceCount,
-    /// Offset of the first member in a struct used for [`push constants`][1].
+    /// The minimum offset of a member in a [`push constant`][1] block.
     ///
     /// [1]: ResourceType::PushConstant
     pub offset: Option<u32>,
