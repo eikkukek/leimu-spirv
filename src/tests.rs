@@ -47,7 +47,7 @@ pub fn be_test() {
 fn spec_test() {
     use crate::Module;
     use crate::Literal;
-    use crate::reflect::{Reflector, SpecConstantValue};
+    use crate::reflect::{Reflector, SpecConstantValue, ScalarType};
     use crate::include_spirv;
     fn test(spirv: &[u32]) {
         let module = Module::new(spirv).unwrap();
@@ -59,17 +59,20 @@ fn spec_test() {
         spec_constants.sort_by_key(|s| s.spec_id);
         let values: Vec<_> = spec_constants
             .iter()
-            .map(|v| v.value)
+            .map(|v| (v.spec_id, v.value, v.ty))
             .collect();
         assert_eq!(values,
             [
-                SpecConstantValue::True,
-                SpecConstantValue::False,
-                SpecConstantValue::Literal(Literal::F32(42.0)),
-                SpecConstantValue::Literal(Literal::U64(!42))
+                (0, SpecConstantValue::True, ScalarType::Bool),
+                (1, SpecConstantValue::False, ScalarType::Bool),
+                (2, SpecConstantValue::Literal(Literal::F32(42.0)), ScalarType::Float { width: 32 }),
+                (3, SpecConstantValue::Literal(Literal::U64(!42)),
+                    ScalarType::Int { width: 64, is_signed: false,
+                })
             ]
         );
     }
+    assert_ne!(include_bytes!("../spec_test.spv"), include_bytes!("../spec_test_be.spv"));
     test(include_spirv!("../spec_test.spv"));
     test(include_spirv!("../spec_test_be.spv"));
 }

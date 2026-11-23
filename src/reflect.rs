@@ -70,7 +70,7 @@ pub enum Constant<'a> {
 }
 
 /// Represents a scalar type.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum ScalarType {
     /// A boolean type.
     Bool,
