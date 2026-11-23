@@ -1,7 +1,6 @@
 use core::ops::Deref;
 
 /// A pile of word returned by [`include_words`].
-#[repr(align(4))]
 pub struct Words<const N: usize> {
     len: usize,
     bytes: [u8; N],

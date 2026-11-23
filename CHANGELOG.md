@@ -1,5 +1,8 @@
 # Cangelog
 All changes to this project will be documented in this file.
+## [0.5.9] - 2026-11-23
+### Fixed
+- small internal fix
 ## [0.5.8] - 2026-11-23
 ### Fixed
 - big-endian parsing of SPIR-V
@@ -81,6 +84,8 @@ All changes to this project will be documented in this file.
 - Initial crate release
 - Basic reflection
 
+[0.5.9]: https://crates.io/crates/leimu-spirv/0.5.9
+[0.5.8]: https://crates.io/crates/leimu-spirv/0.5.8
 [0.5.7]: https://crates.io/crates/leimu-spirv/0.5.7
 [0.5.6]: https://crates.io/crates/leimu-spirv/0.5.6
 [0.5.5]: https://crates.io/crates/leimu-spirv/0.5.5
