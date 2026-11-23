@@ -1,5 +1,8 @@
 # Cangelog
 All changes to this project will be documented in this file.
+## [0.5.7] - 2026-11-23
+### Fixed
+- `Module::from_bytes` not returning an error if `bytes` is not aligned to `u32`
 ## [0.5.6] - 2026-11-21
 ### Fixed
 - `Module::parse_next_capture_inst` returning only instructions with a result id.
@@ -73,6 +76,9 @@ All changes to this project will be documented in this file.
 - Initial crate release
 - Basic reflection
 
+[0.5.7]: https://crates.io/crates/leimu-spirv/0.5.7
+[0.5.6]: https://crates.io/crates/leimu-spirv/0.5.6
+[0.5.5]: https://crates.io/crates/leimu-spirv/0.5.5
 [0.5.4]: https://crates.io/crates/leimu-spirv/0.5.4
 [0.5.3]: https://crates.io/crates/leimu-spirv/0.5.3
 [0.5.2]: https://crates.io/crates/leimu-spirv/0.5.2

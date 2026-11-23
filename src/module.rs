@@ -32,6 +32,26 @@ pub const VERSION_1_5: u32 = 0x00010500;
 /// SPIR_V version 1.6
 pub const VERSION_1_6: u32 = 0x00010600;
 
+/// Indicates an error caused by [`Module::from_bytes`].
+#[derive(Debug)]
+pub enum FromBytesError {
+    /// Indicates that `bytes` is not aligned to `u32`.
+    BytesNotAligned,
+    /// Indicates that `bytes.len()` is not a multiple of four.
+    NotMultipleOfFour(usize),
+}
+
+impl Display for FromBytesError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::BytesNotAligned => write!(f, "`bytes` are not aligned to `u32`"),
+            Self::NotMultipleOfFour(len) => write!(f, "`bytes.len()` `{len}` is not a multiple of four"),
+        }
+    }
+}
+
+impl Error for FromBytesError {}
+
 /// Indicates that the SPIR-V code passed to a [`module`][1] is invalid.
 ///
 /// [1]: Module
@@ -41,10 +61,8 @@ pub enum ParseError {
     EndOfStream,
     /// Indicates a wrong magic number for the module.
     InvalidMagicNumber(u32),
-    /// Indicates that the bytes passed to [`from_bytes`][1] is not divisible by 4.
-    ///
-    /// [1]: Module::from_bytes
-    FromBytesError(usize),
+    /// Indicates that [`Module::from_bytes`] failed.
+    FromBytesError(FromBytesError),
     /// Indicates an invalid type.
     InvalidType {
         /// The expected type.
@@ -113,7 +131,10 @@ impl<'a> Module<'a> {
     #[inline]
     pub fn from_bytes(spirv: &'a [u8]) -> ParseResult<Self> {
         if !spirv.len().is_multiple_of(4) {
-            return Err(ParseError::FromBytesError(spirv.len()))
+            Err(ParseError::FromBytesError(FromBytesError::NotMultipleOfFour(spirv.len())))?
+        }
+        if !spirv.as_ptr().cast::<u32>().is_aligned() {
+            Err(ParseError::FromBytesError(FromBytesError::BytesNotAligned))?
         }
         let spirv = unsafe {
             slice::from_raw_parts(
@@ -289,9 +310,7 @@ impl Display for ParseError {
 
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::FromBytesError(len) => write!(f,
-                "SPIR-V module length `{len}` is not 4-byte aligned"
-            ),
+            Self::FromBytesError(_) => write!(f, "`Module::from_bytes` failed"),
             Self::EndOfStream => write!(f, "end of stream"),
             Self::InvalidMagicNumber(num) => write!(f, "invalid magic number {num}, expected 0x07230203"),
             Self::InvalidType { expected, found } => write!(f,
@@ -334,8 +353,10 @@ impl From<Utf8Error> for ParseError {
 impl Error for ParseError {
 
     fn source(&self) -> Option<&(dyn Error + 'static)> {
-        if let Self::Utf8Error(err) = self {
-            Some(err)
-        } else { None }
+        match self {
+            Self::Utf8Error(err) => Some(err),
+            Self::FromBytesError(err) => Some(err),
+            _ => None,
+        }
     }
 }
