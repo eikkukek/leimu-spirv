@@ -1,6 +1,6 @@
 use core::ops::Deref;
 
-/// A pile of word returned by [`include_spirv`].
+/// A pile of word returned by [`include_spirv`][crate::include_spirv!].
 pub struct Words<const N: usize> {
     len: usize,
     bytes: [u8; N],

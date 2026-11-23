@@ -52,7 +52,7 @@ pub mod stream;
 pub mod op;
 mod module;
 pub mod reflect;
-pub mod include_bytes;
+pub mod include_spirv;
 
 #[cfg(test)]
 mod tests;
@@ -60,7 +60,7 @@ mod tests;
 pub use {
     core::*,
     module::*,
-    include_bytes::*,
+    include_spirv::*,
 };
 
 #[doc = include_str!("../README.md")]
