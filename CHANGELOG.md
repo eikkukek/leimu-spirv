@@ -1,5 +1,10 @@
 # Cangelog
 All changes to this project will be documented in this file.
+## [0.5.8] - 2026-11-23
+### Fixed
+- big-endian parsing of SPIR-V
+### Added
+- `include_spirv` macro
 ## [0.5.7] - 2026-11-23
 ### Fixed
 - `Module::from_bytes` not returning an error if `bytes` is not aligned to `u32`

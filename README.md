@@ -8,9 +8,10 @@ An example of doing some reflection on SPIR-V words:
 use leimu_spirv::op;
 use leimu_spirv::Module;
 use leimu_spirv::reflect::{Reflector, ResourceType};
+use leimu_spirv::include_spirv;
 
-let spirv: &[u8] = include_bytes!("mesh.spv");
-let module = Module::from_bytes(spirv).unwrap();
+let spirv = include_spirv!("mesh.spv");
+let module = Module::new(spirv).unwrap();
 let mut reflector = Reflector::new(module).unwrap();
 reflector.set_entry_point("main", op::ExecutionModel::MESH_EXT).unwrap();
 for ubo in reflector.resources_for_type(ResourceType::UniformBuffer).unwrap() {

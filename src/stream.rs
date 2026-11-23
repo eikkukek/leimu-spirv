@@ -25,21 +25,21 @@ impl<'a> Stream<'a> {
     pub fn new(spirv: &'a [u32]) -> ParseResult<Self> {
         if spirv.len() < 5 { return Err(ParseError::EndOfStream) }
         let magic_number = spirv[0];
+        let ne = magic_number.to_ne_bytes();
         let le = 0x07230203u32.to_le_bytes();
         let be = 0x07230203u32.to_be_bytes();
         let endianness =
-            if magic_number == u32::from_le_bytes(le)
-            {
+            if ne == le {
                 Endianness::Le
-            } else if magic_number == u32::from_be_bytes(be) {
+            } else if ne == be {
                 Endianness::Be
             } else {
                 return Err(ParseError::InvalidMagicNumber(magic_number))
             };
         Ok(Self {
             spirv: WordBytes::transmute_slice_from_u32(&spirv[5..]),
-            version: spirv[1],
-            bound: spirv[3],
+            version: u32::from_word(WordBytes::transmute_from_u32(spirv[1]), endianness),
+            bound: u32::from_word(WordBytes::transmute_from_u32(spirv[3]), endianness),
             pos: 0,
             endianness,
         })
