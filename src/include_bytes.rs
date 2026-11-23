@@ -10,9 +10,9 @@ impl<const N: usize> Words<N> {
 
     #[doc(hidden)]
     pub const fn new(bytes: [u8; N]) -> Self {
-        let len = bytes.len() & !(4 - 1);
+        let trunc = bytes.len() & !(4 - 1);
         Self {
-            len,
+            len: trunc / 4,
             bytes,
         }
     }
@@ -27,7 +27,7 @@ impl<const N: usize> Deref for Words<N> {
         unsafe {
             core::slice::from_raw_parts(
                 self.bytes.as_ptr().cast(),
-                self.len / 4
+                self.len,
             )
         }
     }

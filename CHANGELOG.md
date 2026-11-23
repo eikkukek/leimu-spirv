@@ -1,5 +1,8 @@
 # Cangelog
 All changes to this project will be documented in this file.
+## [0.5.10] - 2026-11-23
+### Changed
+- improved `include_spirv`
 ## [0.5.9] - 2026-11-23
 ### Fixed
 - small internal fix
