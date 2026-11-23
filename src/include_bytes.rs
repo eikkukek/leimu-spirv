@@ -10,9 +10,8 @@ impl<const N: usize> Words<N> {
 
     #[doc(hidden)]
     pub const fn new(bytes: [u8; N]) -> Self {
-        let trunc = bytes.len() & !(4 - 1);
         Self {
-            len: trunc / 4,
+            len: bytes.len() / 4,
             bytes,
         }
     }
