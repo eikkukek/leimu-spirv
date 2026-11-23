@@ -7,6 +7,7 @@ All changes to this project will be documented in this file.
 - name changes in `SpecConstant`
 ### Fixed
 - `SpecConstant` actually containing the width of their type as bits rather than bytes
+- docs
 ## [0.5.10] - 2026-11-23
 ### Changed
 - improved `include_spirv`
@@ -94,6 +95,7 @@ All changes to this project will be documented in this file.
 - Initial crate release
 - Basic reflection
 
+[0.6.0]: https://crates.io/crates/leimu-spirv/0.6.0
 [0.5.10]: https://crates.io/crates/leimu-spirv/0.5.10
 [0.5.9]: https://crates.io/crates/leimu-spirv/0.5.9
 [0.5.8]: https://crates.io/crates/leimu-spirv/0.5.8
