@@ -178,7 +178,7 @@ impl Display for LiteralStr<'_> {
 }
 
 /// Specifies the value of a literal constant.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 pub enum Literal {
     /// 16-bit floating point literal.
     ///

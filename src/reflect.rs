@@ -88,15 +88,28 @@ pub enum ScalarType {
     },
 }
 
-/// Represents a specialization constant
+/// The default value of a [`SpecConstant`].
+#[derive(Clone, Copy, PartialEq, Debug)]
+pub enum SpecConstantValue {
+    /// A boolean `true` value.
+    True,
+    /// A boolean `false` value.
+    False,
+    /// A scalar literal.
+    Literal(Literal),
+}
+
+/// Represents a specialization constant.
 #[derive(Clone, Copy, Debug)]
 pub struct SpecConstant {
-    /// The scalar type of the constant.
-    pub ty: ScalarType,
-    /// The constant id assigned to the constant.
-    pub constant_id: u32,
     /// The [`Id`] of the constant.
     pub id: Id,
+    /// The `SpecId` decoration assigned to the constant.
+    pub spec_id: u32,
+    /// The scalar type of the constant.
+    pub ty: ScalarType,
+    /// The default value of the constant.
+    pub value: SpecConstantValue,
 }
 
 /// A type specifying, which resources to [`reflect`][1].
@@ -464,7 +477,7 @@ impl<'a> Reflector<'a> {
 
     /// Sets the entry point to reflect.
     ///
-    /// This *must* be set before [`reflecting any resources`][1].
+    /// This **must** be set before [reflecting any resources][1].
     ///
     /// [1]: Self::resources_for_type
     #[inline]
@@ -515,8 +528,9 @@ impl<'a> Reflector<'a> {
             })
         }
 
-    /// Returns an iterator over the statically known values and constant ids of all
-    /// specialization constants.
+    /// Returns an iterator over all specialization constants.
+    ///
+    /// Includes their
     #[inline]
     pub fn spec_constants(&self) -> impl Iterator<Item = ReflectResult<SpecConstant>> {
         self.module
@@ -539,14 +553,22 @@ impl<'a> Reflector<'a> {
                             } else { None }
                         ).map(|constant_id| (constant_id, id, stream))
                 } else { None }
-            )
-            .map(|(constant_id, id, mut stream)| {
+            ).map(|(constant_id, id, mut stream)| {
                 match stream.code() {
-                    op::Code::SPEC_CONSTANT_TRUE | op::Code::SPEC_CONSTANT_FALSE => {
+                    op::Code::SPEC_CONSTANT_TRUE => {
                         Ok(SpecConstant {
-                            ty: ScalarType::Bool,
-                            constant_id,
                             id,
+                            spec_id: constant_id,
+                            ty: ScalarType::Bool,
+                            value: SpecConstantValue::True,
+                        })
+                    },
+                    op::Code::SPEC_CONSTANT_FALSE => {
+                        Ok(SpecConstant {
+                            id,
+                            spec_id: constant_id,
+                            ty: ScalarType::Bool,
+                            value: SpecConstantValue::False,
                         })
                     },
                     op::Code::SPEC_CONSTANT => {
@@ -557,22 +579,23 @@ impl<'a> Reflector<'a> {
                         };
                         let value = Literal::parse_one(&self.module, &mut stream, ctx)?;
                         let ty = match value {
-                            Literal::F16(_) => ScalarType::Float { width: 2, },
-                            Literal::F32(_) => ScalarType::Float { width: 4, },
-                            Literal::F64(_) => ScalarType::Float { width: 8, },
-                            Literal::I8(_) => ScalarType::Int { width: 1, is_signed: true, },
-                            Literal::I16(_) => ScalarType::Int { width: 2, is_signed: true, },
-                            Literal::I32(_) => ScalarType::Int { width: 4, is_signed: true, },
-                            Literal::I64(_) => ScalarType::Int { width: 8, is_signed: true, },
-                            Literal::U8(_) => ScalarType::Int { width: 1, is_signed: false, },
-                            Literal::U16(_) => ScalarType::Int { width: 2, is_signed: false, },
-                            Literal::U32(_) => ScalarType::Int { width: 4, is_signed: false, },
-                            Literal::U64(_) => ScalarType::Int { width: 8, is_signed: false, },
+                            Literal::F16(_) => ScalarType::Float { width: 16, },
+                            Literal::F32(_) => ScalarType::Float { width: 32, },
+                            Literal::F64(_) => ScalarType::Float { width: 64, },
+                            Literal::I8(_) => ScalarType::Int { width: 8, is_signed: true, },
+                            Literal::I16(_) => ScalarType::Int { width: 16, is_signed: true, },
+                            Literal::I32(_) => ScalarType::Int { width: 32, is_signed: true, },
+                            Literal::I64(_) => ScalarType::Int { width: 64, is_signed: true, },
+                            Literal::U8(_) => ScalarType::Int { width: 8, is_signed: false, },
+                            Literal::U16(_) => ScalarType::Int { width: 16, is_signed: false, },
+                            Literal::U32(_) => ScalarType::Int { width: 32, is_signed: false, },
+                            Literal::U64(_) => ScalarType::Int { width: 64, is_signed: false, },
                         };
                         Ok(SpecConstant {
-                            ty,
-                            constant_id,
                             id,
+                            spec_id: constant_id,
+                            ty,
+                            value: SpecConstantValue::Literal(value),
                         })
                     },
                     _ => unreachable!(),
@@ -580,7 +603,7 @@ impl<'a> Reflector<'a> {
             })
     }
 
-    /// Gets a specific constant with `id`.
+    /// Gets a constant with `id`.
     pub fn constant(
         &self,
         id: Id,
@@ -675,7 +698,7 @@ impl<'a> Reflector<'a> {
 
     /// Returns an iterator over all resources of [type][1].
     ///
-    /// Entry point *must* be [set][2] before calling this function.
+    /// Entry point **must** be [set][2] before calling this function.
     ///
     /// If the SPIR-V version is >= 1.4, the resources are filtered to only include ones used by
     /// the current entry point.

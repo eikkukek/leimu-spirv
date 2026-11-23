@@ -120,7 +120,7 @@ impl<'a> Module<'a> {
         let stream = Stream::new(spirv)?;
         Ok(Self {
             results: IndexMap::with_capacity_and_hasher(
-                stream.bound() as usize,
+                stream.bound().min(256) as usize,
                 FxBuildHasher,
             ),
             stream,

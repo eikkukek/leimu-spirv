@@ -42,3 +42,34 @@ pub fn be_test() {
         }
     }
 }
+
+#[test]
+fn spec_test() {
+    use crate::Module;
+    use crate::Literal;
+    use crate::reflect::{Reflector, SpecConstantValue};
+    use crate::include_spirv;
+    fn test(spirv: &[u32]) {
+        let module = Module::new(spirv).unwrap();
+        let reflector = Reflector::new(module).unwrap();
+        let mut spec_constants = vec![];
+        for spec in reflector.spec_constants() {
+            spec_constants.push(spec.unwrap());
+        }
+        spec_constants.sort_by_key(|s| s.spec_id);
+        let values: Vec<_> = spec_constants
+            .iter()
+            .map(|v| v.value)
+            .collect();
+        assert_eq!(values,
+            [
+                SpecConstantValue::True,
+                SpecConstantValue::False,
+                SpecConstantValue::Literal(Literal::F32(42.0)),
+                SpecConstantValue::Literal(Literal::U64(!42))
+            ]
+        );
+    }
+    test(include_spirv!("../spec_test.spv"));
+    test(include_spirv!("../spec_test_be.spv"));
+}

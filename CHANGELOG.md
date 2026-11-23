@@ -1,5 +1,12 @@
 # Cangelog
 All changes to this project will be documented in this file.
+
+## [0.6.0] - 2026-11-23
+### Changed
+-  `SpecConstant` containing the default value as `SpecConstantValue`
+- name changes in `SpecConstant`
+### Fixed
+- `SpecConstant` actually containing the width of their type as bits rather than bytes
 ## [0.5.10] - 2026-11-23
 ### Changed
 - improved `include_spirv`
