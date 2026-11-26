@@ -7,4 +7,10 @@ layout(constant_id = 1) const bool SPEC2 = false;
 layout(constant_id = 2) const float SPEC3 = 42.0;
 layout(constant_id = 3) const uint64_t SPEC4 = ~42;
 
+layout(
+    local_size_x_id = 4,
+    local_size_y = 16,
+    local_size_z = 8
+) in;
+
 void main() {}

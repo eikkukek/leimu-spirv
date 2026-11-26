@@ -1,6 +1,9 @@
 # Cangelog
 All changes to this project will be documented in this file.
 
+## [0.6.1] - 2026-11-23
+### Added
+- `Reflector::local_size` for querying `LocalSize` and `LocalSizeId` execution modes.
 ## [0.6.0] - 2026-11-23
 ### Changed
 -  `SpecConstant` containing the default value as `SpecConstantValue`
@@ -95,6 +98,7 @@ All changes to this project will be documented in this file.
 - Initial crate release
 - Basic reflection
 
+[0.6.1]: https://crates.io/crates/leimu-spirv/0.6.1
 [0.6.0]: https://crates.io/crates/leimu-spirv/0.6.0
 [0.5.10]: https://crates.io/crates/leimu-spirv/0.5.10
 [0.5.9]: https://crates.io/crates/leimu-spirv/0.5.9

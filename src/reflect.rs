@@ -112,6 +112,15 @@ pub struct SpecConstant {
     pub value: SpecConstantValue,
 }
 
+/// The local size execution mode of an entry point returned by [`Reflector::local_size`].
+#[derive(Clone, Copy, Debug)]
+pub enum LocalSize {
+    /// Indicates that the local size is specified as IDs.
+    Id(Id, Id, Id),
+    /// Indicates that the local size is specified as literal values.
+    Literal(u32, u32, u32),
+}
+
 /// A type specifying, which resources to [`reflect`][1].
 ///
 /// [1]: Reflector::resources_for_type
@@ -374,6 +383,7 @@ pub struct Variable {
 
 #[derive(Clone, Copy)]
 struct EntryPoint<'a> {
+    entry_point: Id,
     _execution_model: op::ExecutionModel,
     _name: LiteralStr<'a>,
     interface: WordView<'a, Id>,
@@ -491,10 +501,11 @@ impl<'a> Reflector<'a> {
             if stream.code() == op::Code::ENTRY_POINT {
                 let exec_model = op::ExecutionModel::parse_one(&mut stream)?;
                 if exec_model == execution_model {
-                    stream.advance(1)?;
+                    let entry_point = Id::parse_one(&mut stream)?;
                     let cname = stream.read_string()?;
                     if name == cname.as_str() {
                         self.current_entry_point = Some(EntryPoint {
+                            entry_point,
                             _execution_model: exec_model,
                             _name: cname,
                             interface: Id::parse_eos(&mut stream)?,
@@ -526,7 +537,7 @@ impl<'a> Reflector<'a> {
                     })
                 } else { unreachable!() }
             })
-        }
+    }
 
     /// Returns an iterator over all specialization constants.
     ///
@@ -694,6 +705,41 @@ impl<'a> Reflector<'a> {
             }
         }
         Ok(None)
+    }
+
+    /// Searches for the `LocalSize` execution mode.
+    ///
+    /// Entry point **must** be [set][1] before calling this function.
+    ///
+    /// [1]: Self::set_entry_point
+    #[inline]
+    pub fn local_size(&self) -> ReflectResult<Option<LocalSize>> {
+        let Some(entry_point) = self.current_entry_point else {
+            return Err(ReflectError::EntryPointNotSet)
+        };
+        Ok(self.module
+            .all_instructions()
+            .find_map(|mut stream| {
+                if (stream.code() == op::Code::EXECUTION_MODE
+                    || stream.code() == op::Code::EXECUTION_MODE_ID)
+                    && let Ok(id) = Id::parse_one(&mut stream)
+                    && entry_point.entry_point == { id }
+                    && let Ok(operands) = op::ExecutionModeOperands::parse_one(&mut stream)
+                { 
+                    match operands {
+                        op::ExecutionModeOperands::LocalSize { x_size, y_size, z_size } => {
+                            Some(LocalSize::Literal(x_size, y_size, z_size))
+                        },
+                        op::ExecutionModeOperands::LocalSizeId { x_size, y_size, z_size } => {
+                            Some(LocalSize::Id(x_size, y_size, z_size))
+                        },
+                        _ => None,
+                    }
+                } else {
+                    None
+                }
+            })
+        )
     }
 
     /// Returns an iterator over all resources of [type][1].

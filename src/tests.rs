@@ -47,11 +47,11 @@ pub fn be_test() {
 fn spec_test() {
     use crate::Module;
     use crate::Literal;
-    use crate::reflect::{Reflector, SpecConstantValue, ScalarType};
+    use crate::reflect::{Reflector, SpecConstantValue, ScalarType, LocalSize};
     use crate::include_spirv;
-    fn test(spirv: &[u32]) {
+    fn test(spirv: &[u32], ep: &str) {
         let module = Module::new(spirv).unwrap();
-        let reflector = Reflector::new(module).unwrap();
+        let mut reflector = Reflector::new(module).unwrap();
         let mut spec_constants = vec![];
         for spec in reflector.spec_constants() {
             spec_constants.push(spec.unwrap());
@@ -67,12 +67,24 @@ fn spec_test() {
                 (1, SpecConstantValue::False, ScalarType::Bool),
                 (2, SpecConstantValue::Literal(Literal::F32(42.0)), ScalarType::Float { width: 32 }),
                 (3, SpecConstantValue::Literal(Literal::U64(!42)),
-                    ScalarType::Int { width: 64, is_signed: false,
-                })
+                    ScalarType::Int { width: 64, is_signed: false, },
+                ),
+                (4, SpecConstantValue::Literal(Literal::U32(1)),
+                    ScalarType::Int { width: 32, is_signed: false, }
+                ),
+                (4, SpecConstantValue::Literal(Literal::U32(1)),
+                    ScalarType::Int { width: 32, is_signed: false, }
+                ),
             ]
         );
+        reflector.set_entry_point(
+            ep,
+            crate::op::ExecutionModel::GLCOMPUTE,
+        ).unwrap();
+        let local_size = reflector.local_size().unwrap();
+        std::assert_matches!(local_size, Some(LocalSize::Id(_, _, _)));
     }
     assert_ne!(include_bytes!("../spec_test.spv"), include_bytes!("../spec_test_be.spv"));
-    test(include_spirv!("../spec_test.spv"));
-    test(include_spirv!("../spec_test_be.spv"));
+    test(include_spirv!("../spec_test.spv"), "main");
+    test(include_spirv!("../spec_test_be.spv"), "niam");
 }
